@@ -13,6 +13,16 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     var window: UIWindow?
 
+    let baseUrl = "http://localhost:8080"
+    let userRepository: UserRepository
+    
+    override init() {
+        // TODO: Dependency injection?
+        let requestHelper = RequestHelper(baseUrl: baseUrl)
+        let apiService = BudgetApiService(requestHelper: requestHelper)
+        userRepository = NetworkUserRepository(apiService: apiService)
+        super.init()
+    }
 
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         // Use this method to optionally configure and attach the UIWindow `window` to the provided UIWindowScene `scene`.
@@ -20,7 +30,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // This delegate does not imply the connecting scene or session are new (see `application:configurationForConnectingSceneSession` instead).
 
         // Create the SwiftUI view that provides the window contents.
-        let contentView = ContentView()
+        let contentView = ContentView(userRepository: self.userRepository)
 
         // Use a UIHostingController as window root view controller.
         if let windowScene = scene as? UIWindowScene {

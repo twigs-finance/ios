@@ -1,0 +1,13 @@
+/* 
+  Localizable.strings
+  Budget
+
+  Created by Billy Brawner on 9/25/19.
+  Copyright © 2019 William Brawner. All rights reserved.
+*/
+
+// Login
+"info_login" = "Login to start managing your budget";
+"prompt_username" = "Username";
+"prompt_password" = "Password";
+"action_login" = "Login";
