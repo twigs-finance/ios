@@ -16,6 +16,7 @@ class BudgetApiService {
     }
     
     func login(username: String, password: String, completionHandler: @escaping (User?, Error?) -> Void) throws {
+        requestHelper.credentials = (username, password)
         try requestHelper.post(
             endPoint: "/users/login",
             data: LoginRequest(username: username, password: password),
@@ -110,15 +111,10 @@ class RequestHelper {
                 request.addValue("Basic \(encodedCredentials!)", forHTTPHeaderField: "Authorization")
             }
         }
-        let encodedData = data?.toJSONData()
-        request.httpBody = encodedData
+        request.httpBody = data?.toJSONData()
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-        //request.httpMethod = method
-        request.httpMethod = "POST"
-        print("URL: \(String(describing: request.url?.absoluteURL))")
-        print("Method: \(request.httpMethod)")
-        print(try? JSONSerialization.jsonObject(with: encodedData!, options: []) ?? "Unable to serialize json")
-        URLSession.shared.dataTask(with: url) { data, response, error in
+        request.httpMethod = method
+        URLSession.shared.dataTask(with: request) { data, response, error in
             if let httpResponse = response as? HTTPURLResponse{
                 print("Response code: \(httpResponse.statusCode)")
             }
