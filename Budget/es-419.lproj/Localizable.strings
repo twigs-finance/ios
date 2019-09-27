@@ -6,8 +6,10 @@
   Copyright © 2019 William Brawner. All rights reserved.
 */
 
-// Login
+// MARK: Login
 "info_login" = "Inicia sesión para empezar a manejar su presupuseto";
 "prompt_username" = "Nombre de usuario";
 "prompt_password" = "Contraseña";
 "action_login" = "Inicia sesión";
+"loading_login" = "Iniciando sesión...";
+"loading_default" = "Cargando...";

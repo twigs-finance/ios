@@ -7,40 +7,31 @@
 //
 
 import SwiftUI
+import Combine
 
 struct ContentView: View {
     @State var username: String = ""
     @State var password: String = ""
-    let userRepository: UserRepository
+    @EnvironmentObject var userData: UserData
     
     var body: some View {
-        VStack {
-            Text("info_login")
-            TextField("prompt_username", text: $username)
-                .autocapitalization(UITextAutocapitalizationType.none)
-                .textFieldStyle(RoundedBorderTextFieldStyle())
-            SecureField("prompt_password", text: $password)
-                .textFieldStyle(RoundedBorderTextFieldStyle())
-            Button("action_login", action: {
-                print("Username: \(self.username), Password: \(self.password)")
-                DispatchQueue.global(qos: .background).async {
-                    // TODO: show loader, do login request, etc
-                    do {
-                        try self.userRepository.login(
-                            username: self.username,
-                            password: self.password,
-                            completionHandler: { user, error in
-                                print("User ID?: \(String(describing: user?.id))")
-                            }
-                        )
-                    } catch {
-                        print("Unable to log in")
-                    }
-                }
-            })
-                .buttonStyle(DefaultButtonStyle())
+        LoadingView(
+            isShowing: .constant(userData.userStatus == UserStatus.authenticating),
+            loadingText: "loading_login"
+        ) {
+            VStack {
+                Text("info_login")
+                TextField("prompt_username", text: self.$username)
+                    .autocapitalization(UITextAutocapitalizationType.none)
+                    .textFieldStyle(RoundedBorderTextFieldStyle())
+                SecureField("prompt_password", text: self.$password)
+                    .textFieldStyle(RoundedBorderTextFieldStyle())
+                Button("action_login", action: {
+                    print("Username: \(self.username), Password: \(self.password)")
+                    self.userData.login(username: self.username, password: self.password)
+                }).buttonStyle(DefaultButtonStyle())
+            }.padding()
         }
-        .padding()
     }
 }
 

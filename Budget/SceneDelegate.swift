@@ -10,7 +10,6 @@ import UIKit
 import SwiftUI
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
-
     var window: UIWindow?
 
     let baseUrl = "http://localhost:8080"
@@ -20,7 +19,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // TODO: Dependency injection?
         let requestHelper = RequestHelper(baseUrl: baseUrl)
         let apiService = BudgetApiService(requestHelper: requestHelper)
-        userRepository = NetworkUserRepository(apiService: apiService)
+        userRepository = UserRepository(apiService: apiService)
         super.init()
     }
 
@@ -30,7 +29,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // This delegate does not imply the connecting scene or session are new (see `application:configurationForConnectingSceneSession` instead).
 
         // Create the SwiftUI view that provides the window contents.
-        let contentView = ContentView(userRepository: self.userRepository)
+        let contentView = ContentView().environmentObject(UserData(repository: self.userRepository))
 
         // Use a UIHostingController as window root view controller.
         if let windowScene = scene as? UIWindowScene {

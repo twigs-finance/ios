@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2857EAED233DA30B0026BC83 /* LoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2857EAEC233DA30B0026BC83 /* LoadingView.swift */; };
+		2857EAEF233DA73B0026BC83 /* UserData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2857EAEE233DA73B0026BC83 /* UserData.swift */; };
 		28AC94EE233C373900BFB70A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28AC94ED233C373900BFB70A /* AppDelegate.swift */; };
 		28AC94F0233C373900BFB70A /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28AC94EF233C373900BFB70A /* SceneDelegate.swift */; };
 		28AC94F2233C373900BFB70A /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28AC94F1233C373900BFB70A /* ContentView.swift */; };
@@ -40,6 +42,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		2857EAEC233DA30B0026BC83 /* LoadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingView.swift; sourceTree = "<group>"; };
+		2857EAEE233DA73B0026BC83 /* UserData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserData.swift; sourceTree = "<group>"; };
 		28AC94EA233C373900BFB70A /* Budget.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Budget.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		28AC94ED233C373900BFB70A /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		28AC94EF233C373900BFB70A /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -88,6 +92,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		2857EAEB233DA2F90026BC83 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				2857EAEC233DA30B0026BC83 /* LoadingView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
 		28AC94E1233C373900BFB70A = {
 			isa = PBXGroup;
 			children = (
@@ -111,6 +123,7 @@
 		28AC94EC233C373900BFB70A /* Budget */ = {
 			isa = PBXGroup;
 			children = (
+				2857EAEB233DA2F90026BC83 /* Views */,
 				28AC952A233C433C00BFB70A /* User */,
 				28AC9527233C430A00BFB70A /* Network */,
 				28AC9526233C42F800BFB70A /* Transaction */,
@@ -173,6 +186,7 @@
 			children = (
 				28AC952B233C434800BFB70A /* UserRepository.swift */,
 				28AC952D233C43A300BFB70A /* User.swift */,
+				2857EAEE233DA73B0026BC83 /* UserData.swift */,
 			);
 			path = User;
 			sourceTree = "<group>";
@@ -313,8 +327,10 @@
 				28AC94EE233C373900BFB70A /* AppDelegate.swift in Sources */,
 				28AC94F0233C373900BFB70A /* SceneDelegate.swift in Sources */,
 				28AC952C233C434800BFB70A /* UserRepository.swift in Sources */,
+				2857EAEF233DA73B0026BC83 /* UserData.swift in Sources */,
 				28AC94F2233C373900BFB70A /* ContentView.swift in Sources */,
 				28AC9525233C42D100BFB70A /* BudgetApiService.swift in Sources */,
+				2857EAED233DA30B0026BC83 /* LoadingView.swift in Sources */,
 				28AC9529233C433400BFB70A /* TransactionRepository.swift in Sources */,
 				28AC952E233C43A300BFB70A /* User.swift in Sources */,
 			);

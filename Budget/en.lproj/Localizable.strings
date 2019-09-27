@@ -6,8 +6,10 @@
   Copyright © 2019 William Brawner. All rights reserved.
 */
 
-// Login
+// MARK: Login
 "info_login" = "Login to start managing your budget";
 "prompt_username" = "Username";
 "prompt_password" = "Password";
 "action_login" = "Login";
+"loading_login" = "Logging in...";
+"loading_default" = "Loading...";

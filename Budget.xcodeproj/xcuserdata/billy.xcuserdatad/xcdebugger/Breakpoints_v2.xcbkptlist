@@ -7,81 +7,17 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "A328CCA3-0FD0-4334-A557-869E920ED052"
+            uuid = "2AAF8F18-4951-4554-8339-29BC78B0FA0B"
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Budget/Network/BudgetApiService.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "20"
-            endingLineNumber = "20"
-            landmarkName = "login(username:password:completionHandler:)"
+            startingLineNumber = "116"
+            endingLineNumber = "116"
+            landmarkName = "buildRequest(endPoint:method:data:)"
             landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "9D8FEBED-291B-4769-A4D1-1346FF849EF7"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Budget/Network/BudgetApiService.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "69"
-            endingLineNumber = "69"
-            landmarkName = "post(endPoint:data:handler:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "4FDD44C0-C42E-4B6C-B81B-23157835C8B8"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Budget/ContentView.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "33"
-            endingLineNumber = "33"
-            landmarkName = "body"
-            landmarkType = "24">
-            <Locations>
-               <Location
-                  uuid = "4FDD44C0-C42E-4B6C-B81B-23157835C8B8 - 2eba4ce67cf8af5b"
-                  shouldBeEnabled = "No"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 () -&gt; () in closure #1 () -&gt; () in closure #1 () -&gt; SwiftUI.TupleView&lt;(SwiftUI.Text, &lt;&lt;opaque return type of (extension in SwiftUI):SwiftUI.View.textFieldStyle&lt;A where A1: SwiftUI.TextFieldStyle&gt;(A1) -&gt; some&gt;&gt;.0, &lt;&lt;opaque return type of (extension in SwiftUI):SwiftUI.View.textFieldStyle&lt;A where A1: SwiftUI.TextFieldStyle&gt;(A1) -&gt; some&gt;&gt;.0, &lt;&lt;opaque return type of (extension in SwiftUI):SwiftUI.View.buttonStyle&lt;A where A1: SwiftUI.PrimitiveButtonStyle&gt;(A1) -&gt; some&gt;&gt;.0)&gt; in Budget.ContentView.body.getter : some"
-                  moduleName = "Budget"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/billy/Projects/Budget/Budget/ContentView.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "34"
-                  endingLineNumber = "34"
-                  offsetFromSymbolStart = "460">
-               </Location>
-               <Location
-                  uuid = "4FDD44C0-C42E-4B6C-B81B-23157835C8B8 - 2eba4ce67cf8af5b"
-                  shouldBeEnabled = "No"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 () -&gt; () in closure #1 () -&gt; () in closure #1 () -&gt; SwiftUI.TupleView&lt;(SwiftUI.Text, &lt;&lt;opaque return type of (extension in SwiftUI):SwiftUI.View.textFieldStyle&lt;A where A1: SwiftUI.TextFieldStyle&gt;(A1) -&gt; some&gt;&gt;.0, &lt;&lt;opaque return type of (extension in SwiftUI):SwiftUI.View.textFieldStyle&lt;A where A1: SwiftUI.TextFieldStyle&gt;(A1) -&gt; some&gt;&gt;.0, &lt;&lt;opaque return type of (extension in SwiftUI):SwiftUI.View.buttonStyle&lt;A where A1: SwiftUI.PrimitiveButtonStyle&gt;(A1) -&gt; some&gt;&gt;.0)&gt; in Budget.ContentView.body.getter : some"
-                  moduleName = "Budget"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/billy/Projects/Budget/Budget/ContentView.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "34"
-                  endingLineNumber = "34"
-                  offsetFromSymbolStart = "592">
-               </Location>
-            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>
