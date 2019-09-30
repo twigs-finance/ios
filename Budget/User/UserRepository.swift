@@ -16,15 +16,15 @@ class UserRepository {
         self.apiService = apiService
     }
     
-    func getUser(id: Int) -> Future<User, NetworkError> {
+    func getUser(id: Int) -> AnyPublisher<User, NetworkError> {
         return apiService.getUser(id: id)
     }
     
-    func searchUsers(withUsername: String) -> Future<[User], NetworkError> {
+    func searchUsers(withUsername: String) -> AnyPublisher<[User], NetworkError> {
         return apiService.searchUsers(query: withUsername)
     }
     
-    func login(username: String, password: String) -> Future<User, NetworkError> {
+    func login(username: String, password: String) -> AnyPublisher<User, NetworkError> {
         return apiService.login(username: username, password: password)
     }
 }

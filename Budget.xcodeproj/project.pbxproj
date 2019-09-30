@@ -22,6 +22,7 @@
 		28AC9529233C433400BFB70A /* TransactionRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28AC9528233C433400BFB70A /* TransactionRepository.swift */; };
 		28AC952C233C434800BFB70A /* UserRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28AC952B233C434800BFB70A /* UserRepository.swift */; };
 		28AC952E233C43A300BFB70A /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28AC952D233C43A300BFB70A /* User.swift */; };
+		543ECE42233E82A40018A9D9 /* UserDataStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 543ECE41233E82A40018A9D9 /* UserDataStore.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -65,6 +66,7 @@
 		28AC9528233C433400BFB70A /* TransactionRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionRepository.swift; sourceTree = "<group>"; };
 		28AC952B233C434800BFB70A /* UserRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserRepository.swift; sourceTree = "<group>"; };
 		28AC952D233C43A300BFB70A /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
+		543ECE41233E82A40018A9D9 /* UserDataStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDataStore.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -187,6 +189,7 @@
 				28AC952B233C434800BFB70A /* UserRepository.swift */,
 				28AC952D233C43A300BFB70A /* User.swift */,
 				2857EAEE233DA73B0026BC83 /* UserData.swift */,
+				543ECE41233E82A40018A9D9 /* UserDataStore.swift */,
 			);
 			path = User;
 			sourceTree = "<group>";
@@ -332,6 +335,7 @@
 				28AC9525233C42D100BFB70A /* BudgetApiService.swift in Sources */,
 				2857EAED233DA30B0026BC83 /* LoadingView.swift in Sources */,
 				28AC9529233C433400BFB70A /* TransactionRepository.swift in Sources */,
+				543ECE42233E82A40018A9D9 /* UserDataStore.swift in Sources */,
 				28AC952E233C43A300BFB70A /* User.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
