@@ -1,5 +1,5 @@
 //
-//  ContentView.swift
+//  TabbedBudgetView.swift
 //  Budget
 //
 //  Created by Billy Brawner on 9/29/19.
@@ -8,27 +8,20 @@
 
 import SwiftUI
 
-struct ContentView: View {
+struct TabbedBudgetView: View {
     @ObservedObject var userData: UserDataStore
-    
+
     var body: some View {
-        Group {
-            if userData.status == .authenticated {
-                TabbedBudgetView(userData)
-            } else {
-                LoginView(userData)
-            }
-        }
+        Text("You're authenticated as \(userData.currentUser!.username)")
     }
-    
     
     init (_ userData: UserDataStore) {
         self.userData = userData
     }
 }
-
-//struct ContentView_Previews: PreviewProvider {
+//
+//struct TabbedBudgetView_Previews: PreviewProvider {
 //    static var previews: some View {
-//        ContentView()
+//        TabbedBudgetView()
 //    }
 //}
