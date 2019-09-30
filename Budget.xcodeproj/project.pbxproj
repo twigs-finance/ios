@@ -519,13 +519,14 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_ASSET_PATHS = "\"Budget/Preview Content\"";
+				DEVELOPMENT_TEAM = VJ33S6H7W7;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = Budget/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.wbrawner.Budget;
+				PRODUCT_BUNDLE_IDENTIFIER = com.wbrawner.budget.ios;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -538,13 +539,14 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_ASSET_PATHS = "\"Budget/Preview Content\"";
+				DEVELOPMENT_TEAM = VJ33S6H7W7;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = Budget/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.wbrawner.Budget;
+				PRODUCT_BUNDLE_IDENTIFIER = com.wbrawner.budget.ios;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";

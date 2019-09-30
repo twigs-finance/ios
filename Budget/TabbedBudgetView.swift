@@ -10,9 +10,27 @@ import SwiftUI
 
 struct TabbedBudgetView: View {
     @ObservedObject var userData: UserDataStore
-
+    
     var body: some View {
-        Text("You're authenticated as \(userData.currentUser!.username)")
+        NavigationView {
+            TabView {
+                Text("Transactions here")
+                    .tabItem {
+                        Image(systemName: "dollarsign.circle")
+                        Text("transactions")
+                    }
+                Text("Budgets here")
+                    .tabItem {
+                        Image(systemName: "chart.pie.fill")
+                        Text("budgets")
+                    }
+                Text("Profile here")
+                    .tabItem {
+                        Image(systemName: "person")
+                        Text("profile")
+                    }
+            }
+        }
     }
     
     init (_ userData: UserDataStore) {

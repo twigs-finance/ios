@@ -12,11 +12,16 @@ import SwiftUI
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     var window: UIWindow?
 
-    let baseUrl = "http://localhost:8080"
     let userRepository: UserRepository
     
     override init() {
         // TODO: Dependency injection?
+        #if DEBUG
+//        let baseUrl = "http://localhost:8080"
+        let baseUrl = "https://budget-api.intra.wbrawner.com"
+        #else
+        let baseUrl = "https://budget-api.intra.wbrawner.com"
+        #endif
         let requestHelper = RequestHelper(baseUrl: baseUrl)
         let apiService = BudgetApiService(requestHelper: requestHelper)
         userRepository = UserRepository(apiService: apiService)
@@ -30,7 +35,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
         // Create the SwiftUI view that provides the window contents.
         let contentView = ContentView(UserDataStore(self.userRepository))
-
         // Use a UIHostingController as window root view controller.
         if let windowScene = scene as? UIWindowScene {
             let window = UIWindow(windowScene: windowScene)

@@ -13,3 +13,9 @@
 "action_login" = "Login";
 "loading_login" = "Logging in...";
 "loading_default" = "Loading...";
+
+// MARK: Transactions
+"transactions" = "Transactions";
+
+// MARK: Budgets
+"budgets" = "Budgets";
