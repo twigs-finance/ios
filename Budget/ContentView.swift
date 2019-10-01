@@ -13,17 +13,28 @@ struct ContentView: View {
     
     var body: some View {
         Group {
-            if userData.status == .authenticated {
-                TabbedBudgetView(userData)
-            } else {
+            if showLogin() {
                 LoginView(userData)
+            } else {
+                TabbedBudgetView(userData, budgetRepository: budgetRepository)
             }
         }
     }
     
+    func showLogin() -> Bool {
+        switch userData.currentUser {
+        case .failure:
+            return true
+        default:
+            return false
+        }
+    }
     
-    init (_ userData: UserDataStore) {
+    private let budgetRepository: BudgetRepository
+    
+    init (_ userData: UserDataStore, budgetRepository: BudgetRepository) {
         self.userData = userData
+        self.budgetRepository = budgetRepository
     }
 }
 

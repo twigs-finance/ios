@@ -13,10 +13,11 @@ struct LoginView: View {
     @State var username: String = ""
     @State var password: String = ""
     @ObservedObject var userData: UserDataStore
+    let showLoader: Bool
     
     var body: some View {
         LoadingView(
-            isShowing: .constant(userData.status == UserStatus.authenticating),
+            isShowing: .constant(showLoader),
             loadingText: "loading_login"
         ) {
             VStack {
@@ -33,9 +34,13 @@ struct LoginView: View {
         }
     }
     
-    
     init (_ userData: UserDataStore) {
         self.userData = userData
+        if case userData.currentUser = Result<User, UserStatus>.failure(UserStatus.authenticating) {
+            self.showLoader = true
+        } else {
+            self.showLoader = false
+        }
     }
 }
 

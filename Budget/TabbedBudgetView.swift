@@ -10,31 +10,28 @@ import SwiftUI
 
 struct TabbedBudgetView: View {
     @ObservedObject var userData: UserDataStore
+    let budgetRepository: BudgetRepository
     
     var body: some View {
-        NavigationView {
-            TabView {
-                Text("Transactions here")
-                    .tabItem {
-                        Image(systemName: "dollarsign.circle")
-                        Text("transactions")
-                    }
-                Text("Budgets here")
-                    .tabItem {
-                        Image(systemName: "chart.pie.fill")
-                        Text("budgets")
-                    }
-                Text("Profile here")
-                    .tabItem {
-                        Image(systemName: "person")
-                        Text("profile")
-                    }
+        TabView {
+            Text("Transactions here").tabItem {
+                Image(systemName: "dollarsign.circle.fill")
+                Text("transactions")
+            }
+            BudgetsView(BudgetsDataStore(budgetRepository)).tabItem {
+                Image(systemName: "chart.pie.fill")
+                Text("budgets")
+            }
+            Text("Profile here").tabItem {
+                Image(systemName: "person.circle.fill")
+                Text("profile")
             }
         }
     }
     
-    init (_ userData: UserDataStore) {
+    init (_ userData: UserDataStore, budgetRepository: BudgetRepository) {
         self.userData = userData
+        self.budgetRepository = budgetRepository
     }
 }
 //

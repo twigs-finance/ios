@@ -3,16 +3,16 @@ import Combine
 
 class UserDataStore: ObservableObject {
     
-    // Note: You can combine these into one Result type
-    // Result<User, Status>
-    var currentUser: User? = nil
-    var status: UserStatus = .unauthenticated
+    var currentUser: Result<User, UserStatus> = .failure(.unauthenticated) {
+        didSet {
+            self.objectWillChange.send()
+        }
+    }
     
     func login(username: String, password: String) {
         
         // Changes the status and notifies any observers of the change
-        self.status = .authenticating
-        self.objectWillChange.send()
+        self.currentUser = .failure(.authenticating)
         
         // Perform the login
         _ = self.userRepository.login(username: username, password: password)
@@ -24,27 +24,23 @@ class UserDataStore: ObservableObject {
                 // Do nothing it means the network request just ended
                 case .failure( _):
                     // Poulate your status with failed authenticating
-                    self.status = .failedAuthentication
-                    self.objectWillChange.send()
+                    self.currentUser = .failure(.failedAuthentication)
                 }
             }) { (user) in
-                self.currentUser = user
-                if user.id != nil {
-                    self.status = .authenticated
-                }
-                self.objectWillChange.send()
+                self.currentUser = .success(user)
         }
     }
     
     init(_ userRepository: UserRepository) {
         self.userRepository = userRepository
     }
-    
-    let objectWillChange = ObservableObjectPublisher() // needed since the default implementation is currently broken
+
+    // Needed since the default implementation is currently broken
+    let objectWillChange = ObservableObjectPublisher()
     private let userRepository: UserRepository
 }
 
-enum UserStatus {
+enum UserStatus: Error, Equatable {
     case unauthenticated
     case authenticating
     case failedAuthentication

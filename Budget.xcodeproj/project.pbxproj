@@ -9,6 +9,9 @@
 /* Begin PBXBuildFile section */
 		284102252341998300EAFA29 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 284102242341998300EAFA29 /* ContentView.swift */; };
 		2841022723419A2B00EAFA29 /* TabbedBudgetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2841022623419A2B00EAFA29 /* TabbedBudgetView.swift */; };
+		2841022C2342D8E400EAFA29 /* Budget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2841022B2342D8E400EAFA29 /* Budget.swift */; };
+		284102302342D97300EAFA29 /* BudgetsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2841022F2342D97300EAFA29 /* BudgetsView.swift */; };
+		284102322342E12F00EAFA29 /* CategoriesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 284102312342E12F00EAFA29 /* CategoriesView.swift */; };
 		2857EAED233DA30B0026BC83 /* LoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2857EAEC233DA30B0026BC83 /* LoadingView.swift */; };
 		28AC94EE233C373900BFB70A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28AC94ED233C373900BFB70A /* AppDelegate.swift */; };
 		28AC94F0233C373900BFB70A /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28AC94EF233C373900BFB70A /* SceneDelegate.swift */; };
@@ -23,6 +26,8 @@
 		28AC9529233C433400BFB70A /* TransactionRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28AC9528233C433400BFB70A /* TransactionRepository.swift */; };
 		28AC952C233C434800BFB70A /* UserRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28AC952B233C434800BFB70A /* UserRepository.swift */; };
 		28AC952E233C43A300BFB70A /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28AC952D233C43A300BFB70A /* User.swift */; };
+		28FE6AF42342E3CB00D5543E /* BudgetsDataStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28FE6AF32342E3CB00D5543E /* BudgetsDataStore.swift */; };
+		28FE6AF62342E4CC00D5543E /* BudgetRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28FE6AF52342E4CC00D5543E /* BudgetRepository.swift */; };
 		543ECE42233E82A40018A9D9 /* UserDataStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 543ECE41233E82A40018A9D9 /* UserDataStore.swift */; };
 /* End PBXBuildFile section */
 
@@ -46,6 +51,9 @@
 /* Begin PBXFileReference section */
 		284102242341998300EAFA29 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		2841022623419A2B00EAFA29 /* TabbedBudgetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabbedBudgetView.swift; sourceTree = "<group>"; };
+		2841022B2342D8E400EAFA29 /* Budget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Budget.swift; sourceTree = "<group>"; };
+		2841022F2342D97300EAFA29 /* BudgetsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BudgetsView.swift; sourceTree = "<group>"; };
+		284102312342E12F00EAFA29 /* CategoriesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoriesView.swift; sourceTree = "<group>"; };
 		2857EAEC233DA30B0026BC83 /* LoadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingView.swift; sourceTree = "<group>"; };
 		28AC94EA233C373900BFB70A /* Budget.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Budget.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		28AC94ED233C373900BFB70A /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -68,6 +76,8 @@
 		28AC9528233C433400BFB70A /* TransactionRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionRepository.swift; sourceTree = "<group>"; };
 		28AC952B233C434800BFB70A /* UserRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserRepository.swift; sourceTree = "<group>"; };
 		28AC952D233C43A300BFB70A /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
+		28FE6AF32342E3CB00D5543E /* BudgetsDataStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BudgetsDataStore.swift; sourceTree = "<group>"; };
+		28FE6AF52342E4CC00D5543E /* BudgetRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BudgetRepository.swift; sourceTree = "<group>"; };
 		543ECE41233E82A40018A9D9 /* UserDataStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDataStore.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -96,6 +106,25 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		284102292342D8BB00EAFA29 /* Budget */ = {
+			isa = PBXGroup;
+			children = (
+				2841022F2342D97300EAFA29 /* BudgetsView.swift */,
+				2841022B2342D8E400EAFA29 /* Budget.swift */,
+				28FE6AF32342E3CB00D5543E /* BudgetsDataStore.swift */,
+				28FE6AF52342E4CC00D5543E /* BudgetRepository.swift */,
+			);
+			path = Budget;
+			sourceTree = "<group>";
+		};
+		2841022A2342D8CB00EAFA29 /* Category */ = {
+			isa = PBXGroup;
+			children = (
+				284102312342E12F00EAFA29 /* CategoriesView.swift */,
+			);
+			path = Category;
+			sourceTree = "<group>";
+		};
 		2857EAEB233DA2F90026BC83 /* Views */ = {
 			isa = PBXGroup;
 			children = (
@@ -127,6 +156,8 @@
 		28AC94EC233C373900BFB70A /* Budget */ = {
 			isa = PBXGroup;
 			children = (
+				2841022A2342D8CB00EAFA29 /* Category */,
+				284102292342D8BB00EAFA29 /* Budget */,
 				2857EAEB233DA2F90026BC83 /* Views */,
 				28AC952A233C433C00BFB70A /* User */,
 				28AC9527233C430A00BFB70A /* Network */,
@@ -332,14 +363,19 @@
 			files = (
 				28AC94EE233C373900BFB70A /* AppDelegate.swift in Sources */,
 				28AC94F0233C373900BFB70A /* SceneDelegate.swift in Sources */,
+				2841022C2342D8E400EAFA29 /* Budget.swift in Sources */,
 				2841022723419A2B00EAFA29 /* TabbedBudgetView.swift in Sources */,
+				28FE6AF42342E3CB00D5543E /* BudgetsDataStore.swift in Sources */,
 				28AC952C233C434800BFB70A /* UserRepository.swift in Sources */,
 				28AC94F2233C373900BFB70A /* LoginView.swift in Sources */,
 				28AC9525233C42D100BFB70A /* BudgetApiService.swift in Sources */,
 				2857EAED233DA30B0026BC83 /* LoadingView.swift in Sources */,
+				284102322342E12F00EAFA29 /* CategoriesView.swift in Sources */,
 				284102252341998300EAFA29 /* ContentView.swift in Sources */,
 				28AC9529233C433400BFB70A /* TransactionRepository.swift in Sources */,
+				28FE6AF62342E4CC00D5543E /* BudgetRepository.swift in Sources */,
 				543ECE42233E82A40018A9D9 /* UserDataStore.swift in Sources */,
+				284102302342D97300EAFA29 /* BudgetsView.swift in Sources */,
 				28AC952E233C43A300BFB70A /* User.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

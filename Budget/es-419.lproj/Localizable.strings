@@ -19,3 +19,6 @@
 
 // MARK: Budgets
 "budgets" = "Presupuestos";
+
+// MARK: Profile
+"profile" = "Perfil";

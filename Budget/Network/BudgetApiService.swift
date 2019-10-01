@@ -12,25 +12,60 @@ import Combine
 class BudgetApiService {
     let requestHelper: RequestHelper
     
-    init(requestHelper: RequestHelper) {
+    init(_ requestHelper: RequestHelper) {
         self.requestHelper = requestHelper
     }
     
+    // MARK: Budgets
+
+    func getBudgets(count: Int? = nil, page: Int? = nil) -> AnyPublisher<[Budget], NetworkError> {
+        var queries = [String: Array<String>]()
+        if count != nil {
+            queries["count"] = [String(count!)]
+        }
+        if (page != nil) {
+            queries["page"] =  [String(page!)]
+        }
+        return requestHelper.get("/budgets", queries: queries)
+    }
+    
+    func getBudget(_ id: Int) -> AnyPublisher<Budget, NetworkError> {
+        return requestHelper.get("/budgets/\(id)")
+    }
+    
+    func getBudgetBalance(_ id: Int) -> AnyPublisher<Int, NetworkError> {
+        return requestHelper.get("/budgets/\(id)/balance")
+    }
+    
+    func newBudget(_ budget: Budget) -> AnyPublisher<Budget, NetworkError> {
+        return requestHelper.post("/budgets/new", data: budget)
+    }
+    
+    func updateBudget(_ budget: Budget) -> AnyPublisher<Budget, NetworkError> {
+        return requestHelper.put("/budgets/\(budget.id!)", data: budget)
+    }
+  
+    // TODO: Figure out how to implement this
+//    func deleteBudget(_ id: Int) -> AnyPublisher<Void, NetworkError> {
+//        return requestHelper.delete("/budgets/\(id)")
+//    }
+    
+    // MARK: Users
     func login(username: String, password: String) -> AnyPublisher<User, NetworkError> {
         requestHelper.credentials = (username, password)
         return requestHelper.post(
-            endPoint: "/users/login",
+            "/users/login",
             data: LoginRequest(username: username, password: password)
         )
     }
     
     func getUser(id: Int) -> AnyPublisher<User, NetworkError> {
-        return requestHelper.get(endPoint: "/users/\(id)")
+        return requestHelper.get("/users/\(id)")
     }
     
     func searchUsers(query: String) -> AnyPublisher<[User], NetworkError> {
         return requestHelper.get(
-            endPoint: "/users/search",
+            "/users/search",
             queries: ["query": [query]]
         )
     }
@@ -50,7 +85,7 @@ class RequestHelper {
     }
     
     func get<ResultType: Codable>(
-        endPoint: String,
+        _ endPoint: String,
         queries: [String: Array<String>]? = nil
     ) -> AnyPublisher<ResultType, NetworkError> {
         var combinedEndPoint = endPoint
@@ -67,7 +102,7 @@ class RequestHelper {
     }
     
     func post<ResultType: Codable>(
-        endPoint: String,
+        _ endPoint: String,
         data: Codable
     ) -> AnyPublisher<ResultType, NetworkError> {
         return buildRequest(
@@ -78,7 +113,7 @@ class RequestHelper {
     }
     
     func put<ResultType: Codable>(
-        endPoint: String,
+        _ endPoint: String,
         data: ResultType
     ) -> AnyPublisher<ResultType, NetworkError> {
         return buildRequest(
@@ -88,7 +123,7 @@ class RequestHelper {
         )
     }
     
-    func delete<ResultType: Codable>(endPoint: String) -> AnyPublisher<ResultType, NetworkError> {
+    func delete<ResultType: Codable>(_ endPoint: String) -> AnyPublisher<ResultType, NetworkError> {
         return buildRequest(endPoint: endPoint, method: "DELETE")
     }
     
@@ -136,6 +171,7 @@ class RequestHelper {
 }
 
 enum NetworkError: Error {
+    case loading
     case unknown
     case notFound
     case unauthorized
