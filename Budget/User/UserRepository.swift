@@ -12,7 +12,7 @@ import Combine
 class UserRepository {
     let apiService: BudgetApiService
 
-    init(apiService: BudgetApiService) {
+    init(_ apiService: BudgetApiService) {
         self.apiService = apiService
     }
     

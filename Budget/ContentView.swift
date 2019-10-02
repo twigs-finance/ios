@@ -16,7 +16,7 @@ struct ContentView: View {
             if showLogin() {
                 LoginView(userData)
             } else {
-                TabbedBudgetView(userData, budgetRepository: budgetRepository)
+                TabbedBudgetView(userData, dataStoreProvider: dataStoreProvider)
             }
         }
     }
@@ -30,11 +30,11 @@ struct ContentView: View {
         }
     }
     
-    private let budgetRepository: BudgetRepository
+    private let dataStoreProvider: DataStoreProvider
     
-    init (_ userData: UserDataStore, budgetRepository: BudgetRepository) {
-        self.userData = userData
-        self.budgetRepository = budgetRepository
+    init (_ dataStoreProvider: DataStoreProvider) {
+        self.dataStoreProvider = dataStoreProvider
+        self.userData = dataStoreProvider.userDataStore()
     }
 }
 

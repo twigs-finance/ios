@@ -9,7 +9,7 @@
 import SwiftUI
 import Combine
 
-struct BudgetsView: View {
+struct BudgetListsView: View {
     @ObservedObject var budgetsDataStore: BudgetsDataStore
     
     var body: some View {
@@ -22,7 +22,7 @@ struct BudgetsView: View {
         switch budgetsDataStore.budgets {
         case .success(let budgets):
             return AnyView(List(budgets) { budget in
-                BudgetListItemView(budget)
+                BudgetListItemView(self.dataStoreProvider, budget: budget)
             })
         case .failure(.loading):
             return AnyView(VStack {
@@ -34,19 +34,22 @@ struct BudgetsView: View {
         }
     }
     
-    init(_ budgetsDataStore: BudgetsDataStore) {
-        self.budgetsDataStore = budgetsDataStore
+    let dataStoreProvider: DataStoreProvider
+    init(_ dataStoreProvider: DataStoreProvider) {
+        self.dataStoreProvider = dataStoreProvider
+        self.budgetsDataStore = dataStoreProvider.budgetsDataStore()
         self.budgetsDataStore.getBudgets()
     }
 }
 
 struct BudgetListItemView: View {
     var budget: Budget
+    let dataStoreProvider: DataStoreProvider
     
     var body: some View {
         NavigationLink(
-        destination: CategoriesView()
-            .navigationBarTitle(budget.name)
+            destination: CategoryListView(self.dataStoreProvider, budget: budget)
+                .navigationBarTitle(budget.name)
         ) {
             VStack(alignment: .leading) {
                 Text(verbatim: budget.name)
@@ -56,7 +59,8 @@ struct BudgetListItemView: View {
         }
     }
     
-    init (_ budget: Budget) {
+    init (_ dataStoreProvider: DataStoreProvider, budget: Budget) {
+        self.dataStoreProvider = dataStoreProvider
         self.budget = budget
     }
 }

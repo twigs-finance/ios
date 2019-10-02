@@ -7,12 +7,16 @@
 //
 
 import Foundation
+import Combine
 
-protocol TransactionRepository {
-    func getUser(id: UInt) throws -> User
-    func searchUsers(byName: String) throws -> [User]
-    func newUser(user: User) throws -> User
-    func updateUser(user: User) throws -> User
-    func deleteUser(user: User) throws -> Void
+class TransactionRepository {
+    let apiService: BudgetApiService
+    
+    init(_ apiService: BudgetApiService) {
+        self.apiService = apiService
+    }
+    
+    func getTransactions(categoryIds: [Int]? = nil, from: Date? = nil, count: Int? = nil, page: Int? = nil) -> AnyPublisher<[Transaction], NetworkError> {
+        return apiService.getTransactions(categoryIds: categoryIds, from: from, count: count, page: page)
+    }
 }
-

@@ -11,22 +11,17 @@ import SwiftUI
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     var window: UIWindow?
-
-    let userRepository: UserRepository
-    let budgetRepository: BudgetRepository
+    let dataStoreProvider: DataStoreProvider
 
     override init() {
         // TODO: Dependency injection?
         #if DEBUG
-//        let baseUrl = "http://localhost:8080"
-        let baseUrl = "https://budget-api.intra.wbrawner.com"
+        let baseUrl = "http://localhost:8080"
+//        let baseUrl = "https://budget-api.intra.wbrawner.com"
         #else
         let baseUrl = "https://budget-api.intra.wbrawner.com"
         #endif
-        let requestHelper = RequestHelper(baseUrl: baseUrl)
-        let apiService = BudgetApiService(requestHelper)
-        userRepository = UserRepository(apiService: apiService)
-        budgetRepository = BudgetRepository(apiService)
+        dataStoreProvider = DataStoreProvider(baseUrl)
         super.init()
     }
 
@@ -36,10 +31,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // This delegate does not imply the connecting scene or session are new (see `application:configurationForConnectingSceneSession` instead).
 
         // Create the SwiftUI view that provides the window contents.
-        let contentView = ContentView(
-            UserDataStore(self.userRepository),
-            budgetRepository: budgetRepository
-            )
+        let contentView = ContentView(dataStoreProvider)
         // Use a UIHostingController as window root view controller.
         if let windowScene = scene as? UIWindowScene {
             let window = UIWindow(windowScene: windowScene)

@@ -10,15 +10,17 @@ import SwiftUI
 
 struct TabbedBudgetView: View {
     @ObservedObject var userData: UserDataStore
-    let budgetRepository: BudgetRepository
     
     var body: some View {
         TabView {
-            Text("Transactions here").tabItem {
+            NavigationView {
+                TransactionListView(dataStoreProvider)
+                    .navigationBarTitle("transactions")
+            }.tabItem {
                 Image(systemName: "dollarsign.circle.fill")
                 Text("transactions")
             }
-            BudgetsView(BudgetsDataStore(budgetRepository)).tabItem {
+            BudgetListsView(dataStoreProvider).tabItem {
                 Image(systemName: "chart.pie.fill")
                 Text("budgets")
             }
@@ -29,9 +31,10 @@ struct TabbedBudgetView: View {
         }
     }
     
-    init (_ userData: UserDataStore, budgetRepository: BudgetRepository) {
+    let dataStoreProvider: DataStoreProvider
+    init (_ userData: UserDataStore, dataStoreProvider: DataStoreProvider) {
         self.userData = userData
-        self.budgetRepository = budgetRepository
+        self.dataStoreProvider = dataStoreProvider
     }
 }
 //
