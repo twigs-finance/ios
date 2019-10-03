@@ -202,7 +202,7 @@ class RequestHelper {
             }
         }
         
-        return buildRequest(endPoint: combinedEndPoint, method: "GET")
+            return buildRequest(endPoint: combinedEndPoint, method: "GET")
     }
     
     func post<ResultType: Codable>(
@@ -291,14 +291,26 @@ extension Encodable {
 }
 
 extension Date {
-    var dateFormatter: DateFormatter {
+    var iso8601DateFormatter: DateFormatter {
         let dateFormatter = DateFormatter()
         dateFormatter.locale = Locale(identifier: "en_US_POSIX")
-        dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
+        dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"
+        dateFormatter.timeZone = TimeZone(identifier: "UTC")
+        return dateFormatter
+    }
+    
+    var localeDateFormatter: DateFormatter {
+        let dateFormatter = DateFormatter()
+        dateFormatter.locale = Locale.current
+        dateFormatter.dateFormat = DateFormatter.dateFormat(fromTemplate: "yyyyMMdd", options: 0, locale: Locale.current)
         return dateFormatter
     }
     
     func toISO8601String() -> String {
-        return dateFormatter.string(from: self)
+        return iso8601DateFormatter.string(from: self)
+    }
+    
+    func toLocaleString() -> String {
+        return localeDateFormatter.string(from: self)
     }
 }

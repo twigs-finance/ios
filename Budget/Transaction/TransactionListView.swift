@@ -52,14 +52,22 @@ struct TransactionListItemView: View {
             HStack {
                 VStack(alignment: .leading) {
                     Text(verbatim: transaction.title)
-                    Text(verbatim: transaction.date.toISO8601String())
+                        .lineLimit(1)
+                        .font(.system(size: 20))
+                    Text(verbatim: transaction.date.toLocaleString())
+                        .lineLimit(1)
+                        .font(.system(size: 16))
                         .foregroundColor(.gray)
+                        .multilineTextAlignment(.trailing)
                 }
+                Spacer()
                 VStack(alignment: .trailing) {
                     Text(verbatim: self.numberFormatter.string(from: NSNumber(value: Double(transaction.amount) / 100.0)) ?? "")
+                        .foregroundColor(transaction.expense ? .red : .green)
+                        .multilineTextAlignment(.trailing)
                 }
                 .padding(.leading)
-            }
+            }.padding(5.0)
         }
     }
     

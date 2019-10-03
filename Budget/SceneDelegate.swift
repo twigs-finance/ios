@@ -16,8 +16,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     override init() {
         // TODO: Dependency injection?
         #if DEBUG
-        let baseUrl = "http://localhost:8080"
-//        let baseUrl = "https://budget-api.intra.wbrawner.com"
+//        let baseUrl = "http://localhost:8080"
+        let baseUrl = "https://budget-api.intra.wbrawner.com"
         #else
         let baseUrl = "https://budget-api.intra.wbrawner.com"
         #endif

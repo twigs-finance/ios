@@ -12,12 +12,14 @@ struct ContentView: View {
     @ObservedObject var userData: UserDataStore
     
     var body: some View {
-        Group {
-            if showLogin() {
-                LoginView(userData)
-            } else {
-                TabbedBudgetView(userData, dataStoreProvider: dataStoreProvider)
-            }
+        stateContent
+    }
+    
+    var stateContent: AnyView {
+        if showLogin() {
+            return AnyView(LoginView(userData))
+        } else {
+            return AnyView(TabbedBudgetView(userData, dataStoreProvider: dataStoreProvider))
         }
     }
     

@@ -6,6 +6,10 @@
   Copyright © 2019 William Brawner. All rights reserved.
 */
 
+// MARK: Generic
+"add" = "Agregar";
+"filter" = "Filtrar";
+
 // MARK: Login
 "info_login" = "Inicia sesión para empezar a manejar su presupuseto";
 "prompt_username" = "Nombre de usuario";
@@ -16,6 +20,7 @@
 
 // MARK: Transactions
 "transactions" = "Transacciones";
+"add_transaction" = "Agregar Transacción";
 
 // MARK: Budgets
 "budgets" = "Presupuestos";

@@ -16,6 +16,14 @@ struct TabbedBudgetView: View {
             NavigationView {
                 TransactionListView(dataStoreProvider)
                     .navigationBarTitle("transactions")
+                    .navigationBarItems(
+                        leading: NavigationLink(destination: EmptyView()) {
+                            Text("filter")
+                        },
+                        trailing: NavigationLink(destination: EmptyView().navigationBarTitle("add_transaction")) {
+                            Text("add")
+                        }
+                )
             }.tabItem {
                 Image(systemName: "dollarsign.circle.fill")
                 Text("transactions")
@@ -28,7 +36,7 @@ struct TabbedBudgetView: View {
                 Image(systemName: "person.circle.fill")
                 Text("profile")
             }
-        }
+        }.edgesIgnoringSafeArea(.top)
     }
     
     let dataStoreProvider: DataStoreProvider
