@@ -20,17 +20,26 @@ struct LoginView: View {
             isShowing: .constant(showLoader),
             loadingText: "loading_login"
         ) {
-            VStack {
-                Text("info_login")
-                TextField("prompt_username", text: self.$username)
-                    .autocapitalization(UITextAutocapitalizationType.none)
-                    .textFieldStyle(RoundedBorderTextFieldStyle())
-                SecureField("prompt_password", text: self.$password)
-                    .textFieldStyle(RoundedBorderTextFieldStyle())
-                Button("action_login", action: {
-                    self.userData.login(username: self.username, password: self.password)
-                }).buttonStyle(DefaultButtonStyle())
-            }.padding()
+            NavigationView {
+                VStack {
+                    Text("info_login")
+                    TextField("prompt_username", text: self.$username)
+                        .autocapitalization(UITextAutocapitalizationType.none)
+                        .textFieldStyle(RoundedBorderTextFieldStyle())
+                    SecureField("prompt_password", text: self.$password)
+                        .textFieldStyle(RoundedBorderTextFieldStyle())
+                        .textContentType(UITextContentType.password)
+                    Button("action_login", action: {
+                        self.userData.login(username: self.username, password: self.password)
+                    }).buttonStyle(DefaultButtonStyle())
+                    Spacer()
+                    Text("info_register")
+                    NavigationLink(destination: RegistrationView(self.userData)) {
+                        Text("action_register")
+                            .buttonStyle(DefaultButtonStyle())
+                    }
+                }.padding()
+            }.navigationBarHidden(true)
         }
     }
     

@@ -27,4 +27,8 @@ class UserRepository {
     func login(username: String, password: String) -> AnyPublisher<User, NetworkError> {
         return apiService.login(username: username, password: password)
     }
+    
+    func register(username: String, email: String, password: String) -> AnyPublisher<User, NetworkError> {
+        return apiService.register(username: username, email: email, password: password)
+    }
 }

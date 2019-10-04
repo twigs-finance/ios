@@ -9,6 +9,7 @@
 // MARK: Generic
 "add" = "Agregar";
 "filter" = "Filtrar";
+"loading_default" = "Cargando...";
 
 // MARK: Login
 "info_login" = "Inicia sesión para empezar a manejar su presupuseto";
@@ -16,7 +17,12 @@
 "prompt_password" = "Contraseña";
 "action_login" = "Inicia sesión";
 "loading_login" = "Iniciando sesión...";
-"loading_default" = "Cargando...";
+
+// MARK: Registration
+"info_register" = "¿No tienes una cuenta?";
+"action_register" = "Regístrate";
+"prompt_email" = "Correo Electrónico";
+"prompt_confirm_password" = "Confirmar Contraseña";
 
 // MARK: Transactions
 "transactions" = "Transacciones";

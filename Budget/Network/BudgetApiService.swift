@@ -38,7 +38,7 @@ class BudgetApiService {
     }
     
     func newBudget(_ budget: Budget) -> AnyPublisher<Budget, NetworkError> {
-        return requestHelper.post("/budgets/new", data: budget)
+        return requestHelper.post("/budgets/new", data: budget, type: Budget.self)
     }
     
     func updateBudget(_ budget: Budget) -> AnyPublisher<Budget, NetworkError> {
@@ -87,7 +87,7 @@ class BudgetApiService {
     }
     
     func newTransaction(_ transaction: Transaction) -> AnyPublisher<Transaction, NetworkError> {
-        return requestHelper.post("/transactions/new", data: transaction)
+        return requestHelper.post("/transactions/new", data: transaction, type: Transaction.self)
     }
     
     func updateTransaction(_ transaction: Transaction) -> AnyPublisher<Transaction, NetworkError> {
@@ -124,7 +124,7 @@ class BudgetApiService {
     }
     
     func newCategory(_ category: Category) -> AnyPublisher<Category, NetworkError> {
-        return requestHelper.post("/categories/new", data: category)
+        return requestHelper.post("/categories/new", data: category, type: Category.self)
     }
     
     func updateCategory(_ category: Category) -> AnyPublisher<Category, NetworkError> {
@@ -138,11 +138,27 @@ class BudgetApiService {
     
     // MARK: Users
     func login(username: String, password: String) -> AnyPublisher<User, NetworkError> {
-        requestHelper.credentials = (username, password)
         return requestHelper.post(
             "/users/login",
-            data: LoginRequest(username: username, password: password)
-        )
+            data: LoginRequest(username: username, password: password),
+            type: User.self
+        ).map { (user) -> User in
+            // Persist the credentials on sucessful registration
+            self.requestHelper.credentials = (username, password)
+            return user
+        }.eraseToAnyPublisher()
+    }
+    
+    func register(username: String, email: String, password: String) -> AnyPublisher<User, NetworkError> {
+        return requestHelper.post(
+            "/users/new",
+            data: RegistrationRequest(username: username, email: email, password: password),
+            type: User.self
+        ).map { (user) -> User in
+            // Persist the credentials on sucessful registration
+            self.requestHelper.credentials = (username, password)
+            return user
+        }.eraseToAnyPublisher()
     }
     
     func getUser(id: Int) -> AnyPublisher<User, NetworkError> {
@@ -168,7 +184,7 @@ class BudgetApiService {
     }
     
     func newUser(_ user: User) -> AnyPublisher<User, NetworkError> {
-        return requestHelper.post("/users/new", data: user)
+        return requestHelper.post("/users/new", data: user, type: User.self)
     }
     
     func updateUser(_ user: User) -> AnyPublisher<User, NetworkError> {
@@ -202,12 +218,13 @@ class RequestHelper {
             }
         }
         
-            return buildRequest(endPoint: combinedEndPoint, method: "GET")
+        return buildRequest(endPoint: combinedEndPoint, method: "GET")
     }
     
     func post<ResultType: Codable>(
         _ endPoint: String,
-        data: Codable
+        data: Codable,
+        type: ResultType.Type
     ) -> AnyPublisher<ResultType, NetworkError> {
         return buildRequest(
             endPoint: endPoint,
@@ -274,7 +291,28 @@ class RequestHelper {
     }
 }
 
-enum NetworkError: Error {
+enum NetworkError: Error, Equatable {
+    static func == (lhs: NetworkError, rhs: NetworkError) -> Bool {
+        switch (lhs, rhs) {
+        case (.loading, .loading):
+            return true
+        case (.unknown, .unknown):
+            return true
+        case (.notFound, .notFound):
+            return true
+        case (.unauthorized, .unauthorized):
+            return true
+        case (.badRequest, .badRequest):
+            return true
+        case (.invalidUrl, .invalidUrl):
+            return true
+        case (let .jsonParsingFailed(error1), let .jsonParsingFailed(error2)):
+            return error1.localizedDescription == error2.localizedDescription
+        default:
+            return false
+        }
+    }
+    
     case loading
     case unknown
     case notFound

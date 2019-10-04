@@ -9,6 +9,7 @@
 // MARK: Generic
 "add" = "Add";
 "filter" = "Filter";
+"loading_default" = "Loading...";
 
 // MARK: Login
 "info_login" = "Login to start managing your budget";
@@ -16,7 +17,12 @@
 "prompt_password" = "Password";
 "action_login" = "Login";
 "loading_login" = "Logging in...";
-"loading_default" = "Loading...";
+
+// MARK: Registration
+"info_register" = "Don't have an account?";
+"action_register" = "Register";
+"prompt_email" = "Email Address";
+"prompt_confirm_password" = "Confirm Password";
 
 // MARK: Transactions
 "transactions" = "Transactions";

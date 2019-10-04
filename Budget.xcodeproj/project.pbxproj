@@ -26,6 +26,7 @@
 		28AC9529233C433400BFB70A /* TransactionRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28AC9528233C433400BFB70A /* TransactionRepository.swift */; };
 		28AC952C233C434800BFB70A /* UserRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28AC952B233C434800BFB70A /* UserRepository.swift */; };
 		28AC952E233C43A300BFB70A /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28AC952D233C43A300BFB70A /* User.swift */; };
+		28B9E50E2346BCB2007C3909 /* RegistrationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28B9E50D2346BCB2007C3909 /* RegistrationView.swift */; };
 		28FE6AF42342E3CB00D5543E /* BudgetsDataStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28FE6AF32342E3CB00D5543E /* BudgetsDataStore.swift */; };
 		28FE6AF62342E4CC00D5543E /* BudgetRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28FE6AF52342E4CC00D5543E /* BudgetRepository.swift */; };
 		28FE6AF823441E1D00D5543E /* Category.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28FE6AF723441E1D00D5543E /* Category.swift */; };
@@ -84,6 +85,7 @@
 		28AC9528233C433400BFB70A /* TransactionRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionRepository.swift; sourceTree = "<group>"; };
 		28AC952B233C434800BFB70A /* UserRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserRepository.swift; sourceTree = "<group>"; };
 		28AC952D233C43A300BFB70A /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
+		28B9E50D2346BCB2007C3909 /* RegistrationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegistrationView.swift; sourceTree = "<group>"; };
 		28FE6AF32342E3CB00D5543E /* BudgetsDataStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BudgetsDataStore.swift; sourceTree = "<group>"; };
 		28FE6AF52342E4CC00D5543E /* BudgetRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BudgetRepository.swift; sourceTree = "<group>"; };
 		28FE6AF723441E1D00D5543E /* Category.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Category.swift; sourceTree = "<group>"; };
@@ -184,6 +186,7 @@
 				28AC94ED233C373900BFB70A /* AppDelegate.swift */,
 				28AC94EF233C373900BFB70A /* SceneDelegate.swift */,
 				28AC94F1233C373900BFB70A /* LoginView.swift */,
+				28B9E50D2346BCB2007C3909 /* RegistrationView.swift */,
 				2841022623419A2B00EAFA29 /* TabbedBudgetView.swift */,
 				284102242341998300EAFA29 /* ContentView.swift */,
 				28AC9521233C381C00BFB70A /* Localizable.strings */,
@@ -399,6 +402,7 @@
 				28AC9525233C42D100BFB70A /* BudgetApiService.swift in Sources */,
 				2857EAED233DA30B0026BC83 /* LoadingView.swift in Sources */,
 				28FE6AFA23441E3700D5543E /* CategoryDataStore.swift in Sources */,
+				28B9E50E2346BCB2007C3909 /* RegistrationView.swift in Sources */,
 				284102322342E12F00EAFA29 /* CategoryListView.swift in Sources */,
 				284102252341998300EAFA29 /* ContentView.swift in Sources */,
 				28FE6B002344308600D5543E /* Transaction.swift in Sources */,

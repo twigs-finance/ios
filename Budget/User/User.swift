@@ -19,3 +19,9 @@ struct LoginRequest: Codable {
     let username: String
     let password: String
 }
+
+struct RegistrationRequest: Codable {
+    let username: String
+    let email: String
+    let password: String
+}
