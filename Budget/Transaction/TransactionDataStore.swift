@@ -19,9 +19,9 @@ class TransactionDataStore: ObservableObject {
     func getTransactions(_ category: Category? = nil) {
         self.transactions = .failure(.loading)
         
-        var categoryIds: [Int]? = nil
+        var categoryIds: [Int] = []
         if category != nil {
-            categoryIds?.append(category!.id!)
+            categoryIds.append(category!.id!)
         }
         _ = self.transactionRepository.getTransactions(categoryIds: categoryIds, from: Date(timeIntervalSince1970: 0))
             .receive(on: DispatchQueue.main)
