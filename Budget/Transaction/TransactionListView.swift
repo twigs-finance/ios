@@ -53,11 +53,11 @@ struct TransactionListItemView: View {
                 VStack(alignment: .leading) {
                     Text(verbatim: transaction.title)
                         .lineLimit(1)
-                        .font(.system(size: 20))
+                        .font(.headline)
                     Text(verbatim: transaction.date.toLocaleString())
                         .lineLimit(1)
-                        .font(.system(size: 16))
-                        .foregroundColor(.gray)
+                        .font(.subheadline)
+                        .foregroundColor(.secondary)
                         .multilineTextAlignment(.trailing)
                 }
                 Spacer()

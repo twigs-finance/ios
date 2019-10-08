@@ -53,8 +53,11 @@ struct BudgetListItemView: View {
         ) {
             VStack(alignment: .leading) {
                 Text(verbatim: budget.name)
+                    .lineLimit(1)
                 Text(verbatim: budget.description ?? "")
-                    .foregroundColor(.gray)
+                    .font(.subheadline)
+                    .lineLimit(1)
+                    .foregroundColor(.secondary)
             }
         }
     }
