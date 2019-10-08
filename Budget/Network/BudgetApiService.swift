@@ -144,7 +144,6 @@ class BudgetApiService {
             type: User.self
         ).map { (user) -> User in
             // Persist the credentials on sucessful registration
-            self.requestHelper.credentials = (username, password)
             return user
         }.eraseToAnyPublisher()
     }
@@ -156,7 +155,6 @@ class BudgetApiService {
             type: User.self
         ).map { (user) -> User in
             // Persist the credentials on sucessful registration
-            self.requestHelper.credentials = (username, password)
             return user
         }.eraseToAnyPublisher()
     }
@@ -196,7 +194,6 @@ class RequestHelper {
     let encoder = JSONEncoder()
     let decoder: JSONDecoder
     let baseUrl: String
-    var credentials: (String, String)?
     
     init(_ baseUrl: String) {
         self.baseUrl = baseUrl
@@ -212,7 +209,7 @@ class RequestHelper {
         if (queries != nil) {
             for (key, values) in queries! {
                 for value in values {
-                    let separator = endPoint.contains("?") ? "&" : "?"
+                    let separator = combinedEndPoint.contains("?") ? "&" : "?"
                     combinedEndPoint += separator + key + "=" + value
                 }
             }
@@ -261,12 +258,6 @@ class RequestHelper {
         }
         
         var request = URLRequest(url: url)
-        if (self.credentials != nil) {
-            if let encodedCredentials = "\(self.credentials!.0):\(self.credentials!.1)"
-                .data(using: String.Encoding.utf8)?.base64EncodedString() {
-                request.addValue("Basic \(encodedCredentials)", forHTTPHeaderField: "Authorization")
-            }
-        }
         request.httpBody = data?.toJSONData()
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         request.httpMethod = method
