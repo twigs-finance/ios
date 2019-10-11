@@ -50,8 +50,12 @@ struct CategoryListItemView: View {
         ) {
             VStack(alignment: .leading) {
                 Text(verbatim: category.title)
-                Text(verbatim: category.description ?? "")
-                    .foregroundColor(.gray)
+                if category.description?.isEmpty == false {
+                    Text(verbatim: category.description!)
+                        .font(.subheadline)
+                        .foregroundColor(.secondary)
+                        .lineLimit(1)
+                }
             }
         }
     }
