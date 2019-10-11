@@ -16,6 +16,12 @@ class TransactionDataStore: ObservableObject {
         }
     }
     
+    var transaction: Result<Transaction, NetworkError> = .failure(.unknown) {
+        didSet {
+            self.objectWillChange.send()
+        }
+    }
+    
     func getTransactions(_ category: Category? = nil) {
         self.transactions = .failure(.loading)
         
@@ -37,10 +43,26 @@ class TransactionDataStore: ObservableObject {
             })
     }
     
+    func createTransaction(_ transaction: Transaction) {
+        self.transaction = .failure(.loading)
+        
+        _ = self.transactionRepository.createTransaction(transaction)
+            .receive(on: DispatchQueue.main)
+            .sink(receiveCompletion: { (completion) in
+                switch completion {
+                case .finished:
+                    return
+                case .failure(let error):
+                    self.transaction = .failure(error)
+                }
+            }, receiveValue: { (transaction) in
+                self.transaction = .success(transaction)
+            })
+    }
+    
     let objectWillChange = ObservableObjectPublisher()
     private let transactionRepository: TransactionRepository
-    init(_ transactionRepository: TransactionRepository, category: Category? = nil) {
+    init(_ transactionRepository: TransactionRepository) {
         self.transactionRepository = transactionRepository
-        self.getTransactions(category)
     }
 }

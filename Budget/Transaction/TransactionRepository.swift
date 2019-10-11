@@ -19,4 +19,8 @@ class TransactionRepository {
     func getTransactions(categoryIds: [Int]? = nil, from: Date? = nil, count: Int? = nil, page: Int? = nil) -> AnyPublisher<[Transaction], NetworkError> {
         return apiService.getTransactions(categoryIds: categoryIds, from: from, count: count, page: page)
     }
+    
+    func createTransaction(_ transaction: Transaction) -> AnyPublisher<Transaction, NetworkError> {
+        return apiService.newTransaction(transaction)
+    }
 }

@@ -9,7 +9,18 @@
 // MARK: Generic
 "add" = "Agregar";
 "filter" = "Filtrar";
+"save" = "Guardar";
+"cancel" = "Cancelar";
 "loading_default" = "Cargando...";
+"prompt_name" = "Nombre";
+"prompt_description" = "Descripción";
+"prompt_amount" = "Monto";
+"prompt_date" = "Fecha";
+"prompt_category" = "Categoría";
+"prompt_budget" = "Presupuesto";
+"prompt_type" = "Tipo";
+"type_income" = "Ingreso";
+"type_expense" = "Gasto";
 
 // MARK: Login
 "info_login" = "Inicia sesión para empezar a manejar su presupuseto";

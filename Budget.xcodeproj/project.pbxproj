@@ -13,6 +13,7 @@
 		284102302342D97300EAFA29 /* BudgetListsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2841022F2342D97300EAFA29 /* BudgetListsView.swift */; };
 		284102322342E12F00EAFA29 /* CategoryListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 284102312342E12F00EAFA29 /* CategoryListView.swift */; };
 		2857EAED233DA30B0026BC83 /* LoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2857EAEC233DA30B0026BC83 /* LoadingView.swift */; };
+		28A1E95A235006A300CA57FE /* AddTransactionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28A1E959235006A300CA57FE /* AddTransactionView.swift */; };
 		28AC94EE233C373900BFB70A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28AC94ED233C373900BFB70A /* AppDelegate.swift */; };
 		28AC94F0233C373900BFB70A /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28AC94EF233C373900BFB70A /* SceneDelegate.swift */; };
 		28AC94F2233C373900BFB70A /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28AC94F1233C373900BFB70A /* LoginView.swift */; };
@@ -64,6 +65,7 @@
 		2841022F2342D97300EAFA29 /* BudgetListsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BudgetListsView.swift; sourceTree = "<group>"; };
 		284102312342E12F00EAFA29 /* CategoryListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryListView.swift; sourceTree = "<group>"; };
 		2857EAEC233DA30B0026BC83 /* LoadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingView.swift; sourceTree = "<group>"; };
+		28A1E959235006A300CA57FE /* AddTransactionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddTransactionView.swift; sourceTree = "<group>"; };
 		28AC94EA233C373900BFB70A /* Budget.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Budget.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		28AC94ED233C373900BFB70A /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		28AC94EF233C373900BFB70A /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -233,6 +235,7 @@
 				28FE6B012344331B00D5543E /* TransactionDataStore.swift */,
 				28FE6B03234449DC00D5543E /* TransactionListView.swift */,
 				28FE6B0523444A9800D5543E /* TransactionDetailsView.swift */,
+				28A1E959235006A300CA57FE /* AddTransactionView.swift */,
 			);
 			path = Transaction;
 			sourceTree = "<group>";
@@ -389,6 +392,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				28FE6AFE234428BF00D5543E /* DataStoreProvider.swift in Sources */,
+				28A1E95A235006A300CA57FE /* AddTransactionView.swift in Sources */,
 				28AC94EE233C373900BFB70A /* AppDelegate.swift in Sources */,
 				28AC94F0233C373900BFB70A /* SceneDelegate.swift in Sources */,
 				28FE6AFC23441E4500D5543E /* CategoryRepository.swift in Sources */,

@@ -27,8 +27,8 @@ class DataStoreProvider {
         return CategoryDataStore(categoryRepository, budget: budget)
     }
     
-    func transactionDataStore(_ category: Category? = nil) -> TransactionDataStore {
-        return TransactionDataStore(transactionRepository, category: category)
+    func transactionDataStore() -> TransactionDataStore {
+        return TransactionDataStore(transactionRepository)
     }
     
     func userDataStore() -> UserDataStore {

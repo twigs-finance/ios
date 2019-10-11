@@ -35,7 +35,8 @@ struct TransactionListView: View {
     let dataStoreProvider: DataStoreProvider
     init(_ dataStoreProvider: DataStoreProvider, category: Category? = nil) {
         self.dataStoreProvider = dataStoreProvider
-        self.transactionDataStore = dataStoreProvider.transactionDataStore(category)
+        self.transactionDataStore = dataStoreProvider.transactionDataStore()
+        self.transactionDataStore.getTransactions(category)
     }
 }
 

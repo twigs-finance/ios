@@ -10,6 +10,7 @@ import SwiftUI
 
 struct TabbedBudgetView: View {
     @ObservedObject var userData: UserDataStore
+    @State var isAddingTransaction = false
     
     var body: some View {
         TabView {
@@ -20,18 +21,26 @@ struct TabbedBudgetView: View {
                         leading: NavigationLink(destination: EmptyView()) {
                             Text("filter")
                         },
-                        trailing: NavigationLink(destination: EmptyView().navigationBarTitle("add_transaction")) {
-                            Text("add")
+                        trailing: Button(action: {
+                            self.isAddingTransaction = true
+                        }) {
+                            Image(systemName: "plus")
                         }
                 )
-            }.tabItem {
+                    .sheet(isPresented: $isAddingTransaction, content: {
+                        AddTransactionView(self.dataStoreProvider)
+                    })
+            }
+            .tabItem {
                 Image(systemName: "dollarsign.circle.fill")
                 Text("transactions")
             }
+            
             BudgetListsView(dataStoreProvider).tabItem {
                 Image(systemName: "chart.pie.fill")
                 Text("budgets")
             }
+            
             Text("Profile here").tabItem {
                 Image(systemName: "person.circle.fill")
                 Text("profile")
