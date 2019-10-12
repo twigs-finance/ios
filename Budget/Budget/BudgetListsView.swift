@@ -21,9 +21,13 @@ struct BudgetListsView: View {
     var stateContent: AnyView {
         switch budgetsDataStore.budgets {
         case .success(let budgets):
-            return AnyView(List(budgets) { budget in
-                BudgetListItemView(self.dataStoreProvider, budget: budget)
-            })
+            return AnyView(
+                Section {
+                    List(budgets) { budget in
+                        BudgetListItemView(self.dataStoreProvider, budget: budget)
+                    }
+                }
+            )
         case .failure(.loading):
             return AnyView(VStack {
                 ActivityIndicator(isAnimating: .constant(true), style: .large)

@@ -19,9 +19,13 @@ struct CategoryListView: View {
     var stateContent: AnyView {
         switch self.categoryDataStore.categories {
         case .success(let categories):
-            return AnyView(List(categories) { category in
-                CategoryListItemView(self.dataStoreProvider, category: category)
-            })
+            return AnyView(
+                Section {
+                    List(categories) { category in
+                        CategoryListItemView(self.dataStoreProvider, category: category)
+                    }
+                }
+            )
         case .failure(.loading):
             return AnyView(VStack {
                 ActivityIndicator(isAnimating: .constant(true), style: .large)
@@ -35,7 +39,9 @@ struct CategoryListView: View {
     private let dataStoreProvider: DataStoreProvider
     init(_ dataStoreProvider: DataStoreProvider, budget: Budget) {
         self.dataStoreProvider = dataStoreProvider
-        self.categoryDataStore = dataStoreProvider.categoryDataStore(budget)
+        let categoryDataStore = dataStoreProvider.categoryDataStore()
+        categoryDataStore.getCategories(budgetId: budget.id!)
+        self.categoryDataStore = categoryDataStore
     }
 }
 

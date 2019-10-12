@@ -19,9 +19,13 @@ struct TransactionListView: View {
     var stateContent: AnyView {
         switch transactionDataStore.transactions {
         case .success(let transactions):
-            return AnyView(List(transactions) { transaction in
-                TransactionListItemView(self.dataStoreProvider, transaction: transaction)
-            })
+            return AnyView(
+                Section{
+                    List(transactions) { transaction in
+                        TransactionListItemView(self.dataStoreProvider, transaction: transaction)
+                    }
+                }
+            )
         case .failure(.loading):
             return AnyView(VStack {
                 ActivityIndicator(isAnimating: .constant(true), style: .large)

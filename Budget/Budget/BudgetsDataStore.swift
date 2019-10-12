@@ -15,7 +15,12 @@ class BudgetsDataStore: ObservableObject {
             self.objectWillChange.send()
         }
     }
-    
+    var budget: Result<Budget, NetworkError> = .failure(.loading) {
+        didSet {
+            self.objectWillChange.send()
+        }
+    }
+
     func getBudgets() {
         self.budgets = .failure(.loading)
         

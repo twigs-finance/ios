@@ -13,6 +13,7 @@
 		284102302342D97300EAFA29 /* BudgetListsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2841022F2342D97300EAFA29 /* BudgetListsView.swift */; };
 		284102322342E12F00EAFA29 /* CategoryListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 284102312342E12F00EAFA29 /* CategoryListView.swift */; };
 		2857EAED233DA30B0026BC83 /* LoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2857EAEC233DA30B0026BC83 /* LoadingView.swift */; };
+		2888234723512DBF003D3847 /* Observable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2888234623512DBF003D3847 /* Observable.swift */; };
 		28A1E95A235006A300CA57FE /* AddTransactionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28A1E959235006A300CA57FE /* AddTransactionView.swift */; };
 		28AC94EE233C373900BFB70A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28AC94ED233C373900BFB70A /* AppDelegate.swift */; };
 		28AC94F0233C373900BFB70A /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28AC94EF233C373900BFB70A /* SceneDelegate.swift */; };
@@ -65,6 +66,7 @@
 		2841022F2342D97300EAFA29 /* BudgetListsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BudgetListsView.swift; sourceTree = "<group>"; };
 		284102312342E12F00EAFA29 /* CategoryListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryListView.swift; sourceTree = "<group>"; };
 		2857EAEC233DA30B0026BC83 /* LoadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingView.swift; sourceTree = "<group>"; };
+		2888234623512DBF003D3847 /* Observable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Observable.swift; sourceTree = "<group>"; };
 		28A1E959235006A300CA57FE /* AddTransactionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddTransactionView.swift; sourceTree = "<group>"; };
 		28AC94EA233C373900BFB70A /* Budget.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Budget.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		28AC94ED233C373900BFB70A /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -197,6 +199,7 @@
 				28AC94FB233C373A00BFB70A /* Info.plist */,
 				28AC94F5233C373A00BFB70A /* Preview Content */,
 				28FE6AFD234428BF00D5543E /* DataStoreProvider.swift */,
+				2888234623512DBF003D3847 /* Observable.swift */,
 			);
 			path = Budget;
 			sourceTree = "<group>";
@@ -404,6 +407,7 @@
 				28FE6B04234449DC00D5543E /* TransactionListView.swift in Sources */,
 				28AC94F2233C373900BFB70A /* LoginView.swift in Sources */,
 				28AC9525233C42D100BFB70A /* BudgetApiService.swift in Sources */,
+				2888234723512DBF003D3847 /* Observable.swift in Sources */,
 				2857EAED233DA30B0026BC83 /* LoadingView.swift in Sources */,
 				28FE6AFA23441E3700D5543E /* CategoryDataStore.swift in Sources */,
 				28B9E50E2346BCB2007C3909 /* RegistrationView.swift in Sources */,

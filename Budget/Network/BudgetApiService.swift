@@ -191,13 +191,11 @@ class BudgetApiService {
 }
 
 class RequestHelper {
-    let encoder = JSONEncoder()
-    let decoder: JSONDecoder
+    let decoder = JSONDecoder()
     let baseUrl: String
     
     init(_ baseUrl: String) {
         self.baseUrl = baseUrl
-        self.decoder = JSONDecoder()
         self.decoder.dateDecodingStrategy = .iso8601
     }
     
@@ -315,7 +313,9 @@ enum NetworkError: Error, Equatable {
 
 extension Encodable {
     func toJSONData() -> Data? {
-        return try? JSONEncoder().encode(self)
+        let encoder = JSONEncoder()
+        encoder.dateEncodingStrategy = .iso8601
+        return try? encoder.encode(self)
     }
 }
 

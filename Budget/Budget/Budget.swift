@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct Budget: Identifiable, Codable {
+struct Budget: Identifiable, Hashable, Codable {
     let id: Int?
     let name: String
     let description: String?

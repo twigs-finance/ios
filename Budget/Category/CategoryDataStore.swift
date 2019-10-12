@@ -35,8 +35,7 @@ class CategoryDataStore: ObservableObject {
     
     let objectWillChange = ObservableObjectPublisher()
     private let categoryRepository: CategoryRepository
-    init(_ categoryRepository: CategoryRepository, budget: Budget? = nil) {
+    init(_ categoryRepository: CategoryRepository) {
         self.categoryRepository = categoryRepository
-        self.getCategories(budgetId: budget?.id)
     }
 }

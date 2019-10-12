@@ -7,6 +7,7 @@
 //
 
 import SwiftUI
+import Combine
 
 struct AddTransactionView: View {
     @Environment(\.presentationMode) var presentationMode
@@ -15,11 +16,11 @@ struct AddTransactionView: View {
     @State var description: String = ""
     @State var date: Date = Date()
     @State var amount: String = ""
-    @State var categoryId: Int = 0
     @State var type: TransactionType = .expense
-    @State var budgetId: Int = 0
+    @State var categoryId: Int? = nil
+    @ObservedObject var budgetPublisher = Observable<Int?>(nil)
     let createdBy: Int
-        
+    
     var stateContent: AnyView {
         switch transactionDataStore.transaction {
         case .success(_):
@@ -45,20 +46,44 @@ struct AddTransactionView: View {
                             Text(type.localizedKey)
                         }
                     }
-                    // TODO: Figure out how to load budgets dynamically
-                    Picker("prompt_budget", selection: self.$type) {
-                        ForEach(TransactionType.allCases) { type in
-                            Text(type.localizedKey)
-                        }
-                    }
-                    // TODO: Figure out how to load categories dynamically
-                    Picker("prompt_category", selection: self.$type) {
-                        ForEach(TransactionType.allCases) { type in
-                            Text(type.localizedKey)
-                        }
-                    }
+                    budgetPicker
+                    categoryPicker
                 }
             })
+        }
+    }
+    
+    var budgetPicker: some View {
+        switch budgetsDataStore.budgets {
+        case .success(let budgets):
+            return AnyView(
+                Picker(selection: $budgetPublisher.value, label: Text("prompt_budget")) {
+                    ForEach(budgets) { budget in
+                        Text(budget.name)
+                    }
+                }.onReceive(budgetPublisher.publisher, perform: { budget in
+                    self.categoryDataStore.getCategories(budgetId: budget!)
+                })
+            )
+        default:
+            return AnyView(VStack {
+                ActivityIndicator(isAnimating: .constant(true), style: .large)
+            })
+        }
+    }
+    
+    var categoryPicker: some View {
+        switch categoryDataStore.categories {
+        case .success(let categories):
+            return AnyView(
+                Picker("prompt_category", selection: self.$categoryId) {
+                    ForEach(categories) { category in
+                        Text(category.title)
+                    }
+                }
+            )
+        default:
+            return AnyView(EmptyView())
         }
     }
     
@@ -66,30 +91,42 @@ struct AddTransactionView: View {
         NavigationView {
             stateContent
                 .navigationBarTitle("add_transaction")
-                .navigationBarItems(leading: Button("cancel") {
-                    self.presentationMode.wrappedValue.dismiss()
-                    }, trailing: Button("save") {
+                .navigationBarItems(
+                    leading: Button("cancel") {
+                        self.presentationMode.wrappedValue.dismiss()
+                    },
+                    trailing: Button("save") {
+                        let amount = Double(self.amount) ?? 0.0
+                        
                         self.transactionDataStore.createTransaction(Transaction(
                             id: self.id,
                             title: self.title,
                             description: self.description,
                             date: self.date,
-                            amount: Int(Double(self.amount) ?? 0.0 * 100.0),
-                            categoryId: self.categoryId,
+                            amount: Int(amount * 100.0),
+                            categoryId: self.categoryId!,
                             expense: self.type == TransactionType.expense,
                             createdBy: self.createdBy,
-                            budgetId: self.budgetId
+                            budgetId: self.budgetPublisher.value!
                         ))
                 })
         }
     }
     
     @ObservedObject var transactionDataStore: TransactionDataStore
+    @ObservedObject var budgetsDataStore: BudgetsDataStore
+    @ObservedObject var categoryDataStore: CategoryDataStore
     init(_ dataStoreProvider: DataStoreProvider) {
         self.transactionDataStore = dataStoreProvider.transactionDataStore()
+        let budgetsDataStore = dataStoreProvider.budgetsDataStore()
+        budgetsDataStore.getBudgets()
+        self.budgetsDataStore = budgetsDataStore
+        let categoryDataStore = dataStoreProvider.categoryDataStore()
+        self.categoryDataStore = categoryDataStore
         self.createdBy = try! dataStoreProvider.userDataStore().currentUser.get().id!
     }
 }
+
 
 //struct AddTransactionView_Previews: PreviewProvider {
 //    static var previews: some View {
