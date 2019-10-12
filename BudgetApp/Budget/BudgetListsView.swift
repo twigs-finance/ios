@@ -1,3 +1,4 @@
+
 //
 //  BudgetsView.swift
 //  Budget
@@ -74,8 +75,8 @@ struct BudgetListItemView: View {
     }
 }
 
-//struct BudgetsView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        BudgetsView(budgets: [])
-//    }
-//}
+struct BudgetListsView_Previews: PreviewProvider {
+    static var previews: some View {
+        BudgetListsView(MockDataStoreProvider())
+    }
+}

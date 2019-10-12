@@ -22,7 +22,19 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         #else
         let baseUrl = "https://budget-api.intra.wbrawner.com"
         #endif
-        dataStoreProvider = DataStoreProvider(baseUrl)
+        let requestHelper = RequestHelper(baseUrl)
+        let apiService = BudgetApiService(requestHelper)
+        let budgetRepository = MockBudgetRepository()
+//        let budgetRepository = NetworkBudgetRepository(apiService)
+        let categoryRepository = NetworkCategoryRepository(apiService)
+        let transactionRepository = NetworkTransactionRepository(apiService)
+        let userRepository = NetworkUserRepository(apiService)
+        dataStoreProvider = DataStoreProvider(
+            budgetRepository: budgetRepository,
+            categoryRepository: categoryRepository,
+            transactionRepository: transactionRepository,
+            userRepository: userRepository
+        )
         super.init()
     }
 

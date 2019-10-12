@@ -29,9 +29,7 @@ struct AddTransactionView: View {
             return AnyView(EmptyView())
             
         case .failure(.loading):
-            return AnyView(VStack {
-                ActivityIndicator(isAnimating: .constant(true), style: .large)
-            })
+            return AnyView(EmbeddedLoadingView())
         default:
             // TODO: Handle each network failure type
             return AnyView(Form {
@@ -66,9 +64,7 @@ struct AddTransactionView: View {
                 })
             )
         default:
-            return AnyView(VStack {
-                ActivityIndicator(isAnimating: .constant(true), style: .large)
-            })
+            return AnyView(EmbeddedLoadingView())
         }
     }
     

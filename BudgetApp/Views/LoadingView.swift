@@ -36,6 +36,14 @@ struct LoadingView<Content>: View where Content: View {
     }
 }
 
+struct EmbeddedLoadingView: View {
+    var body: some View {
+        VStack {
+            ActivityIndicator(isAnimating: .constant(true), style: .large)
+        }
+    }
+}
+
 struct ActivityIndicator: UIViewRepresentable {
     
     @Binding var isAnimating: Bool

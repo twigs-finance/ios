@@ -21,10 +21,10 @@ class BudgetsDataStore: ObservableObject {
         }
     }
 
-    func getBudgets() {
+    func getBudgets(count: Int? = nil, page: Int? = nil) {
         self.budgets = .failure(.loading)
         
-        _ = self.budgetRepository.getBudgets()
+        _ = self.budgetRepository.getBudgets(count: count, page: page)
             .receive(on: DispatchQueue.main)
             .sink(receiveCompletion: { (status) in
                 switch status {

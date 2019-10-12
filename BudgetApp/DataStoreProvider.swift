@@ -15,7 +15,6 @@ class DataStoreProvider {
     private let budgetRepository: BudgetRepository
     private let categoryRepository: CategoryRepository
     private let transactionRepository: TransactionRepository
-    private let userRepository: UserRepository
     
     private let _userDataStore: UserDataStore
     
@@ -35,14 +34,30 @@ class DataStoreProvider {
         return self._userDataStore
     }
 
-    init(_ baseUrl: String) {
-        let requestHelper = RequestHelper(baseUrl)
-        let apiService = BudgetApiService(requestHelper)
-        budgetRepository = BudgetRepository(apiService)
-        categoryRepository = CategoryRepository(apiService)
-        transactionRepository = TransactionRepository(apiService)
-        userRepository = UserRepository(apiService)
-
-        _userDataStore = UserDataStore(userRepository)
+    init(
+        budgetRepository: BudgetRepository,
+        categoryRepository: CategoryRepository,
+        transactionRepository: TransactionRepository,
+        userRepository: UserRepository
+    ) {
+        self.budgetRepository = budgetRepository
+        self.categoryRepository = categoryRepository
+        self.transactionRepository = transactionRepository
+        self._userDataStore = UserDataStore(userRepository)
     }
 }
+
+#if DEBUG
+
+class MockDataStoreProvider: DataStoreProvider {
+    init() {
+        super.init(
+            budgetRepository: MockBudgetRepository(),
+            categoryRepository: MockCategoryRepository(),
+            transactionRepository: MockTransactionRepository(),
+            userRepository: MockUserRepository()
+        )
+    }
+}
+
+#endif

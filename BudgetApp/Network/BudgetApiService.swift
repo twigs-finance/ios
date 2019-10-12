@@ -45,10 +45,9 @@ class BudgetApiService {
         return requestHelper.put("/budgets/\(budget.id!)", data: budget)
     }
     
-    // TODO: Figure out how to implement this
-    //    func deleteBudget(_ id: Int) -> AnyPublisher<Void, NetworkError> {
-    //        return requestHelper.delete("/budgets/\(id)")
-    //    }
+    func deleteBudget(_ id: Int) -> AnyPublisher<Empty, NetworkError> {
+        return requestHelper.delete("/budgets/\(id)")
+    }
     
     // MARK: Transactions
     
@@ -94,10 +93,9 @@ class BudgetApiService {
         return requestHelper.put("/transactions/\(transaction.id!)", data: transaction)
     }
     
-    // TODO: Figure out how to implement this
-    //    func deleteTransaction(_ id: Int) -> AnyPublisher<Void, NetworkError> {
-    //        return requestHelper.delete("/transactions/\(id)")
-    //    }
+    func deleteTransaction(_ id: Int) -> AnyPublisher<Empty, NetworkError> {
+        return requestHelper.delete("/transactions/\(id)")
+    }
     
     // MARK: Categories
     
@@ -131,10 +129,9 @@ class BudgetApiService {
         return requestHelper.put("/categories/\(category.id!)", data: category)
     }
     
-    // TODO: Figure out how to implement this
-    //    func deleteCategory(_ id: Int) -> AnyPublisher<Void, NetworkError> {
-    //        return requestHelper.delete("/categories/\(id)")
-    //    }
+    func deleteCategory(_ id: Int) -> AnyPublisher<Empty, NetworkError> {
+        return requestHelper.delete("/categories/\(id)")
+    }
     
     // MARK: Users
     func login(username: String, password: String) -> AnyPublisher<User, NetworkError> {
@@ -187,6 +184,10 @@ class BudgetApiService {
     
     func updateUser(_ user: User) -> AnyPublisher<User, NetworkError> {
         return requestHelper.put("/users/\(user.id!)", data: user)
+    }
+    
+    func deleteUser(_ user: User) -> AnyPublisher<Empty, NetworkError> {
+        return requestHelper.delete("/users/\(user.id!)")
     }
 }
 
@@ -279,6 +280,8 @@ class RequestHelper {
         return task.eraseToAnyPublisher()
     }
 }
+
+struct Empty: Codable {}
 
 enum NetworkError: Error, Equatable {
     static func == (lhs: NetworkError, rhs: NetworkError) -> Bool {
