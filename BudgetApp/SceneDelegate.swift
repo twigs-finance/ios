@@ -24,8 +24,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         #endif
         let requestHelper = RequestHelper(baseUrl)
         let apiService = BudgetApiService(requestHelper)
-        let budgetRepository = MockBudgetRepository()
-//        let budgetRepository = NetworkBudgetRepository(apiService)
+        let budgetRepository = NetworkBudgetRepository(apiService)
         let categoryRepository = NetworkCategoryRepository(apiService)
         let transactionRepository = NetworkTransactionRepository(apiService)
         let userRepository = NetworkUserRepository(apiService)
