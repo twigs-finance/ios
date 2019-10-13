@@ -9,8 +9,10 @@
 // MARK: Generic
 "add" = "Agregar";
 "filter" = "Filtrar";
+"edit" = "Editar";
 "save" = "Guardar";
 "cancel" = "Cancelar";
+"details" = "Detalles";
 "loading_default" = "Cargando...";
 "prompt_name" = "Nombre";
 "prompt_description" = "Descripción";
@@ -21,6 +23,7 @@
 "prompt_type" = "Tipo";
 "type_income" = "Ingreso";
 "type_expense" = "Gasto";
+"retry" = "Volver a intentar";
 
 // MARK: Login
 "info_login" = "Inicia sesión para empezar a manejar su presupuseto";
@@ -38,8 +41,15 @@
 // MARK: Transactions
 "transactions" = "Transacciones";
 "add_transaction" = "Agregar Transacción";
+"notes" = "Notas";
+"registered_by" = "Registrado por";
+
+// MARK: Categories
+"category" = "Categoría";
+"categories" = "Categorías";
 
 // MARK: Budgets
+"budget" = "Presupuesto";
 "budgets" = "Presupuestos";
 
 // MARK: Profile

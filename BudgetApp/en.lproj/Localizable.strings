@@ -9,8 +9,10 @@
 // MARK: Generic
 "add" = "Add";
 "filter" = "Filter";
+"edit" = "Edit";
 "save" = "Save";
 "cancel" = "Cancel";
+"details" = "Details";
 "loading_default" = "Loading...";
 "prompt_name" = "Name";
 "prompt_description" = "Description";
@@ -21,6 +23,7 @@
 "prompt_type" = "Type";
 "type_income" = "Income";
 "type_expense" = "Expense";
+"retry" = "Retry";
 
 // MARK: Login
 "info_login" = "Login to start managing your budget";
@@ -38,8 +41,15 @@
 // MARK: Transactions
 "transactions" = "Transactions";
 "add_transaction" = "Add Transaction";
+"notes" = "Notes";
+"registered_by" = "Registered by";
+
+// MARK: Categories
+"category" = "Category";
+"categories" = "Categories";
 
 // MARK: Budgets
+"budget" = "Budget";
 "budgets" = "Budgets";
 
 // MARK: Profile

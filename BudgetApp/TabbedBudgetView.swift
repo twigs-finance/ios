@@ -9,7 +9,7 @@
 import SwiftUI
 
 struct TabbedBudgetView: View {
-    @ObservedObject var userData: UserDataStore
+    @ObservedObject var userData: AuthenticationDataStore
     @State var isAddingTransaction = false
     
     var body: some View {
@@ -49,7 +49,7 @@ struct TabbedBudgetView: View {
     }
     
     let dataStoreProvider: DataStoreProvider
-    init (_ userData: UserDataStore, dataStoreProvider: DataStoreProvider) {
+    init (_ userData: AuthenticationDataStore, dataStoreProvider: DataStoreProvider) {
         self.userData = userData
         self.dataStoreProvider = dataStoreProvider
     }

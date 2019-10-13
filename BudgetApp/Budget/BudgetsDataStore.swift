@@ -20,7 +20,7 @@ class BudgetsDataStore: ObservableObject {
             self.objectWillChange.send()
         }
     }
-
+    
     func getBudgets(count: Int? = nil, page: Int? = nil) {
         self.budgets = .failure(.loading)
         
@@ -36,6 +36,24 @@ class BudgetsDataStore: ObservableObject {
                 }
             }, receiveValue: { (budgets) in
                 self.budgets = .success(budgets)
+            })
+    }
+    
+    func getBudget(_ id: Int) {
+        self.budget = .failure(.loading)
+        
+        _ = self.budgetRepository.getBudget(id)
+            .receive(on: DispatchQueue.main)
+            .sink(receiveCompletion: { (status) in
+                switch status {
+                case .finished:
+                    return
+                case .failure(let error):
+                    self.budget = .failure(error)
+                    return
+                }
+            }, receiveValue: { (budget) in
+                self.budget = .success(budget)
             })
     }
     

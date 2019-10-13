@@ -93,14 +93,13 @@ struct AddTransactionView: View {
                     },
                     trailing: Button("save") {
                         let amount = Double(self.amount) ?? 0.0
-                        
                         self.transactionDataStore.createTransaction(Transaction(
                             id: self.id,
                             title: self.title,
                             description: self.description,
                             date: self.date,
                             amount: Int(amount * 100.0),
-                            categoryId: self.categoryId!,
+                            categoryId: self.categoryId,
                             expense: self.type == TransactionType.expense,
                             createdBy: self.createdBy,
                             budgetId: self.budgetPublisher.value!
@@ -119,7 +118,7 @@ struct AddTransactionView: View {
         self.budgetsDataStore = budgetsDataStore
         let categoryDataStore = dataStoreProvider.categoryDataStore()
         self.categoryDataStore = categoryDataStore
-        self.createdBy = try! dataStoreProvider.userDataStore().currentUser.get().id!
+        self.createdBy = try! dataStoreProvider.authenticationDataStore().currentUser.get().id!
     }
 }
 

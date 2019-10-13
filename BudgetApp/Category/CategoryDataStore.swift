@@ -16,6 +16,12 @@ class CategoryDataStore: ObservableObject {
         }
     }
     
+    var category: Result<Category, NetworkError> = .failure(.loading) {
+        didSet {
+            self.objectWillChange.send()
+        }
+    }
+    
     func getCategories(budgetId: Int? = nil, count: Int? = nil, page: Int? = nil) {
         self.categories = .failure(.loading)
         
@@ -33,6 +39,23 @@ class CategoryDataStore: ObservableObject {
             })
     }
     
+    func getCategory(_ categoryId: Int) {
+        self.category = .failure(.loading)
+        
+        _ = categoryRepository.getCategory(categoryId)
+            .receive(on: DispatchQueue.main)
+            .sink(receiveCompletion: { (completion) in
+                switch completion {
+                case .finished:
+                    return
+                case .failure(let error):
+                    self.category = .failure(error)
+                }
+            }, receiveValue: { (categories) in
+                self.category = .success(categories)
+            })
+    }
+
     let objectWillChange = ObservableObjectPublisher()
     private let categoryRepository: CategoryRepository
     init(_ categoryRepository: CategoryRepository) {

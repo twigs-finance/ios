@@ -13,7 +13,7 @@ struct RegistrationView: View {
     @State var email: String = ""
     @State var password: String = ""
     @State var confirmedPassword: String = ""
-    @ObservedObject var userData: UserDataStore
+    @ObservedObject var userData: AuthenticationDataStore
     
     var body: some View {
         VStack {
@@ -42,7 +42,7 @@ struct RegistrationView: View {
         }.padding()
     }
     
-    init(_ userData: UserDataStore) {
+    init(_ userData: AuthenticationDataStore) {
         self.userData = userData
     }
 }

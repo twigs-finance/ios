@@ -12,7 +12,7 @@ import Combine
 struct LoginView: View {
     @State var username: String = ""
     @State var password: String = ""
-    @ObservedObject var userData: UserDataStore
+    @ObservedObject var userData: AuthenticationDataStore
     let showLoader: Bool
     
     var body: some View {
@@ -43,7 +43,7 @@ struct LoginView: View {
         }
     }
     
-    init (_ userData: UserDataStore) {
+    init (_ userData: AuthenticationDataStore) {
         self.userData = userData
         if case userData.currentUser = Result<User, UserStatus>.failure(UserStatus.authenticating) {
             self.showLoader = true

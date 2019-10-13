@@ -15,8 +15,9 @@ class DataStoreProvider {
     private let budgetRepository: BudgetRepository
     private let categoryRepository: CategoryRepository
     private let transactionRepository: TransactionRepository
-    
-    private let _userDataStore: UserDataStore
+    private let userRepository: UserRepository
+
+    private let _authenticationDataStore: AuthenticationDataStore
     
     func budgetsDataStore() -> BudgetsDataStore {
         return BudgetsDataStore(budgetRepository)
@@ -30,8 +31,12 @@ class DataStoreProvider {
         return TransactionDataStore(transactionRepository)
     }
     
+    func authenticationDataStore() -> AuthenticationDataStore {
+        return self._authenticationDataStore
+    }
+    
     func userDataStore() -> UserDataStore {
-        return self._userDataStore
+        return UserDataStore(userRepository)
     }
 
     init(
@@ -43,7 +48,8 @@ class DataStoreProvider {
         self.budgetRepository = budgetRepository
         self.categoryRepository = categoryRepository
         self.transactionRepository = transactionRepository
-        self._userDataStore = UserDataStore(userRepository)
+        self.userRepository = userRepository
+        self._authenticationDataStore = AuthenticationDataStore(userRepository)
     }
 }
 

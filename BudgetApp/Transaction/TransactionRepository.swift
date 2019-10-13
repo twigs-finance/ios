@@ -37,46 +37,28 @@ class NetworkTransactionRepository: TransactionRepository {
 
 #if DEBUG
 class MockTransactionRepository: TransactionRepository {
-    func getTransactions(categoryIds: [Int]? = nil, from: Date? = nil, count: Int? = nil, page: Int? = nil) -> AnyPublisher<[Transaction], NetworkError> {
-        return Result.Publisher([Transaction(
-            id: 2,
-            title: "Test Transaction",
-            description: "A mock transaction used for testing",
-            date: Date(),
-            amount: 10000,
-            categoryId: 3,
-            expense: true,
-            createdBy: 0,
-            budgetId: 1
-            )]).eraseToAnyPublisher()
+    static let transaction: Transaction = Transaction(
+        id: 2,
+        title: "Test Transaction",
+        description: "A mock transaction used for testing",
+        date: Date(),
+        amount: 10000,
+        categoryId: MockCategoryRepository.category.id!,
+        expense: true,
+        createdBy: MockUserRepository.user.id!,
+        budgetId: MockBudgetRepository.budget.id!
+    )
+
+    func getTransactions(categoryIds: [Int]?, from: Date?, count: Int?, page: Int?) -> AnyPublisher<[Transaction], NetworkError> {
+        return Result.Publisher([MockTransactionRepository.transaction]).eraseToAnyPublisher()
     }
     
     func getTransaction(_ transactionId: Int) -> AnyPublisher<Transaction, NetworkError> {
-        return Result.Publisher(Transaction(
-            id: 2,
-            title: "Test Transaction",
-            description: "A mock transaction used for testing",
-            date: Date(),
-            amount: 10000,
-            categoryId: 3,
-            expense: true,
-            createdBy: 0,
-            budgetId: 1
-        )).eraseToAnyPublisher()
+        return Result.Publisher(MockTransactionRepository.transaction).eraseToAnyPublisher()
     }
     
     func createTransaction(_ transaction: Transaction) -> AnyPublisher<Transaction, NetworkError> {
-        return Result.Publisher(Transaction(
-            id: 2,
-            title: "Test Transaction",
-            description: "A mock transaction used for testing",
-            date: Date(),
-            amount: 10000,
-            categoryId: 3,
-            expense: true,
-            createdBy: 0,
-            budgetId: 1
-        )).eraseToAnyPublisher()
+        return Result.Publisher(MockTransactionRepository.transaction).eraseToAnyPublisher()
     }
 }
 #endif

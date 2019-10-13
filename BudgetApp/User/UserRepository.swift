@@ -10,8 +10,8 @@ import Foundation
 import Combine
 
 protocol UserRepository {
-    func getUser(id: Int) -> AnyPublisher<User, NetworkError>
-    func searchUsers(withUsername: String) -> AnyPublisher<[User], NetworkError>
+    func getUser(_ id: Int) -> AnyPublisher<User, NetworkError>
+    func searchUsers(_ withUsername: String) -> AnyPublisher<[User], NetworkError>
     func login(username: String, password: String) -> AnyPublisher<User, NetworkError>
     func register(username: String, email: String, password: String) -> AnyPublisher<User, NetworkError>
 }
@@ -23,11 +23,11 @@ class NetworkUserRepository: UserRepository {
         self.apiService = apiService
     }
     
-    func getUser(id: Int) -> AnyPublisher<User, NetworkError> {
+    func getUser(_ id: Int) -> AnyPublisher<User, NetworkError> {
         return apiService.getUser(id: id)
     }
     
-    func searchUsers(withUsername: String) -> AnyPublisher<[User], NetworkError> {
+    func searchUsers(_ withUsername: String) -> AnyPublisher<[User], NetworkError> {
         return apiService.searchUsers(query: withUsername)
     }
     
@@ -43,23 +43,25 @@ class NetworkUserRepository: UserRepository {
 #if DEBUG
 
 class MockUserRepository: UserRepository {
-    func getUser(id: Int) -> AnyPublisher<User, NetworkError> {
-        return Result<User, NetworkError>.Publisher(.failure(NetworkError.unknown))
+    static let user = User(id: 0, username: "root", email: "root@localhost", avatar: nil)
+    
+    func getUser(_ id: Int) -> AnyPublisher<User, NetworkError> {
+        return Result<User, NetworkError>.Publisher(MockUserRepository.user)
             .eraseToAnyPublisher()
     }
     
-    func searchUsers(withUsername: String) -> AnyPublisher<[User], NetworkError> {
-        return Result<[User], NetworkError>.Publisher(.failure(NetworkError.unknown))
+    func searchUsers(_ withUsername: String) -> AnyPublisher<[User], NetworkError> {
+        return Result<[User], NetworkError>.Publisher([MockUserRepository.user])
             .eraseToAnyPublisher()
     }
     
     func login(username: String, password: String) -> AnyPublisher<User, NetworkError> {
-        return Result<User, NetworkError>.Publisher(.failure(NetworkError.unknown))
+        return Result<User, NetworkError>.Publisher(MockUserRepository.user)
             .eraseToAnyPublisher()
     }
     
     func register(username: String, email: String, password: String) -> AnyPublisher<User, NetworkError> {
-        return Result<User, NetworkError>.Publisher(.failure(NetworkError.unknown))
+        return Result<User, NetworkError>.Publisher(MockUserRepository.user)
             .eraseToAnyPublisher()
     }
 }

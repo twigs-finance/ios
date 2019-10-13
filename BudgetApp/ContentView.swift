@@ -9,7 +9,7 @@
 import SwiftUI
 
 struct ContentView: View {
-    @ObservedObject var userData: UserDataStore
+    @ObservedObject var authenticationDataStore: AuthenticationDataStore
     
     var body: some View {
         stateContent
@@ -17,14 +17,14 @@ struct ContentView: View {
     
     var stateContent: AnyView {
         if showLogin() {
-            return AnyView(LoginView(userData))
+            return AnyView(LoginView(authenticationDataStore))
         } else {
-            return AnyView(TabbedBudgetView(userData, dataStoreProvider: dataStoreProvider))
+            return AnyView(TabbedBudgetView(authenticationDataStore, dataStoreProvider: dataStoreProvider))
         }
     }
     
     func showLogin() -> Bool {
-        switch userData.currentUser {
+        switch authenticationDataStore.currentUser {
         case .failure:
             return true
         default:
@@ -36,7 +36,7 @@ struct ContentView: View {
     
     init (_ dataStoreProvider: DataStoreProvider) {
         self.dataStoreProvider = dataStoreProvider
-        self.userData = dataStoreProvider.userDataStore()
+        self.authenticationDataStore = dataStoreProvider.authenticationDataStore()
     }
 }
 

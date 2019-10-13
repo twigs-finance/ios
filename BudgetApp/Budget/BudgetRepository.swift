@@ -53,22 +53,19 @@ class NetworkBudgetRepository: BudgetRepository {
 #if DEBUG
 
 class MockBudgetRepository: BudgetRepository {
+    static let budget = Budget(
+    id: 1,
+    name: "Test Budget",
+    description: "A mock budget used for testing",
+    users: []
+    )
+    
     func getBudgets(count: Int?, page: Int?) -> AnyPublisher<[Budget], NetworkError> {
-        return Result.Publisher([Budget(
-            id: 1,
-            name: "Test Budget",
-            description: "A mock budget used for testing",
-            users: []
-            )]).eraseToAnyPublisher()
+        return Result.Publisher([MockBudgetRepository.budget]).eraseToAnyPublisher()
     }
     
     func getBudget(_ id: Int) -> AnyPublisher<Budget, NetworkError> {
-        return Result.Publisher(Budget(
-            id: 1,
-            name: "Test Budget",
-            description: "A mock budget used for testing",
-            users: []
-            )).eraseToAnyPublisher()
+        return Result.Publisher(MockBudgetRepository.budget).eraseToAnyPublisher()
     }
     
     func getBudgetBalance(_ id: Int) -> AnyPublisher<Int, NetworkError> {
@@ -76,12 +73,7 @@ class MockBudgetRepository: BudgetRepository {
     }
     
     func newBudget(_ budget: Budget) -> AnyPublisher<Budget, NetworkError> {
-        return Result.Publisher(Budget(
-            id: 1,
-            name: "Test Budget",
-            description: "A mock budget used for testing",
-            users: []
-            )).eraseToAnyPublisher()
+        return Result.Publisher(MockBudgetRepository.budget).eraseToAnyPublisher()
     }
     
     func updateBudget(_ budget: Budget) -> AnyPublisher<Budget, NetworkError> {

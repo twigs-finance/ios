@@ -47,12 +47,11 @@ struct TransactionListView: View {
 struct TransactionListItemView: View {
     var transaction: Transaction
     let dataStoreProvider: DataStoreProvider
-    let numberFormatter: NumberFormatter
     
     var body: some View {
         NavigationLink(
-            destination: TransactionDetailsView(self.dataStoreProvider, transaction: transaction)
-                .navigationBarTitle(transaction.title)
+            destination: TransactionDetailsView(self.dataStoreProvider, transactionId: transaction.id!)
+                .navigationBarTitle("details", displayMode: .inline)
         ) {
             HStack {
                 VStack(alignment: .leading) {
@@ -67,7 +66,7 @@ struct TransactionListItemView: View {
                 }
                 Spacer()
                 VStack(alignment: .trailing) {
-                    Text(verbatim: self.numberFormatter.string(from: NSNumber(value: Double(transaction.amount) / 100.0)) ?? "")
+                    Text(verbatim: transaction.amount.toCurrencyString() ?? "")
                         .foregroundColor(transaction.expense ? .red : .green)
                         .multilineTextAlignment(.trailing)
                 }
@@ -79,9 +78,5 @@ struct TransactionListItemView: View {
     init (_ dataStoreProvider: DataStoreProvider, transaction: Transaction) {
         self.dataStoreProvider = dataStoreProvider
         self.transaction = transaction
-        let formatter = NumberFormatter()
-        formatter.locale = Locale.current
-        formatter.numberStyle = .currency
-        self.numberFormatter = formatter
     }
 }
