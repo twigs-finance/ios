@@ -9,7 +9,7 @@
 import Foundation
 
 /**
- Wrapper for all types of data stores. Some are considered singletons, such as the UserDataStore, while others are created as needed
+ Wrapper for all types of data stores. Some are considered singletons, such as the AuthenticationDataStore, while others are created as needed
  */
 class DataStoreProvider {
     private let budgetRepository: BudgetRepository
