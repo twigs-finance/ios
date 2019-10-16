@@ -11,90 +11,47 @@ import Combine
 
 struct AddTransactionView: View {
     @Environment(\.presentationMode) var presentationMode
-    @State var id: Int? = nil
     @State var title: String = ""
     @State var description: String = ""
     @State var date: Date = Date()
     @State var amount: String = ""
     @State var type: TransactionType = .expense
+    @State var budgetId: Int? = nil
     @State var categoryId: Int? = nil
-    @ObservedObject var budgetPublisher = Observable<Int?>(nil)
     let createdBy: Int
     
     var stateContent: AnyView {
         switch transactionDataStore.transaction {
         case .success(_):
-            // TODO: Figure out how to pass transaction up to previous view
             self.presentationMode.wrappedValue.dismiss()
             return AnyView(EmptyView())
-            
         case .failure(.loading):
             return AnyView(EmbeddedLoadingView())
         default:
-            // TODO: Handle each network failure type
-            return AnyView(Form {
-                Section {
-                    TextField("prompt_name", text: self.$title)
-                    TextField("prompt_description", text: self.$description)
-                    DatePicker(selection: self.$date, label: { Text("prompt_date") })
-                    TextField("prompt_amount", text: self.$amount)
-                        .keyboardType(.decimalPad)
-                    Picker("prompt_type", selection: self.$type) {
-                        ForEach(TransactionType.allCases) { type in
-                            Text(type.localizedKey)
-                        }
-                    }
-                    budgetPicker
-                    categoryPicker
-                }
-            })
-        }
-    }
-    
-    var budgetPicker: some View {
-        switch budgetsDataStore.budgets {
-        case .success(let budgets):
-            return AnyView(
-                Picker(selection: $budgetPublisher.value, label: Text("prompt_budget")) {
-                    ForEach(budgets) { budget in
-                        Text(budget.name)
-                    }
-                }.onReceive(budgetPublisher.publisher, perform: { budget in
-                    self.categoryDataStore.getCategories(budgetId: budget!)
-                })
-            )
-        default:
-            return AnyView(EmbeddedLoadingView())
-        }
-    }
-    
-    var categoryPicker: some View {
-        switch categoryDataStore.categories {
-        case .success(let categories):
-            return AnyView(
-                Picker("prompt_category", selection: self.$categoryId) {
-                    ForEach(categories) { category in
-                        Text(category.title)
-                    }
-                }
-            )
-        default:
-            return AnyView(EmptyView())
+                return AnyView(EditTransactionView(
+                    title: self.$title,
+                    description: self.$description,
+                    date: self.$date,
+                    amount: self.$amount,
+                    type: self.$type,
+                    budgetId: self.$budgetId,
+                    categoryId: self.$categoryId,
+                    dataStoreProvider: self.dataStoreProvider
+                ))
         }
     }
     
     var body: some View {
         NavigationView {
             stateContent
-                .navigationBarTitle("add_transaction")
                 .navigationBarItems(
                     leading: Button("cancel") {
                         self.presentationMode.wrappedValue.dismiss()
                     },
                     trailing: Button("save") {
                         let amount = Double(self.amount) ?? 0.0
-                        self.transactionDataStore.createTransaction(Transaction(
-                            id: self.id,
+                        self.transactionDataStore.saveTransaction(Transaction(
+                            id: nil,
                             title: self.title,
                             description: self.description,
                             date: self.date,
@@ -102,26 +59,20 @@ struct AddTransactionView: View {
                             categoryId: self.categoryId,
                             expense: self.type == TransactionType.expense,
                             createdBy: self.createdBy,
-                            budgetId: self.budgetPublisher.value!
+                            budgetId: self.budgetId!
                         ))
                 })
         }
     }
     
     @ObservedObject var transactionDataStore: TransactionDataStore
-    @ObservedObject var budgetsDataStore: BudgetsDataStore
-    @ObservedObject var categoryDataStore: CategoryDataStore
+    let dataStoreProvider: DataStoreProvider
     init(_ dataStoreProvider: DataStoreProvider) {
+        self.dataStoreProvider = dataStoreProvider
         self.transactionDataStore = dataStoreProvider.transactionDataStore()
-        let budgetsDataStore = dataStoreProvider.budgetsDataStore()
-        budgetsDataStore.getBudgets()
-        self.budgetsDataStore = budgetsDataStore
-        let categoryDataStore = dataStoreProvider.categoryDataStore()
-        self.categoryDataStore = categoryDataStore
         self.createdBy = try! dataStoreProvider.authenticationDataStore().currentUser.get().id!
     }
 }
-
 
 //struct AddTransactionView_Previews: PreviewProvider {
 //    static var previews: some View {

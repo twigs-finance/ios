@@ -29,6 +29,7 @@ struct TabbedBudgetView: View {
                 )
                     .sheet(isPresented: $isAddingTransaction, content: {
                         AddTransactionView(self.dataStoreProvider)
+                            .navigationBarTitle("add_transaction")
                     })
             }
             .tabItem {

@@ -65,10 +65,16 @@ class TransactionDataStore: ObservableObject {
             })
     }
     
-    func createTransaction(_ transaction: Transaction) {
+    func saveTransaction(_ transaction: Transaction) {
         self.transaction = .failure(.loading)
         
-        _ = self.transactionRepository.createTransaction(transaction)
+        var transactionSavePublisher: AnyPublisher<Transaction, NetworkError>
+        if (transaction.id != nil) {
+            transactionSavePublisher = self.transactionRepository.updateTransaction(transaction)
+        } else {
+            transactionSavePublisher = self.transactionRepository.createTransaction(transaction)
+        }
+        _ = transactionSavePublisher
             .receive(on: DispatchQueue.main)
             .sink(receiveCompletion: { (completion) in
                 switch completion {

@@ -13,6 +13,7 @@ protocol TransactionRepository {
     func getTransactions(categoryIds: [Int]?, from: Date?, count: Int?, page: Int?) -> AnyPublisher<[Transaction], NetworkError>
     func getTransaction(_ transactionId: Int) -> AnyPublisher<Transaction, NetworkError>
     func createTransaction(_ transaction: Transaction) -> AnyPublisher<Transaction, NetworkError>
+    func updateTransaction(_ transaction: Transaction) -> AnyPublisher<Transaction, NetworkError>
 }
 
 class NetworkTransactionRepository: TransactionRepository {
@@ -32,6 +33,10 @@ class NetworkTransactionRepository: TransactionRepository {
     
     func createTransaction(_ transaction: Transaction) -> AnyPublisher<Transaction, NetworkError> {
         return apiService.newTransaction(transaction)
+    }
+
+    func updateTransaction(_ transaction: Transaction) -> AnyPublisher<Transaction, NetworkError> {
+        return apiService.updateTransaction(transaction)
     }
 }
 
@@ -58,6 +63,10 @@ class MockTransactionRepository: TransactionRepository {
     }
     
     func createTransaction(_ transaction: Transaction) -> AnyPublisher<Transaction, NetworkError> {
+        return Result.Publisher(MockTransactionRepository.transaction).eraseToAnyPublisher()
+    }
+
+    func updateTransaction(_ transaction: Transaction) -> AnyPublisher<Transaction, NetworkError> {
         return Result.Publisher(MockTransactionRepository.transaction).eraseToAnyPublisher()
     }
 }
