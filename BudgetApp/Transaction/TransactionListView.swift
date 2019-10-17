@@ -13,7 +13,9 @@ struct TransactionListView: View {
     @ObservedObject var transactionDataStore: TransactionDataStore
     
     var body: some View {
-        stateContent
+        stateContent.onAppear {
+            self.transactionDataStore.getTransactions(self.category)
+        }
     }
     
     var stateContent: AnyView {
@@ -37,10 +39,11 @@ struct TransactionListView: View {
     }
     
     let dataStoreProvider: DataStoreProvider
+    let category: Category?
     init(_ dataStoreProvider: DataStoreProvider, category: Category? = nil) {
         self.dataStoreProvider = dataStoreProvider
         self.transactionDataStore = dataStoreProvider.transactionDataStore()
-        self.transactionDataStore.getTransactions(category)
+        self.category = category
     }
 }
 

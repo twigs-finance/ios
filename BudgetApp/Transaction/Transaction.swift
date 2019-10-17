@@ -38,3 +38,17 @@ enum TransactionType: Int, CaseIterable, Identifiable, Hashable {
     
     var id: TransactionType { self }
 }
+
+extension Transaction {
+    var type: TransactionType {
+        if (self.expense) {
+            return .expense
+        } else {
+            return .income
+        }
+    }
+    
+    var amountString: String {
+        return String(Double(self.amount) / 100.0)
+    }
+}

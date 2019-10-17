@@ -8,7 +8,7 @@
 
 import SwiftUI
 
-struct EditTransactionView: View {
+struct EditTransactionForm: View {
     @Binding var title: String
     @Binding var description: String
     @Binding var date: Date
@@ -16,7 +16,9 @@ struct EditTransactionView: View {
     @Binding var type: TransactionType
     @Binding var budgetId: Int?
     @Binding var categoryId: Int?
+    @State private var showingAlert = false
     let dataStoreProvider: DataStoreProvider
+    let deleteAction: (() -> ())?
     
     var body: some View {
         Form {
@@ -32,6 +34,19 @@ struct EditTransactionView: View {
             }
             BudgetPicker(self.dataStoreProvider, budgetId: self.$budgetId)
             CategoryPicker(self.dataStoreProvider, budgetId: self.$budgetId, categoryId: self.$categoryId)
+            if deleteAction != nil {
+                Button(action: {
+                    self.showingAlert = true
+                }) {
+                    Text("delete_transaction")
+                        .foregroundColor(.red)
+                }
+                .alert(isPresented:$showingAlert) {
+                    Alert(title: Text("confirm_delete_transaction"), message: nil, primaryButton: .destructive(Text("delete"), action: deleteAction), secondaryButton: .cancel())
+                }
+            } else {
+                EmptyView()
+            }
         }
     }
 }

@@ -28,7 +28,7 @@ struct AddTransactionView: View {
         case .failure(.loading):
             return AnyView(EmbeddedLoadingView())
         default:
-                return AnyView(EditTransactionView(
+                return AnyView(EditTransactionForm(
                     title: self.$title,
                     description: self.$description,
                     date: self.$date,
@@ -36,7 +36,8 @@ struct AddTransactionView: View {
                     type: self.$type,
                     budgetId: self.$budgetId,
                     categoryId: self.$categoryId,
-                    dataStoreProvider: self.dataStoreProvider
+                    dataStoreProvider: self.dataStoreProvider,
+                    deleteAction: nil
                 ))
         }
     }
@@ -62,6 +63,15 @@ struct AddTransactionView: View {
                             budgetId: self.budgetId!
                         ))
                 })
+        }
+        .onDisappear {
+            self.title = ""
+            self.description = ""
+            self.date = Date()
+            self.amount = ""
+            self.type = .expense
+            self.budgetId = nil
+            self.categoryId = nil
         }
     }
     

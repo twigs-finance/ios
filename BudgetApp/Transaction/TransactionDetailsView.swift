@@ -9,8 +9,17 @@
 import SwiftUI
 
 struct TransactionDetailsView: View {
+    @Environment(\.presentationMode) var presentationMode
+    @State var shouldNavigateUp: Bool = false
     var body: some View {
         stateContent
+            .onAppear {
+                if self.shouldNavigateUp {
+                    self.presentationMode.wrappedValue.dismiss()
+                } else {
+                    self.transactionDataStore.getTransaction(self.transactionId)
+                }
+        }
     }
     
     var stateContent: AnyView {
@@ -35,23 +44,33 @@ struct TransactionDetailsView: View {
                     UserLineItem(self.dataStoreProvider, userId: transaction.createdBy)
                 }.padding()
             }
-            .navigationBarItems(trailing: NavigationLink(destination: EmptyView()) {
+            .navigationBarItems(trailing: NavigationLink(
+                destination: TransactionEditView(
+                    self.dataStoreProvider,
+                    transaction: transaction,
+                    shouldNavigateUp: self.$shouldNavigateUp
+                ).navigationBarTitle("edit_transaction")
+            ) {
                 Text("edit")
             }))
         case .failure(.loading):
             return AnyView(EmbeddedLoadingView())
+        case.failure(.deleted):
+            self.presentationMode.wrappedValue.dismiss()
+            return AnyView(EmptyView())
         default:
             return AnyView(Text("transaction_details_error"))
         }
     }
         
     let dataStoreProvider: DataStoreProvider
+    let transactionId: Int
     @ObservedObject var transactionDataStore: TransactionDataStore
     init(_ dataStoreProvider: DataStoreProvider, transactionId: Int) {
         self.dataStoreProvider = dataStoreProvider
         let transactionDataStore = dataStoreProvider.transactionDataStore()
-        transactionDataStore.getTransaction(transactionId)
         self.transactionDataStore = transactionDataStore
+        self.transactionId = transactionId
     }
 }
 

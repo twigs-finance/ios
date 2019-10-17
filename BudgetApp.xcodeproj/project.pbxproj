@@ -7,7 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		2821266023555FD300072D52 /* EditTransactionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2821265F23555FD300072D52 /* EditTransactionView.swift */; };
+		2821266023555FD300072D52 /* EditTransactionForm.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2821265F23555FD300072D52 /* EditTransactionForm.swift */; };
+		282126622357E45F00072D52 /* TransactionEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 282126612357E45F00072D52 /* TransactionEditView.swift */; };
 		284102252341998300EAFA29 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 284102242341998300EAFA29 /* ContentView.swift */; };
 		2841022723419A2B00EAFA29 /* TabbedBudgetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2841022623419A2B00EAFA29 /* TabbedBudgetView.swift */; };
 		2841022C2342D8E400EAFA29 /* Budget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2841022B2342D8E400EAFA29 /* Budget.swift */; };
@@ -63,7 +64,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		2821265F23555FD300072D52 /* EditTransactionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditTransactionView.swift; sourceTree = "<group>"; };
+		2821265F23555FD300072D52 /* EditTransactionForm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditTransactionForm.swift; sourceTree = "<group>"; };
+		282126612357E45F00072D52 /* TransactionEditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionEditView.swift; sourceTree = "<group>"; };
 		284102242341998300EAFA29 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		2841022623419A2B00EAFA29 /* TabbedBudgetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabbedBudgetView.swift; sourceTree = "<group>"; };
 		2841022B2342D8E400EAFA29 /* Budget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Budget.swift; sourceTree = "<group>"; };
@@ -246,7 +248,8 @@
 				28FE6B03234449DC00D5543E /* TransactionListView.swift */,
 				28FE6B0523444A9800D5543E /* TransactionDetailsView.swift */,
 				28A1E959235006A300CA57FE /* AddTransactionView.swift */,
-				2821265F23555FD300072D52 /* EditTransactionView.swift */,
+				2821265F23555FD300072D52 /* EditTransactionForm.swift */,
+				282126612357E45F00072D52 /* TransactionEditView.swift */,
 			);
 			path = Transaction;
 			sourceTree = "<group>";
@@ -406,7 +409,8 @@
 				28FE6AFE234428BF00D5543E /* DataStoreProvider.swift in Sources */,
 				28A1E95A235006A300CA57FE /* AddTransactionView.swift in Sources */,
 				28AC94EE233C373900BFB70A /* AppDelegate.swift in Sources */,
-				2821266023555FD300072D52 /* EditTransactionView.swift in Sources */,
+				2821266023555FD300072D52 /* EditTransactionForm.swift in Sources */,
+				282126622357E45F00072D52 /* TransactionEditView.swift in Sources */,
 				28AC94F0233C373900BFB70A /* SceneDelegate.swift in Sources */,
 				28FE6AFC23441E4500D5543E /* CategoryRepository.swift in Sources */,
 				2841022C2342D8E400EAFA29 /* Budget.swift in Sources */,

@@ -923,8 +923,8 @@
             filePath = "BudgetApp/Network/BudgetApiService.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "268"
-            endingLineNumber = "268"
+            startingLineNumber = "290"
+            endingLineNumber = "290"
             landmarkName = "buildRequest(endPoint:method:data:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -939,87 +939,10 @@
             filePath = "BudgetApp/Network/BudgetApiService.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "267"
-            endingLineNumber = "267"
+            startingLineNumber = "289"
+            endingLineNumber = "289"
             landmarkName = "buildRequest(endPoint:method:data:)"
             landmarkType = "7">
-            <Locations>
-               <Location
-                  uuid = "4657DB47-280A-41EE-B534-09C6F57D8DF8 - 662d42a959a71afc"
-                  shouldBeEnabled = "No"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #2 (Foundation.Data, __C.NSURLResponse) throws -&gt; Foundation.Data in BudgetApp.RequestHelper.(buildRequest in _49C38939E0AD4FDF6F9F222ABD721B8E)&lt;A where A: Swift.Decodable, A: Swift.Encodable&gt;(endPoint: Swift.String, method: Swift.String, data: Swift.Optional&lt;Swift.Encodable&gt;) -&gt; Combine.AnyPublisher&lt;A, BudgetApp.NetworkError&gt;"
-                  moduleName = "BudgetApp"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/billy/Projects/Budget/BudgetApp/Network/BudgetApiService.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "267"
-                  endingLineNumber = "267"
-                  offsetFromSymbolStart = "540">
-               </Location>
-               <Location
-                  uuid = "4657DB47-280A-41EE-B534-09C6F57D8DF8 - 662d42a959a71afc"
-                  shouldBeEnabled = "No"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #2 (Foundation.Data, __C.NSURLResponse) throws -&gt; Foundation.Data in BudgetApp.RequestHelper.(buildRequest in _49C38939E0AD4FDF6F9F222ABD721B8E)&lt;A where A: Swift.Decodable, A: Swift.Encodable&gt;(endPoint: Swift.String, method: Swift.String, data: Swift.Optional&lt;Swift.Encodable&gt;) -&gt; Combine.AnyPublisher&lt;A, BudgetApp.NetworkError&gt;"
-                  moduleName = "BudgetApp"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/billy/Projects/Budget/BudgetApp/Network/BudgetApiService.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "267"
-                  endingLineNumber = "267"
-                  offsetFromSymbolStart = "760">
-               </Location>
-               <Location
-                  uuid = "4657DB47-280A-41EE-B534-09C6F57D8DF8 - 662d42a959a71afc"
-                  shouldBeEnabled = "No"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #2 (Foundation.Data, __C.NSURLResponse) throws -&gt; Foundation.Data in BudgetApp.RequestHelper.(buildRequest in _49C38939E0AD4FDF6F9F222ABD721B8E)&lt;A where A: Swift.Decodable, A: Swift.Encodable&gt;(endPoint: Swift.String, method: Swift.String, data: Swift.Optional&lt;Swift.Encodable&gt;) -&gt; Combine.AnyPublisher&lt;A, BudgetApp.NetworkError&gt;"
-                  moduleName = "BudgetApp"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/billy/Projects/Budget/BudgetApp/Network/BudgetApiService.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "267"
-                  endingLineNumber = "267"
-                  offsetFromSymbolStart = "928">
-               </Location>
-               <Location
-                  uuid = "4657DB47-280A-41EE-B534-09C6F57D8DF8 - 662d42a959a71afc"
-                  shouldBeEnabled = "No"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #2 (Foundation.Data, __C.NSURLResponse) throws -&gt; Foundation.Data in BudgetApp.RequestHelper.(buildRequest in _49C38939E0AD4FDF6F9F222ABD721B8E)&lt;A where A: Swift.Decodable, A: Swift.Encodable&gt;(endPoint: Swift.String, method: Swift.String, data: Swift.Optional&lt;Swift.Encodable&gt;) -&gt; Combine.AnyPublisher&lt;A, BudgetApp.NetworkError&gt;"
-                  moduleName = "BudgetApp"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/billy/Projects/Budget/BudgetApp/Network/BudgetApiService.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "267"
-                  endingLineNumber = "267"
-                  offsetFromSymbolStart = "1004">
-               </Location>
-               <Location
-                  uuid = "4657DB47-280A-41EE-B534-09C6F57D8DF8 - 662d42a959a71afc"
-                  shouldBeEnabled = "No"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #2 (Foundation.Data, __C.NSURLResponse) throws -&gt; Foundation.Data in BudgetApp.RequestHelper.(buildRequest in _49C38939E0AD4FDF6F9F222ABD721B8E)&lt;A where A: Swift.Decodable, A: Swift.Encodable&gt;(endPoint: Swift.String, method: Swift.String, data: Swift.Optional&lt;Swift.Encodable&gt;) -&gt; Combine.AnyPublisher&lt;A, BudgetApp.NetworkError&gt;"
-                  moduleName = "BudgetApp"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/billy/Projects/Budget/BudgetApp/Network/BudgetApiService.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "267"
-                  endingLineNumber = "267"
-                  offsetFromSymbolStart = "1176">
-               </Location>
-            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -1032,8 +955,8 @@
             filePath = "BudgetApp/Network/BudgetApiService.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "271"
-            endingLineNumber = "271"
+            startingLineNumber = "293"
+            endingLineNumber = "293"
             landmarkName = "buildRequest(endPoint:method:data:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -1057,22 +980,6 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "81B540BD-DA72-4649-9624-E5B94E110061"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "BudgetApp/Network/BudgetApiService.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "278"
-            endingLineNumber = "278"
-            landmarkName = "buildRequest(endPoint:method:data:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
             uuid = "CB2BFA16-FD1A-4701-A893-5A35743C2450"
             shouldBeEnabled = "No"
             ignoreCount = "0"
@@ -1080,8 +987,8 @@
             filePath = "BudgetApp/Network/BudgetApiService.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "274"
-            endingLineNumber = "274"
+            startingLineNumber = "296"
+            endingLineNumber = "296"
             landmarkName = "buildRequest(endPoint:method:data:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -1128,8 +1035,8 @@
             filePath = "BudgetApp/Transaction/TransactionDetailsView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "131"
-            endingLineNumber = "131"
+            startingLineNumber = "150"
+            endingLineNumber = "150"
             landmarkName = "stateContent"
             landmarkType = "24">
          </BreakpointContent>
@@ -1144,8 +1051,8 @@
             filePath = "BudgetApp/Transaction/TransactionDetailsView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "132"
-            endingLineNumber = "132"
+            startingLineNumber = "151"
+            endingLineNumber = "151"
             landmarkName = "stateContent"
             landmarkType = "24">
             <Locations>
@@ -1192,8 +1099,8 @@
             filePath = "BudgetApp/Transaction/TransactionDetailsView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "109"
-            endingLineNumber = "109"
+            startingLineNumber = "128"
+            endingLineNumber = "128"
             landmarkName = "stateContent"
             landmarkType = "24">
          </BreakpointContent>
@@ -1208,8 +1115,8 @@
             filePath = "BudgetApp/Transaction/TransactionDetailsView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "110"
-            endingLineNumber = "110"
+            startingLineNumber = "129"
+            endingLineNumber = "129"
             landmarkName = "stateContent"
             landmarkType = "24">
          </BreakpointContent>
@@ -1224,8 +1131,8 @@
             filePath = "BudgetApp/Transaction/TransactionDetailsView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "85"
-            endingLineNumber = "85"
+            startingLineNumber = "104"
+            endingLineNumber = "104"
             landmarkName = "stateContent"
             landmarkType = "24">
          </BreakpointContent>
@@ -1240,8 +1147,8 @@
             filePath = "BudgetApp/Transaction/TransactionDetailsView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "86"
-            endingLineNumber = "86"
+            startingLineNumber = "105"
+            endingLineNumber = "105"
             landmarkName = "stateContent"
             landmarkType = "24">
             <Locations>
@@ -1288,8 +1195,8 @@
             filePath = "BudgetApp/Transaction/TransactionDetailsView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "87"
-            endingLineNumber = "87"
+            startingLineNumber = "106"
+            endingLineNumber = "106"
             landmarkName = "stateContent"
             landmarkType = "24">
          </BreakpointContent>
@@ -1304,8 +1211,8 @@
             filePath = "BudgetApp/Transaction/TransactionDetailsView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "111"
-            endingLineNumber = "111"
+            startingLineNumber = "130"
+            endingLineNumber = "130"
             landmarkName = "stateContent"
             landmarkType = "24">
          </BreakpointContent>
@@ -1320,10 +1227,186 @@
             filePath = "BudgetApp/Transaction/TransactionDetailsView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "133"
-            endingLineNumber = "133"
+            startingLineNumber = "152"
+            endingLineNumber = "152"
             landmarkName = "stateContent"
             landmarkType = "24">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "44E1F344-2A01-41C9-9CEF-3AA78B75786F"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "BudgetApp/Transaction/TransactionDetailsView.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "70"
+            endingLineNumber = "70"
+            landmarkName = "init(_:transactionId:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "F1B20B89-EC27-4275-B5C2-42731837346D"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "BudgetApp/Transaction/TransactionDetailsView.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "22"
+            endingLineNumber = "22"
+            landmarkName = "body"
+            landmarkType = "24">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "CCDAD304-E9B9-415D-8C32-DD16F0145D35"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "BudgetApp/Transaction/TransactionEditView.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "29"
+            endingLineNumber = "29"
+            landmarkName = "stateContent"
+            landmarkType = "24">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "1443CC3F-35EB-4BFC-B8A0-AED0967623B3"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "BudgetApp/Transaction/TransactionEditView.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "28"
+            endingLineNumber = "28"
+            landmarkName = "stateContent"
+            landmarkType = "24">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "72CF2BC4-4793-45C9-AB03-7BF0435C967D"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "BudgetApp/Transaction/TransactionEditView.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "30"
+            endingLineNumber = "30"
+            landmarkName = "stateContent"
+            landmarkType = "24">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "C4EFC6E6-28A6-4526-A39F-9ECBE3FD54C0"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "BudgetApp/Transaction/TransactionDataStore.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "104"
+            endingLineNumber = "104"
+            landmarkName = "deleteTransaction(_:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "10E6DF77-55D2-4A3B-9A2D-AB201E442563"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "BudgetApp/Transaction/TransactionDataStore.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "98"
+            endingLineNumber = "98"
+            landmarkName = "deleteTransaction(_:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "10E6DF77-55D2-4A3B-9A2D-AB201E442563 - 2056d968351e5ea4"
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "BudgetApp.TransactionDataStore.__allocating_init(BudgetApp.TransactionRepository) -&gt; BudgetApp.TransactionDataStore"
+                  moduleName = "BudgetApp"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/billy/Projects/Budget/BudgetApp/Transaction/TransactionDataStore.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "0"
+                  endingLineNumber = "0"
+                  offsetFromSymbolStart = "18">
+               </Location>
+               <Location
+                  uuid = "10E6DF77-55D2-4A3B-9A2D-AB201E442563 - 2dd9a0446d059f36"
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "BudgetApp.TransactionDataStore.init(BudgetApp.TransactionRepository) -&gt; BudgetApp.TransactionDataStore"
+                  moduleName = "BudgetApp"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/billy/Projects/Budget/BudgetApp/Transaction/TransactionDataStore.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "13"
+                  endingLineNumber = "13"
+                  offsetFromSymbolStart = "103">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "196C979E-2C3E-490A-8146-7B292B6271E7"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "BudgetApp/Transaction/TransactionDataStore.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "101"
+            endingLineNumber = "101"
+            landmarkName = "deleteTransaction(_:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "9B227992-1D58-4610-82C8-0615315761C3"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "BudgetApp/Transaction/TransactionDataStore.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "100"
+            endingLineNumber = "100"
+            landmarkName = "deleteTransaction(_:)"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

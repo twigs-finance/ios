@@ -88,6 +88,28 @@ class TransactionDataStore: ObservableObject {
             })
     }
     
+    func deleteTransaction(_ transactionId: Int) {
+        self.transaction = .failure(.loading)
+        
+        _ = self.transactionRepository.deleteTransaction(transactionId)
+            .receive(on: DispatchQueue.main)
+            .sink(receiveCompletion: { completion in
+                switch completion {
+                case .finished:
+                    return
+                case .failure(let error):
+                    self.transaction = .failure(error)
+                }
+            }, receiveValue: { (empty) in
+                self.transaction = .failure(.deleted)
+            })
+    }
+    
+    func reset() {
+        self.transaction = .failure(.unknown)
+        self.transactions = .failure(.loading)
+    }
+    
     let objectWillChange = ObservableObjectPublisher()
     private let transactionRepository: TransactionRepository
     init(_ transactionRepository: TransactionRepository) {

@@ -240,8 +240,32 @@ class RequestHelper {
         )
     }
     
-    func delete<ResultType: Codable>(_ endPoint: String) -> AnyPublisher<ResultType, NetworkError> {
-        return buildRequest(endPoint: endPoint, method: "DELETE")
+    func delete(_ endPoint: String) -> AnyPublisher<Empty, NetworkError> {
+        // Delete requests return no body so they need a special request helper
+        guard let url = URL(string: self.baseUrl + endPoint) else {
+            return Result.Publisher(.failure(.invalidUrl)).eraseToAnyPublisher()
+        }
+        
+        var request = URLRequest(url: url)
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.httpMethod = "DELETE"
+        
+        let task = URLSession.shared.dataTaskPublisher(for: request)
+            .tryMap { (_, res) -> Empty in
+                guard let response = res as? HTTPURLResponse, 200...299 ~= response.statusCode else {
+                    switch (res as? HTTPURLResponse)?.statusCode {
+                    case 400: throw NetworkError.badRequest
+                    case 401, 403: throw NetworkError.unauthorized
+                    case 404: throw NetworkError.notFound
+                    default: throw NetworkError.unknown
+                    }
+                }
+                return Empty()
+        }
+        .mapError {
+            return NetworkError.jsonParsingFailed($0)
+        }
+        return task.eraseToAnyPublisher()
     }
     
     private func buildRequest<ResultType: Codable>(
@@ -251,9 +275,7 @@ class RequestHelper {
     ) -> AnyPublisher<ResultType, NetworkError> {
         
         guard let url = URL(string: self.baseUrl + endPoint) else {
-            return Future<ResultType, NetworkError> { promise in
-                promise(.failure(.invalidUrl))
-            }.eraseToAnyPublisher()
+            return Result.Publisher(.failure(.invalidUrl)).eraseToAnyPublisher()
         }
         
         var request = URLRequest(url: url)
@@ -308,6 +330,7 @@ enum NetworkError: Error, Equatable {
     case loading
     case unknown
     case notFound
+    case deleted
     case unauthorized
     case badRequest
     case invalidUrl
