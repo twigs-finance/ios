@@ -38,11 +38,11 @@ struct EditTransactionForm: View {
                 Button(action: {
                     self.showingAlert = true
                 }) {
-                    Text("delete_transaction")
+                    Text("delete")
                         .foregroundColor(.red)
                 }
                 .alert(isPresented:$showingAlert) {
-                    Alert(title: Text("confirm_delete_transaction"), message: nil, primaryButton: .destructive(Text("delete"), action: deleteAction), secondaryButton: .cancel())
+                    Alert(title: Text("confirm_delete"), message: Text("cannot_undo"), primaryButton: .destructive(Text("delete"), action: deleteAction), secondaryButton: .cancel())
                 }
             } else {
                 EmptyView()
@@ -64,7 +64,11 @@ struct BudgetPicker: View {
                 }
             )
         default:
-            return AnyView(EmptyView())
+            return AnyView(
+                Picker("prompt_budget", selection: self.budgetId) {
+                    Text("")
+                }
+            )
         }
     }
     
@@ -94,7 +98,11 @@ struct CategoryPicker: View {
                 }
             )
         default:
-            return AnyView(EmptyView())
+            return AnyView(
+                Picker("prompt_category", selection: self.categoryId) {
+                    Text("")
+                }
+            )
         }
     }
     

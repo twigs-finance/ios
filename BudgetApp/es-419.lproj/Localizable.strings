@@ -11,6 +11,7 @@
 "filter" = "Filtrar";
 "edit" = "Editar";
 "save" = "Guardar";
+"delete" = "Eliminar";
 "cancel" = "Cancelar";
 "details" = "Detalles";
 "loading_default" = "Cargando...";
@@ -24,6 +25,8 @@
 "type_income" = "Ingreso";
 "type_expense" = "Gasto";
 "retry" = "Volver a intentar";
+"confirm_delete" = "¿Seguro que quieres eliminar esto?";
+"cannot_undo" = "No se puede deshacer";
 
 // MARK: Login
 "info_login" = "Inicia sesión para empezar a manejar su presupuseto";

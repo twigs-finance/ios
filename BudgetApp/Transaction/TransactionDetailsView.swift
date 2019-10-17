@@ -49,7 +49,7 @@ struct TransactionDetailsView: View {
                     self.dataStoreProvider,
                     transaction: transaction,
                     shouldNavigateUp: self.$shouldNavigateUp
-                ).navigationBarTitle("edit_transaction")
+                ).navigationBarTitle("edit")
             ) {
                 Text("edit")
             }))
