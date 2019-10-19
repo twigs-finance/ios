@@ -9,7 +9,7 @@
 import Foundation
 import Combine
 
-class BudgetApiService {
+class BudgetAppApiService {
     let requestHelper: RequestHelper
     
     init(_ requestHelper: RequestHelper) {
@@ -188,6 +188,10 @@ class BudgetApiService {
     
     func deleteUser(_ user: User) -> AnyPublisher<Empty, NetworkError> {
         return requestHelper.delete("/users/\(user.id!)")
+    }
+    
+    func getProfile() -> AnyPublisher<User, NetworkError> {
+        return requestHelper.get("/users/me")
     }
 }
 

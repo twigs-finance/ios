@@ -44,6 +44,7 @@ struct TransactionListView: View {
         self.dataStoreProvider = dataStoreProvider
         self.transactionDataStore = dataStoreProvider.transactionDataStore()
         self.category = category
+        self.transactionDataStore.getTransactions(self.category)
     }
 }
 

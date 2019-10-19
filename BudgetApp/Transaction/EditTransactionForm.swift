@@ -90,6 +90,7 @@ struct CategoryPicker: View {
     var stateContent: AnyView {
         switch self.categoryDataStore.categories {
         case .success(let categories):
+            print("Using returned categories")
             return AnyView(
                 Picker("prompt_category", selection: self.categoryId) {
                     ForEach(categories) { category in
@@ -99,9 +100,7 @@ struct CategoryPicker: View {
             )
         default:
             return AnyView(
-                Picker("prompt_category", selection: self.categoryId) {
-                    Text("")
-                }
+                EmptyView()
             )
         }
     }
@@ -113,7 +112,10 @@ struct CategoryPicker: View {
     @ObservedObject var categoryDataStore: CategoryDataStore
     init(_ dataStoreProvider: DataStoreProvider, budgetId: Binding<Int?>, categoryId: Binding<Int?>) {
         let categoryDataStore = dataStoreProvider.categoryDataStore()
-        categoryDataStore.getCategories(budgetId: budgetId.wrappedValue, count: nil, page: nil)
+        print("Requesting categories")
+        if let id = budgetId.wrappedValue {
+            categoryDataStore.getCategories(budgetId: id, count: nil, page: nil)
+        }
         self.categoryDataStore = categoryDataStore
         self.categoryId = categoryId
     }

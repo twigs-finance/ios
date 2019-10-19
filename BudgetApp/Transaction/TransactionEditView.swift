@@ -82,8 +82,10 @@ struct TransactionEditView: View {
     }
 }
 
+#if DEBUG
 struct TransactionEditView_Previews: PreviewProvider {
     static var previews: some View {
         TransactionEditView(MockDataStoreProvider(), transaction: MockTransactionRepository.transaction, shouldNavigateUp: .constant(false))
     }
 }
+#endif

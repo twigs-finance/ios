@@ -19,18 +19,33 @@ protocol BudgetRepository {
 }
 
 class NetworkBudgetRepository: BudgetRepository {
-    let apiService: BudgetApiService
+    let apiService: BudgetAppApiService
+    let cacheService: BudgetAppInMemoryCacheService?
     
-    init(_ apiService: BudgetApiService) {
+    init(_ apiService: BudgetAppApiService, cacheService: BudgetAppInMemoryCacheService? = nil) {
         self.apiService = apiService
+        self.cacheService = cacheService
     }
     
     func getBudgets(count: Int?, page: Int?) -> AnyPublisher<[Budget], NetworkError> {
-        return apiService.getBudgets(count: count, page: page)
+        if let budgets = cacheService?.getBudgets(count: count, page: page) {
+            return budgets
+        }
+        
+        return apiService.getBudgets(count: count, page: page).map { (budgets: [Budget]) in
+            self.cacheService?.addBudgets(budgets)
+            return budgets
+        }.eraseToAnyPublisher()
     }
     
     func getBudget(_ id: Int) -> AnyPublisher<Budget, NetworkError> {
-        return apiService.getBudget(id)
+        if let budget = cacheService?.getBudget(id) {
+            return budget
+        }
+        return apiService.getBudget(id).map { budget in
+            self.cacheService?.addBudget(budget)
+            return budget
+        }.eraseToAnyPublisher()
     }
     
     func getBudgetBalance(_ id: Int) -> AnyPublisher<Int, NetworkError> {
@@ -54,10 +69,10 @@ class NetworkBudgetRepository: BudgetRepository {
 
 class MockBudgetRepository: BudgetRepository {
     static let budget = Budget(
-    id: 1,
-    name: "Test Budget",
-    description: "A mock budget used for testing",
-    users: []
+        id: 1,
+        name: "Test Budget",
+        description: "A mock budget used for testing",
+        users: []
     )
     
     func getBudgets(count: Int?, page: Int?) -> AnyPublisher<[Budget], NetworkError> {
@@ -82,7 +97,7 @@ class MockBudgetRepository: BudgetRepository {
             name: "Test Budget",
             description: "A mock budget used for testing",
             users: []
-            )).eraseToAnyPublisher()
+        )).eraseToAnyPublisher()
     }
     
     func deleteBudget(_ id: Int) -> AnyPublisher<Empty, NetworkError> {

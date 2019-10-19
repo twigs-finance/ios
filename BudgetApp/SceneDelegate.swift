@@ -10,22 +10,23 @@ import UIKit
 import SwiftUI
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
+    #if DEBUG
+    // Uncomment this for local development
+//            static let baseUrl = "http://localhost:8080"
+    static let baseUrl = "https://budget-api.intra.wbrawner.com"
+    #else
+    static let baseUrl = "https://budget-api.intra.wbrawner.com"
+    #endif
     var window: UIWindow?
     let dataStoreProvider: DataStoreProvider
 
     override init() {
         // TODO: Dependency injection?
-        #if DEBUG
-         // Uncomment this for local development
-//        let baseUrl = "http://localhost:8080"
-        let baseUrl = "https://budget-api.intra.wbrawner.com"
-        #else
-        let baseUrl = "https://budget-api.intra.wbrawner.com"
-        #endif
-        let requestHelper = RequestHelper(baseUrl)
-        let apiService = BudgetApiService(requestHelper)
-        let budgetRepository = NetworkBudgetRepository(apiService)
-        let categoryRepository = NetworkCategoryRepository(apiService)
+        let requestHelper = RequestHelper(SceneDelegate.baseUrl)
+        let cacheService = BudgetAppInMemoryCacheService()
+        let apiService = BudgetAppApiService(requestHelper)
+        let budgetRepository = NetworkBudgetRepository(apiService, cacheService: cacheService)
+        let categoryRepository = NetworkCategoryRepository(apiService, cacheService: cacheService)
         let transactionRepository = NetworkTransactionRepository(apiService)
         let userRepository = NetworkUserRepository(apiService)
         dataStoreProvider = DataStoreProvider(
@@ -41,7 +42,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // Use this method to optionally configure and attach the UIWindow `window` to the provided UIWindowScene `scene`.
         // If using a storyboard, the `window` property will automatically be initialized and attached to the scene.
         // This delegate does not imply the connecting scene or session are new (see `application:configurationForConnectingSceneSession` instead).
-
         // Create the SwiftUI view that provides the window contents.
         let contentView = ContentView(dataStoreProvider)
         // Use a UIHostingController as window root view controller.

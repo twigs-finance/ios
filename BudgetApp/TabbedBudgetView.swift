@@ -25,12 +25,9 @@ struct TabbedBudgetView: View {
                             self.isAddingTransaction = true
                         }) {
                             Image(systemName: "plus")
+                            .padding()
                         }
                 )
-                    .sheet(isPresented: $isAddingTransaction, content: {
-                        AddTransactionView(self.dataStoreProvider)
-                            .navigationBarTitle("add_transaction")
-                    })
             }
             .tabItem {
                 Image(systemName: "dollarsign.circle.fill")
@@ -42,17 +39,24 @@ struct TabbedBudgetView: View {
                 Text("budgets")
             }
             
-            Text("Profile here").tabItem {
+            ProfileView(dataStoreProvider).tabItem {
                 Image(systemName: "person.circle.fill")
                 Text("profile")
             }
         }.edgesIgnoringSafeArea(.top)
+        .sheet(isPresented: $isAddingTransaction, content: {
+            AddTransactionView(self.dataStoreProvider)
+                .navigationBarTitle("add_transaction")
+        })
     }
     
     let dataStoreProvider: DataStoreProvider
     init (_ userData: AuthenticationDataStore, dataStoreProvider: DataStoreProvider) {
         self.userData = userData
         self.dataStoreProvider = dataStoreProvider
+        // Warm up the caches
+        self.dataStoreProvider.budgetsDataStore().getBudgets()
+        self.dataStoreProvider.categoryDataStore().getCategories()
     }
 }
 //

@@ -14,12 +14,13 @@ protocol UserRepository {
     func searchUsers(_ withUsername: String) -> AnyPublisher<[User], NetworkError>
     func login(username: String, password: String) -> AnyPublisher<User, NetworkError>
     func register(username: String, email: String, password: String) -> AnyPublisher<User, NetworkError>
+    func getProfile() -> AnyPublisher<User, NetworkError>
 }
 
 class NetworkUserRepository: UserRepository {
-    let apiService: BudgetApiService
+    let apiService: BudgetAppApiService
     
-    init(_ apiService: BudgetApiService) {
+    init(_ apiService: BudgetAppApiService) {
         self.apiService = apiService
     }
     
@@ -37,6 +38,10 @@ class NetworkUserRepository: UserRepository {
     
     func register(username: String, email: String, password: String) -> AnyPublisher<User, NetworkError> {
         return apiService.register(username: username, email: email, password: password)
+    }
+    
+    func getProfile() -> AnyPublisher<User, NetworkError> {
+        return apiService.getProfile()
     }
 }
 
@@ -63,6 +68,10 @@ class MockUserRepository: UserRepository {
     func register(username: String, email: String, password: String) -> AnyPublisher<User, NetworkError> {
         return Result<User, NetworkError>.Publisher(MockUserRepository.user)
             .eraseToAnyPublisher()
+    }
+    
+    func getProfile() -> AnyPublisher<User, NetworkError> {
+        return Result.Publisher(MockUserRepository.user).eraseToAnyPublisher()
     }
 }
 

@@ -75,8 +75,10 @@ struct BudgetListItemView: View {
     }
 }
 
+#if DEBUG
 struct BudgetListsView_Previews: PreviewProvider {
     static var previews: some View {
         BudgetListsView(MockDataStoreProvider())
     }
 }
+#endif

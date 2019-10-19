@@ -35,6 +35,7 @@ class CategoryDataStore: ObservableObject {
                     self.categories = .failure(error)
                 }
             }, receiveValue: { (categories) in
+                print("Received \(categories.count) categories")
                 self.categories = .success(categories)
             })
     }
@@ -51,8 +52,8 @@ class CategoryDataStore: ObservableObject {
                 case .failure(let error):
                     self.category = .failure(error)
                 }
-            }, receiveValue: { (categories) in
-                self.category = .success(categories)
+            }, receiveValue: { (category) in
+                self.category = .success(category)
             })
     }
 

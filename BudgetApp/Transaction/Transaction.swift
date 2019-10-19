@@ -9,7 +9,7 @@
 import Foundation
 import SwiftUI
 
-struct Transaction: Identifiable, Codable {
+struct Transaction: Identifiable, Hashable, Codable {
     let id: Int?
     let title: String
     let description: String?

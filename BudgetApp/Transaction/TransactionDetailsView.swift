@@ -163,8 +163,10 @@ struct UserLineItem: View {
     }
 }
 
+#if DEBUG
 struct TransactionDetailsView_Previews: PreviewProvider {
     static var previews: some View {
         TransactionDetailsView(MockDataStoreProvider(), transactionId: 2)
     }
 }
+#endif

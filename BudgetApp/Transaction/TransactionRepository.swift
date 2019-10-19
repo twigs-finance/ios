@@ -18,9 +18,9 @@ protocol TransactionRepository {
 }
 
 class NetworkTransactionRepository: TransactionRepository {
-    let apiService: BudgetApiService
+    let apiService: BudgetAppApiService
     
-    init(_ apiService: BudgetApiService) {
+    init(_ apiService: BudgetAppApiService) {
         self.apiService = apiService
     }
     

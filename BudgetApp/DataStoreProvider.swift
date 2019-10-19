@@ -56,6 +56,11 @@ class DataStoreProvider {
 #if DEBUG
 
 class MockDataStoreProvider: DataStoreProvider {
+    
+    override func authenticationDataStore() -> AuthenticationDataStore {
+        return MockAuthenticationDataStore(MockUserRepository())
+    }
+    
     init() {
         super.init(
             budgetRepository: MockBudgetRepository(),

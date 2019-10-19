@@ -1409,5 +1409,332 @@
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "ECFFF901-C549-437A-A8A3-6C7AEF033822"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "BudgetApp/Transaction/TransactionListView.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "44"
+            endingLineNumber = "44"
+            landmarkName = "init(_:category:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "DB07923E-819C-4854-97A5-94A5E1790913"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "BudgetApp/Category/CategoryRepository.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "33"
+            endingLineNumber = "33"
+            landmarkName = "getCategories(budgetId:count:page:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "93983EAA-5286-4CBE-928D-86988FB1D153"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "BudgetApp/Category/CategoryDataStore.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "26"
+            endingLineNumber = "26"
+            landmarkName = "getCategories(budgetId:count:page:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "33A6CFC5-F78D-491F-A793-732352FDD1CB"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "BudgetApp/Category/CategoryDataStore.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "39"
+            endingLineNumber = "39"
+            landmarkName = "getCategories(budgetId:count:page:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "CA398500-BEE8-4717-B727-FAA2C62EC711"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "BudgetApp/Category/CategoryRepository.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "29"
+            endingLineNumber = "29"
+            landmarkName = "getCategories(budgetId:count:page:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.ExceptionBreakpoint">
+         <BreakpointContent
+            uuid = "152C6CF4-A03F-46DB-A690-08535EE452D6"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            scope = "0"
+            stopOnStyle = "0">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "C352446F-A182-4BAB-8C01-23DB336F2301"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "BudgetApp/Network/BudgetAppInMemoryCacheService.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "74"
+            endingLineNumber = "74"
+            landmarkName = "getCategories(budgetId:count:page:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "C00678FC-5D4C-4072-93FD-6D2C0E4D47E9"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "BudgetApp/User/AuthenticationDataStore.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "37"
+            endingLineNumber = "37"
+            landmarkName = "login(username:password:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "0A8006D2-C24E-4AE5-8F7E-78ED5D1D6B7D"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "BudgetApp/User/AuthenticationDataStore.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "88"
+            endingLineNumber = "88"
+            landmarkName = "init(_:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "F00DC3DF-E704-4B70-B744-57B4767E501D"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "BudgetApp/User/AuthenticationDataStore.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "74"
+            endingLineNumber = "74"
+            landmarkName = "loadFromExistingSession()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "C0F886DF-04BE-4C45-9A4B-17370122B446"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "BudgetApp/User/AuthenticationDataStore.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "81"
+            endingLineNumber = "81"
+            landmarkName = "loadFromExistingSession()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "3E49E2C2-F186-44D2-BA8C-DB27F0623DE1"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "BudgetApp/Network/BudgetAppApiService.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "260"
+            endingLineNumber = "260"
+            landmarkName = "delete(_:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "3E49E2C2-F186-44D2-BA8C-DB27F0623DE1 - 36db867e35bc722d"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (Foundation.Data, __C.NSURLResponse) throws -&gt; BudgetApp.Empty in BudgetApp.RequestHelper.delete(Swift.String) -&gt; Combine.AnyPublisher&lt;BudgetApp.Empty, BudgetApp.NetworkError&gt;"
+                  moduleName = "BudgetApp"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/billy/Projects/Budget/BudgetApp/Network/BudgetAppApiService.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "260"
+                  endingLineNumber = "260"
+                  offsetFromSymbolStart = "590">
+               </Location>
+               <Location
+                  uuid = "3E49E2C2-F186-44D2-BA8C-DB27F0623DE1 - 36db867e35bc722d"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (Foundation.Data, __C.NSURLResponse) throws -&gt; BudgetApp.Empty in BudgetApp.RequestHelper.delete(Swift.String) -&gt; Combine.AnyPublisher&lt;BudgetApp.Empty, BudgetApp.NetworkError&gt;"
+                  moduleName = "BudgetApp"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/billy/Projects/Budget/BudgetApp/Network/BudgetAppApiService.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "260"
+                  endingLineNumber = "260"
+                  offsetFromSymbolStart = "871">
+               </Location>
+               <Location
+                  uuid = "3E49E2C2-F186-44D2-BA8C-DB27F0623DE1 - 36db867e35bc722d"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (Foundation.Data, __C.NSURLResponse) throws -&gt; BudgetApp.Empty in BudgetApp.RequestHelper.delete(Swift.String) -&gt; Combine.AnyPublisher&lt;BudgetApp.Empty, BudgetApp.NetworkError&gt;"
+                  moduleName = "BudgetApp"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/billy/Projects/Budget/BudgetApp/Network/BudgetAppApiService.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "260"
+                  endingLineNumber = "260"
+                  offsetFromSymbolStart = "1042">
+               </Location>
+               <Location
+                  uuid = "3E49E2C2-F186-44D2-BA8C-DB27F0623DE1 - 36db867e35bc722d"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (Foundation.Data, __C.NSURLResponse) throws -&gt; BudgetApp.Empty in BudgetApp.RequestHelper.delete(Swift.String) -&gt; Combine.AnyPublisher&lt;BudgetApp.Empty, BudgetApp.NetworkError&gt;"
+                  moduleName = "BudgetApp"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/billy/Projects/Budget/BudgetApp/Network/BudgetAppApiService.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "260"
+                  endingLineNumber = "260"
+                  offsetFromSymbolStart = "1118">
+               </Location>
+               <Location
+                  uuid = "3E49E2C2-F186-44D2-BA8C-DB27F0623DE1 - 36db867e35bc722d"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (Foundation.Data, __C.NSURLResponse) throws -&gt; BudgetApp.Empty in BudgetApp.RequestHelper.delete(Swift.String) -&gt; Combine.AnyPublisher&lt;BudgetApp.Empty, BudgetApp.NetworkError&gt;"
+                  moduleName = "BudgetApp"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/billy/Projects/Budget/BudgetApp/Network/BudgetAppApiService.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "260"
+                  endingLineNumber = "260"
+                  offsetFromSymbolStart = "1269">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "DC8F6E88-A769-4ADC-8354-9BC089230827"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "BudgetApp/Network/BudgetAppApiService.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "262"
+            endingLineNumber = "262"
+            landmarkName = "delete(_:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "DC8F6E88-A769-4ADC-8354-9BC089230827 - 36db867e35bc722d"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (Foundation.Data, __C.NSURLResponse) throws -&gt; BudgetApp.Empty in BudgetApp.RequestHelper.delete(Swift.String) -&gt; Combine.AnyPublisher&lt;BudgetApp.Empty, BudgetApp.NetworkError&gt;"
+                  moduleName = "BudgetApp"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/billy/Projects/Budget/BudgetApp/Network/BudgetAppApiService.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "262"
+                  endingLineNumber = "262"
+                  offsetFromSymbolStart = "1102">
+               </Location>
+               <Location
+                  uuid = "DC8F6E88-A769-4ADC-8354-9BC089230827 - 36db867e35bc722d"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (Foundation.Data, __C.NSURLResponse) throws -&gt; BudgetApp.Empty in BudgetApp.RequestHelper.delete(Swift.String) -&gt; Combine.AnyPublisher&lt;BudgetApp.Empty, BudgetApp.NetworkError&gt;"
+                  moduleName = "BudgetApp"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/billy/Projects/Budget/BudgetApp/Network/BudgetAppApiService.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "262"
+                  endingLineNumber = "262"
+                  offsetFromSymbolStart = "1178">
+               </Location>
+               <Location
+                  uuid = "DC8F6E88-A769-4ADC-8354-9BC089230827 - 36db867e35bc722d"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (Foundation.Data, __C.NSURLResponse) throws -&gt; BudgetApp.Empty in BudgetApp.RequestHelper.delete(Swift.String) -&gt; Combine.AnyPublisher&lt;BudgetApp.Empty, BudgetApp.NetworkError&gt;"
+                  moduleName = "BudgetApp"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/billy/Projects/Budget/BudgetApp/Network/BudgetAppApiService.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "262"
+                  endingLineNumber = "262"
+                  offsetFromSymbolStart = "1180">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
    </Breakpoints>
 </Bucket>

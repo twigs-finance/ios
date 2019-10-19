@@ -33,6 +33,9 @@ class AuthenticationDataStore: ObservableObject {
                     self.currentUser = .failure(.failedAuthentication)
                 }
             }) { (user) in
+                if let sessionCookie = HTTPCookieStorage.shared.cookies(for: URL(string: SceneDelegate.baseUrl)!)?.first(where: { $0.name == SESSION_KEY }) {
+                    UserDefaults.standard.set(sessionCookie.value, forKey: SESSION_KEY)
+                }
                 self.currentUser = .success(user)
         }
     }
@@ -62,14 +65,42 @@ class AuthenticationDataStore: ObservableObject {
         }
     }
     
+    private func loadFromExistingSession() {
+        self.currentUser = .failure(.authenticating)
+        
+        _ = self.userRepository.getProfile()
+            .receive(on: DispatchQueue.main)
+            .sink(receiveCompletion: { (status) in
+                switch status {
+                case .finished:
+                    return
+                case .failure(_):
+                    self.currentUser = .failure(.unauthenticated)
+                }
+            }) { (user) in
+                self.currentUser = .success(user)
+        }
+    }
+    
     init(_ userRepository: UserRepository) {
         self.userRepository = userRepository
+        if let sessionKey = UserDefaults.standard.string(forKey: SESSION_KEY) {
+            HTTPCookieStorage.shared.setCookie(HTTPCookie(properties: [
+                HTTPCookiePropertyKey.name: SESSION_KEY,
+                HTTPCookiePropertyKey.value: sessionKey,
+                HTTPCookiePropertyKey.domain: URL(string: SceneDelegate.baseUrl)!.host!,
+                HTTPCookiePropertyKey.path: "/"
+            ])!)
+            loadFromExistingSession()
+        }
     }
     
     // Needed since the default implementation is currently broken
     let objectWillChange = ObservableObjectPublisher()
     private let userRepository: UserRepository
 }
+
+private let SESSION_KEY = "SESSION"
 
 enum UserStatus: Error, Equatable {
     case unauthenticated
@@ -78,3 +109,12 @@ enum UserStatus: Error, Equatable {
     case authenticated
     case passwordMismatch // Passwords don't match
 }
+
+#if DEBUG
+class MockAuthenticationDataStore: AuthenticationDataStore {
+    override init(_ userRepository: UserRepository) {
+        super.init(userRepository)
+        self.currentUser = .success(User(id: 1, username: "test_user", email: "test@localhost.loc", avatar: nil))
+    }
+}
+#endif
