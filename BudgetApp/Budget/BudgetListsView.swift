@@ -53,7 +53,7 @@ struct BudgetListItemView: View {
     
     var body: some View {
         NavigationLink(
-            destination: CategoryListView(self.dataStoreProvider, budget: budget)
+            destination: BudgetDetailsView(self.dataStoreProvider, budget: budget)
                 .navigationBarTitle(budget.name)
         ) {
             VStack(alignment: .leading) {
