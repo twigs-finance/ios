@@ -9,10 +9,10 @@
 import Foundation
 
 struct Category: Identifiable, Hashable, Codable {
-    let budgetId: Int
-    let id: Int?
+    let budgetId: String
+    let id: String
     let title: String
     let description: String?
     let amount: Int
-    let isExpense: Bool = true
+    let expense: Bool
 }

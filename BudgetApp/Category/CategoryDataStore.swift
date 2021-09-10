@@ -22,7 +22,7 @@ class CategoryDataStore: ObservableObject {
         }
     }
     
-    func getCategories(budgetId: Int? = nil, count: Int? = nil, page: Int? = nil) {
+    func getCategories(budgetId: String? = nil, count: Int? = nil, page: Int? = nil) {
         self.categories = .failure(.loading)
         
         _ = categoryRepository.getCategories(budgetId: budgetId, count: count, page: page)
@@ -40,7 +40,7 @@ class CategoryDataStore: ObservableObject {
             })
     }
     
-    func getCategory(_ categoryId: Int) {
+    func getCategory(_ categoryId: String) {
         self.category = .failure(.loading)
         
         _ = categoryRepository.getCategory(categoryId)

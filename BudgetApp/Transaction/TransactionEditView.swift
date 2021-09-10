@@ -15,10 +15,10 @@ struct TransactionEditView: View {
     var date: State<Date>
     var amount: State<String>
     var type: State<TransactionType>
-    var budgetId: State<Int?>
-    var categoryId: State<Int?>
-    let createdBy: Int
-    let id: Int?
+    var budgetId: State<String?>
+    var categoryId: State<String?>
+    let createdBy: String
+    let id: String?
     var shouldNavigateUp: Binding<Bool>
     
     var stateContent: AnyView {
@@ -51,7 +51,7 @@ struct TransactionEditView: View {
             .navigationBarItems(trailing: Button("save") {
                 let amount = Double(self.amount.wrappedValue) ?? 0.0
                 self.transactionDataStore.saveTransaction(Transaction(
-                    id: self.id,
+                    id: self.id ?? "",
                     title: self.title.wrappedValue,
                     description: self.description.wrappedValue,
                     date: self.date.wrappedValue,
@@ -69,15 +69,15 @@ struct TransactionEditView: View {
     init(_ dataStoreProvider: DataStoreProvider, transaction: Transaction, shouldNavigateUp: Binding<Bool>) {
         self.dataStoreProvider = dataStoreProvider
         self.transactionDataStore = dataStoreProvider.transactionDataStore()
-        self.createdBy = try! dataStoreProvider.authenticationDataStore().currentUser.get().id!
+        self.createdBy = try! dataStoreProvider.authenticationDataStore().currentUser.get().id
         self.id = transaction.id
         self.title = State<String>(initialValue: transaction.title)
         self.description = State<String>(initialValue: transaction.description ?? "")
         self.date = State<Date>(initialValue: transaction.date)
         self.amount = State<String>(initialValue: transaction.amountString)
         self.type = State<TransactionType>(initialValue: transaction.type)
-        self.budgetId = State<Int?>(initialValue: transaction.budgetId)
-        self.categoryId = State<Int?>(initialValue: transaction.categoryId)
+        self.budgetId = State<String?>(initialValue: transaction.budgetId)
+        self.categoryId = State<String?>(initialValue: transaction.categoryId)
         self.shouldNavigateUp = shouldNavigateUp
     }
 }

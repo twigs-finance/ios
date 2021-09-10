@@ -64,9 +64,9 @@ struct TransactionDetailsView: View {
     }
         
     let dataStoreProvider: DataStoreProvider
-    let transactionId: Int
+    let transactionId: String
     @ObservedObject var transactionDataStore: TransactionDataStore
-    init(_ dataStoreProvider: DataStoreProvider, transactionId: Int) {
+    init(_ dataStoreProvider: DataStoreProvider, transactionId: String) {
         self.dataStoreProvider = dataStoreProvider
         let transactionDataStore = dataStoreProvider.transactionDataStore()
         self.transactionDataStore = transactionDataStore
@@ -110,7 +110,7 @@ struct CategoryLineItem: View {
     }
     
     @ObservedObject var categoryDataStore: CategoryDataStore
-    init(_ dataStoreProvider: DataStoreProvider, categoryId: Int?) {
+    init(_ dataStoreProvider: DataStoreProvider, categoryId: String?) {
         let categoryDataStore = dataStoreProvider.categoryDataStore()
         if let id = categoryId {
             categoryDataStore.getCategory(id)
@@ -134,7 +134,7 @@ struct BudgetLineItem: View {
     }
     
     @ObservedObject var budgetDataStore: BudgetsDataStore
-    init(_ dataStoreProvider: DataStoreProvider, budgetId: Int) {
+    init(_ dataStoreProvider: DataStoreProvider, budgetId: String) {
         let budgetDataStore = dataStoreProvider.budgetsDataStore()
         budgetDataStore.getBudget(budgetId)
         self.budgetDataStore = budgetDataStore
@@ -156,7 +156,7 @@ struct UserLineItem: View {
     }
     
     @ObservedObject var userDataStore: UserDataStore
-    init(_ dataStoreProvider: DataStoreProvider, userId: Int) {
+    init(_ dataStoreProvider: DataStoreProvider, userId: String) {
         let userDataStore = dataStoreProvider.userDataStore()
         userDataStore.getUser(userId)
         self.userDataStore = userDataStore
@@ -166,7 +166,7 @@ struct UserLineItem: View {
 #if DEBUG
 struct TransactionDetailsView_Previews: PreviewProvider {
     static var previews: some View {
-        TransactionDetailsView(MockDataStoreProvider(), transactionId: 2)
+        TransactionDetailsView(MockDataStoreProvider(), transactionId: "2")
     }
 }
 #endif

@@ -40,7 +40,7 @@ struct CategoryListView: View {
     init(_ dataStoreProvider: DataStoreProvider, budget: Budget) {
         self.dataStoreProvider = dataStoreProvider
         let categoryDataStore = dataStoreProvider.categoryDataStore()
-        categoryDataStore.getCategories(budgetId: budget.id!)
+        categoryDataStore.getCategories(budgetId: budget.id)
         self.categoryDataStore = categoryDataStore
     }
 }

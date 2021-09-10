@@ -11,11 +11,11 @@ import Combine
 
 protocol BudgetRepository {
     func getBudgets(count: Int?, page: Int?) -> AnyPublisher<[Budget], NetworkError>
-    func getBudget(_ id: Int) -> AnyPublisher<Budget, NetworkError>
-    func getBudgetBalance(_ id: Int) -> AnyPublisher<Int, NetworkError>
+    func getBudget(_ id: String) -> AnyPublisher<Budget, NetworkError>
+    func getBudgetBalance(_ id: String) -> AnyPublisher<Int, NetworkError>
     func newBudget(_ budget: Budget) -> AnyPublisher<Budget, NetworkError>
     func updateBudget(_ budget: Budget) -> AnyPublisher<Budget, NetworkError>
-    func deleteBudget(_ id: Int) -> AnyPublisher<Empty, NetworkError>
+    func deleteBudget(_ id: String) -> AnyPublisher<Empty, NetworkError>
 }
 
 class NetworkBudgetRepository: BudgetRepository {
@@ -38,7 +38,7 @@ class NetworkBudgetRepository: BudgetRepository {
         }.eraseToAnyPublisher()
     }
     
-    func getBudget(_ id: Int) -> AnyPublisher<Budget, NetworkError> {
+    func getBudget(_ id: String) -> AnyPublisher<Budget, NetworkError> {
         if let budget = cacheService?.getBudget(id) {
             return budget
         }
@@ -48,7 +48,7 @@ class NetworkBudgetRepository: BudgetRepository {
         }.eraseToAnyPublisher()
     }
     
-    func getBudgetBalance(_ id: Int) -> AnyPublisher<Int, NetworkError> {
+    func getBudgetBalance(_ id: String) -> AnyPublisher<Int, NetworkError> {
         return apiService.getBudgetBalance(id)
     }
     
@@ -60,7 +60,7 @@ class NetworkBudgetRepository: BudgetRepository {
         return apiService.updateBudget(budget)
     }
     
-    func deleteBudget(_ id: Int) -> AnyPublisher<Empty, NetworkError> {
+    func deleteBudget(_ id: String) -> AnyPublisher<Empty, NetworkError> {
         return apiService.deleteBudget(id)
     }
 }
@@ -69,21 +69,21 @@ class NetworkBudgetRepository: BudgetRepository {
 
 class MockBudgetRepository: BudgetRepository {
     static let budget = Budget(
-        id: 1,
+        id: "1",
         name: "Test Budget",
         description: "A mock budget used for testing",
-        users: []
+        currencyCode: "USD"
     )
     
     func getBudgets(count: Int?, page: Int?) -> AnyPublisher<[Budget], NetworkError> {
         return Result.Publisher([MockBudgetRepository.budget]).eraseToAnyPublisher()
     }
     
-    func getBudget(_ id: Int) -> AnyPublisher<Budget, NetworkError> {
+    func getBudget(_ id: String) -> AnyPublisher<Budget, NetworkError> {
         return Result.Publisher(MockBudgetRepository.budget).eraseToAnyPublisher()
     }
     
-    func getBudgetBalance(_ id: Int) -> AnyPublisher<Int, NetworkError> {
+    func getBudgetBalance(_ id: String) -> AnyPublisher<Int, NetworkError> {
         return Result.Publisher(10000).eraseToAnyPublisher()
     }
     
@@ -93,14 +93,14 @@ class MockBudgetRepository: BudgetRepository {
     
     func updateBudget(_ budget: Budget) -> AnyPublisher<Budget, NetworkError> {
         return Result.Publisher(Budget(
-            id: 1,
+            id: "1",
             name: "Test Budget",
             description: "A mock budget used for testing",
-            users: []
+            currencyCode: "USD"
         )).eraseToAnyPublisher()
     }
     
-    func deleteBudget(_ id: Int) -> AnyPublisher<Empty, NetworkError> {
+    func deleteBudget(_ id: String) -> AnyPublisher<Empty, NetworkError> {
         return Result.Publisher(Empty()).eraseToAnyPublisher()
     }
 }

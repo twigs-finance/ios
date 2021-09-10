@@ -10,15 +10,15 @@ import Foundation
 import SwiftUI
 
 struct Transaction: Identifiable, Hashable, Codable {
-    let id: Int?
+    let id: String
     let title: String
     let description: String?
     let date: Date
     let amount: Int
-    let categoryId: Int?
+    let categoryId: String?
     let expense: Bool
-    let createdBy: Int
-    let budgetId: Int
+    let createdBy: String
+    let budgetId: String
 }
 
 enum TransactionType: Int, CaseIterable, Identifiable, Hashable {

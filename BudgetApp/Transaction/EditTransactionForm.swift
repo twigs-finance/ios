@@ -14,8 +14,8 @@ struct EditTransactionForm: View {
     @Binding var date: Date
     @Binding var amount: String
     @Binding var type: TransactionType
-    @Binding var budgetId: Int?
-    @Binding var categoryId: Int?
+    @Binding var budgetId: String?
+    @Binding var categoryId: String?
     @State private var showingAlert = false
     let dataStoreProvider: DataStoreProvider
     let deleteAction: (() -> ())?
@@ -52,7 +52,7 @@ struct EditTransactionForm: View {
 }
 
 struct BudgetPicker: View {
-    var budgetId: Binding<Int?>
+    var budgetId: Binding<String?>
     var stateContent: AnyView {
         switch self.budgetsDataStore.budgets {
         case .success(let budgets):
@@ -77,7 +77,7 @@ struct BudgetPicker: View {
     }
     
     @ObservedObject var budgetsDataStore: BudgetsDataStore
-    init(_ dataStoreProvider: DataStoreProvider, budgetId: Binding<Int?>) {
+    init(_ dataStoreProvider: DataStoreProvider, budgetId: Binding<String?>) {
         let budgetsDataStore = dataStoreProvider.budgetsDataStore()
         budgetsDataStore.getBudgets()
         self.budgetsDataStore = budgetsDataStore
@@ -86,7 +86,7 @@ struct BudgetPicker: View {
 }
 
 struct CategoryPicker: View {
-    var categoryId: Binding<Int?>
+    var categoryId: Binding<String?>
     var stateContent: AnyView {
         switch self.categoryDataStore.categories {
         case .success(let categories):
@@ -110,7 +110,7 @@ struct CategoryPicker: View {
     }
     
     @ObservedObject var categoryDataStore: CategoryDataStore
-    init(_ dataStoreProvider: DataStoreProvider, budgetId: Binding<Int?>, categoryId: Binding<Int?>) {
+    init(_ dataStoreProvider: DataStoreProvider, budgetId: Binding<String?>, categoryId: Binding<String?>) {
         let categoryDataStore = dataStoreProvider.categoryDataStore()
         print("Requesting categories")
         if let id = budgetId.wrappedValue {

@@ -9,8 +9,8 @@
 import Foundation
 
 struct Budget: Identifiable, Hashable, Codable {
-    let id: Int?
+    let id: String
     let name: String
     let description: String?
-    let users: [User]
+    let currencyCode: String
 }

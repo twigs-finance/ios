@@ -16,9 +16,9 @@ struct AddTransactionView: View {
     @State var date: Date = Date()
     @State var amount: String = ""
     @State var type: TransactionType = .expense
-    @State var budgetId: Int? = nil
-    @State var categoryId: Int? = nil
-    let createdBy: Int
+    @State var budgetId: String? = nil
+    @State var categoryId: String? = nil
+    let createdBy: String
     
     var stateContent: AnyView {
         switch transactionDataStore.transaction {
@@ -52,7 +52,7 @@ struct AddTransactionView: View {
                     trailing: Button("save") {
                         let amount = Double(self.amount) ?? 0.0
                         self.transactionDataStore.saveTransaction(Transaction(
-                            id: nil,
+                            id: "",
                             title: self.title,
                             description: self.description,
                             date: self.date,
@@ -80,7 +80,7 @@ struct AddTransactionView: View {
     init(_ dataStoreProvider: DataStoreProvider) {
         self.dataStoreProvider = dataStoreProvider
         self.transactionDataStore = dataStoreProvider.transactionDataStore()
-        self.createdBy = try! dataStoreProvider.authenticationDataStore().currentUser.get().id!
+        self.createdBy = try! dataStoreProvider.authenticationDataStore().currentUser.get().id
     }
 }
 

@@ -10,8 +10,8 @@ import Foundation
 import Combine
 
 protocol CategoryRepository {
-    func getCategories(budgetId: Int?, count: Int?, page: Int?) -> AnyPublisher<[Category], NetworkError>
-    func getCategory(_ categoryId: Int) -> AnyPublisher<Category, NetworkError>
+    func getCategories(budgetId: String?, count: Int?, page: Int?) -> AnyPublisher<[Category], NetworkError>
+    func getCategory(_ categoryId: String) -> AnyPublisher<Category, NetworkError>
 }
 
 class NetworkCategoryRepository: CategoryRepository {
@@ -23,7 +23,7 @@ class NetworkCategoryRepository: CategoryRepository {
         self.cacheService = cacheService
     }
     
-    func getCategories(budgetId: Int?, count: Int?, page: Int?) -> AnyPublisher<[Category], NetworkError> {
+    func getCategories(budgetId: String?, count: Int?, page: Int?) -> AnyPublisher<[Category], NetworkError> {
         if let categories = cacheService?.getCategories(budgetId: budgetId, count: count, page: page) {
             print("Returning categories from cache")
             return categories
@@ -36,7 +36,7 @@ class NetworkCategoryRepository: CategoryRepository {
         }.eraseToAnyPublisher()
     }
     
-    func getCategory(_ categoryId: Int) -> AnyPublisher<Category, NetworkError> {
+    func getCategory(_ categoryId: String) -> AnyPublisher<Category, NetworkError> {
         if let category = cacheService?.getCategory(categoryId) {
             print("Returning category from cache")
             return category
@@ -53,18 +53,19 @@ class NetworkCategoryRepository: CategoryRepository {
 
 class MockCategoryRepository: CategoryRepository {
     static let category = Category(
-        budgetId: MockBudgetRepository.budget.id!,
-        id: 3,
+        budgetId: MockBudgetRepository.budget.id,
+        id: "3",
         title: "Test Category",
         description: "This is a test category to help with testing",
-        amount: 10000
+        amount: 10000,
+        expense: true
     )
     
-    func getCategories(budgetId: Int?, count: Int?, page: Int?) -> AnyPublisher<[Category], NetworkError> {
+    func getCategories(budgetId: String?, count: Int?, page: Int?) -> AnyPublisher<[Category], NetworkError> {
         return Result.Publisher([MockCategoryRepository.category]).eraseToAnyPublisher()
     }
     
-    func getCategory(_ categoryId: Int) -> AnyPublisher<Category, NetworkError> {
+    func getCategory(_ categoryId: String) -> AnyPublisher<Category, NetworkError> {
         return Result.Publisher(MockCategoryRepository.category).eraseToAnyPublisher()
     }
 }

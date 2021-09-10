@@ -26,14 +26,14 @@ class BudgetAppApiService {
         if (page != nil) {
             queries["page"] =  [String(page!)]
         }
-        return requestHelper.get("/budgets", queries: queries)
+        return requestHelper.get("/api/budgets", queries: queries)
     }
     
-    func getBudget(_ id: Int) -> AnyPublisher<Budget, NetworkError> {
+    func getBudget(_ id: String) -> AnyPublisher<Budget, NetworkError> {
         return requestHelper.get("/budgets/\(id)")
     }
     
-    func getBudgetBalance(_ id: Int) -> AnyPublisher<Int, NetworkError> {
+    func getBudgetBalance(_ id: String) -> AnyPublisher<Int, NetworkError> {
         return requestHelper.get("/budgets/\(id)/balance")
     }
     
@@ -42,18 +42,18 @@ class BudgetAppApiService {
     }
     
     func updateBudget(_ budget: Budget) -> AnyPublisher<Budget, NetworkError> {
-        return requestHelper.put("/budgets/\(budget.id!)", data: budget)
+        return requestHelper.put("/budgets/\(budget.id)", data: budget)
     }
     
-    func deleteBudget(_ id: Int) -> AnyPublisher<Empty, NetworkError> {
+    func deleteBudget(_ id: String) -> AnyPublisher<Empty, NetworkError> {
         return requestHelper.delete("/budgets/\(id)")
     }
     
     // MARK: Transactions
     
     func getTransactions(
-        budgetIds: [Int]? = nil,
-        categoryIds: [Int]? = nil,
+        budgetIds: [String]? = nil,
+        categoryIds: [String]? = nil,
         from: Date? = nil,
         to: Date? = nil,
         count: Int? = nil,
@@ -61,10 +61,10 @@ class BudgetAppApiService {
     ) -> AnyPublisher<[Transaction], NetworkError> {
         var queries = [String: Array<String>]()
         if budgetIds != nil {
-            queries["budgetId"] = budgetIds!.map { String($0) }
+            queries["budgetId"] = budgetIds!
         }
         if categoryIds != nil {
-            queries["categoryId"] = categoryIds!.map { String($0) }
+            queries["categoryId"] = categoryIds!
         }
         if from != nil {
             queries["from"] = [from!.toISO8601String()]
@@ -81,7 +81,7 @@ class BudgetAppApiService {
         return requestHelper.get("/transactions", queries: queries)
     }
     
-    func getTransaction(_ id: Int) -> AnyPublisher<Transaction, NetworkError> {
+    func getTransaction(_ id: String) -> AnyPublisher<Transaction, NetworkError> {
         return requestHelper.get("/transactions/\(id)")
     }
     
@@ -90,16 +90,16 @@ class BudgetAppApiService {
     }
     
     func updateTransaction(_ transaction: Transaction) -> AnyPublisher<Transaction, NetworkError> {
-        return requestHelper.put("/transactions/\(transaction.id!)", data: transaction)
+        return requestHelper.put("/transactions/\(transaction.id)", data: transaction)
     }
     
-    func deleteTransaction(_ id: Int) -> AnyPublisher<Empty, NetworkError> {
+    func deleteTransaction(_ id: String) -> AnyPublisher<Empty, NetworkError> {
         return requestHelper.delete("/transactions/\(id)")
     }
     
     // MARK: Categories
     
-    func getCategories(budgetId: Int? = nil, count: Int? = nil, page: Int? = nil) -> AnyPublisher<[Category], NetworkError> {
+    func getCategories(budgetId: String? = nil, count: Int? = nil, page: Int? = nil) -> AnyPublisher<[Category], NetworkError> {
         var queries = [String: Array<String>]()
         if budgetId != nil {
             queries["budgetId"] = [String(budgetId!)]
@@ -113,11 +113,11 @@ class BudgetAppApiService {
         return requestHelper.get("/categories", queries: queries)
     }
     
-    func getCategory(_ id: Int) -> AnyPublisher<Category, NetworkError> {
+    func getCategory(_ id: String) -> AnyPublisher<Category, NetworkError> {
         return requestHelper.get("/categories/\(id)")
     }
     
-    func getCategoryBalance(_ id: Int) -> AnyPublisher<Int, NetworkError> {
+    func getCategoryBalance(_ id: String) -> AnyPublisher<Int, NetworkError> {
         return requestHelper.get("/categories/\(id)/balance")
     }
     
@@ -126,22 +126,21 @@ class BudgetAppApiService {
     }
     
     func updateCategory(_ category: Category) -> AnyPublisher<Category, NetworkError> {
-        return requestHelper.put("/categories/\(category.id!)", data: category)
+        return requestHelper.put("/categories/\(category.id)", data: category)
     }
     
-    func deleteCategory(_ id: Int) -> AnyPublisher<Empty, NetworkError> {
+    func deleteCategory(_ id: String) -> AnyPublisher<Empty, NetworkError> {
         return requestHelper.delete("/categories/\(id)")
     }
     
     // MARK: Users
-    func login(username: String, password: String) -> AnyPublisher<User, NetworkError> {
+    func login(username: String, password: String) -> AnyPublisher<LoginResponse, NetworkError> {
         return requestHelper.post(
             "/users/login",
             data: LoginRequest(username: username, password: password),
-            type: User.self
-        ).map { (user) -> User in
-            // Persist the credentials on sucessful registration
-            return user
+            type: LoginResponse.self
+        ).map { (session) -> LoginResponse in
+            return session
         }.eraseToAnyPublisher()
     }
     
@@ -156,7 +155,7 @@ class BudgetAppApiService {
         }.eraseToAnyPublisher()
     }
     
-    func getUser(id: Int) -> AnyPublisher<User, NetworkError> {
+    func getUser(id: String) -> AnyPublisher<User, NetworkError> {
         return requestHelper.get("/users/\(id)")
     }
     
@@ -183,15 +182,11 @@ class BudgetAppApiService {
     }
     
     func updateUser(_ user: User) -> AnyPublisher<User, NetworkError> {
-        return requestHelper.put("/users/\(user.id!)", data: user)
+        return requestHelper.put("/users/\(user.id)", data: user)
     }
     
     func deleteUser(_ user: User) -> AnyPublisher<Empty, NetworkError> {
-        return requestHelper.delete("/users/\(user.id!)")
-    }
-    
-    func getProfile() -> AnyPublisher<User, NetworkError> {
-        return requestHelper.get("/users/me")
+        return requestHelper.delete("/users/\(user.id)")
     }
 }
 

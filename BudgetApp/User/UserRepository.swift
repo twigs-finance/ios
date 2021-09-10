@@ -10,11 +10,10 @@ import Foundation
 import Combine
 
 protocol UserRepository {
-    func getUser(_ id: Int) -> AnyPublisher<User, NetworkError>
+    func getUser(_ id: String) -> AnyPublisher<User, NetworkError>
     func searchUsers(_ withUsername: String) -> AnyPublisher<[User], NetworkError>
-    func login(username: String, password: String) -> AnyPublisher<User, NetworkError>
+    func login(username: String, password: String) -> AnyPublisher<LoginResponse, NetworkError>
     func register(username: String, email: String, password: String) -> AnyPublisher<User, NetworkError>
-    func getProfile() -> AnyPublisher<User, NetworkError>
 }
 
 class NetworkUserRepository: UserRepository {
@@ -24,7 +23,7 @@ class NetworkUserRepository: UserRepository {
         self.apiService = apiService
     }
     
-    func getUser(_ id: Int) -> AnyPublisher<User, NetworkError> {
+    func getUser(_ id: String) -> AnyPublisher<User, NetworkError> {
         return apiService.getUser(id: id)
     }
     
@@ -32,25 +31,22 @@ class NetworkUserRepository: UserRepository {
         return apiService.searchUsers(query: withUsername)
     }
     
-    func login(username: String, password: String) -> AnyPublisher<User, NetworkError> {
+    func login(username: String, password: String) -> AnyPublisher<LoginResponse, NetworkError> {
         return apiService.login(username: username, password: password)
     }
     
     func register(username: String, email: String, password: String) -> AnyPublisher<User, NetworkError> {
         return apiService.register(username: username, email: email, password: password)
     }
-    
-    func getProfile() -> AnyPublisher<User, NetworkError> {
-        return apiService.getProfile()
-    }
 }
 
 #if DEBUG
 
 class MockUserRepository: UserRepository {
-    static let user = User(id: 0, username: "root", email: "root@localhost", avatar: nil)
+    static let loginResponse = LoginResponse(token: "token", expiration: "2020-01-01T12:00:00Z", userId: "0")
+    static let user = User(id: "0", username: "root", email: "root@localhost", avatar: nil)
     
-    func getUser(_ id: Int) -> AnyPublisher<User, NetworkError> {
+    func getUser(_ id: String) -> AnyPublisher<User, NetworkError> {
         return Result<User, NetworkError>.Publisher(MockUserRepository.user)
             .eraseToAnyPublisher()
     }
@@ -60,18 +56,14 @@ class MockUserRepository: UserRepository {
             .eraseToAnyPublisher()
     }
     
-    func login(username: String, password: String) -> AnyPublisher<User, NetworkError> {
-        return Result<User, NetworkError>.Publisher(MockUserRepository.user)
+    func login(username: String, password: String) -> AnyPublisher<LoginResponse, NetworkError> {
+        return Result<LoginResponse, NetworkError>.Publisher(MockUserRepository.loginResponse)
             .eraseToAnyPublisher()
     }
     
     func register(username: String, email: String, password: String) -> AnyPublisher<User, NetworkError> {
         return Result<User, NetworkError>.Publisher(MockUserRepository.user)
             .eraseToAnyPublisher()
-    }
-    
-    func getProfile() -> AnyPublisher<User, NetworkError> {
-        return Result.Publisher(MockUserRepository.user).eraseToAnyPublisher()
     }
 }
 

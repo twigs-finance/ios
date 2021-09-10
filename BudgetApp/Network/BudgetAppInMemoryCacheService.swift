@@ -25,14 +25,14 @@ class BudgetAppInMemoryCacheService {
         return Result.Publisher(.success(results.slice(count: count, page: page))).eraseToAnyPublisher()
     }
     
-    func getBudget(_ id: Int) -> AnyPublisher<Budget, NetworkError>? {
+    func getBudget(_ id: String) -> AnyPublisher<Budget, NetworkError>? {
         guard let budget = budgets.first(where: { $0.id == id }) else {
             return nil
         }
         return Result.Publisher(.success(budget)).eraseToAnyPublisher()
     }
     
-    func getBudgetBalance(_ id: Int) -> AnyPublisher<Int, NetworkError>? {
+    func getBudgetBalance(_ id: String) -> AnyPublisher<Int, NetworkError>? {
         return nil
     }
     
@@ -56,12 +56,12 @@ class BudgetAppInMemoryCacheService {
         return nil
     }
     
-    func getTransaction(_ id: Int) -> AnyPublisher<Transaction, NetworkError>? {
+    func getTransaction(_ id: String) -> AnyPublisher<Transaction, NetworkError>? {
         return nil
     }
     
     // MARK: Categories
-    func getCategories(budgetId: Int? = nil, count: Int? = nil, page: Int? = nil) -> AnyPublisher<[Category], NetworkError>? {
+    func getCategories(budgetId: String? = nil, count: Int? = nil, page: Int? = nil) -> AnyPublisher<[Category], NetworkError>? {
         var results = categories
         if budgetId != nil {
             results = categories.filter { $0.budgetId == budgetId }
@@ -75,14 +75,14 @@ class BudgetAppInMemoryCacheService {
         return nil
     }
     
-    func getCategory(_ id: Int) -> AnyPublisher<Category, NetworkError>? {
+    func getCategory(_ id: String) -> AnyPublisher<Category, NetworkError>? {
         guard let category = categories.first(where: { $0.id == id }) else {
             return nil
         }
         return Result.Publisher(.success(category)).eraseToAnyPublisher()
     }
     
-    func getCategoryBalance(_ id: Int) -> AnyPublisher<Int, NetworkError>? {
+    func getCategoryBalance(_ id: String) -> AnyPublisher<Int, NetworkError>? {
         return nil
     }
     
@@ -96,7 +96,7 @@ class BudgetAppInMemoryCacheService {
 
     
     // MARK: Users
-    func getUser(id: Int) -> AnyPublisher<User, NetworkError>? {
+    func getUser(id: String) -> AnyPublisher<User, NetworkError>? {
         return nil
     }
     

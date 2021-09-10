@@ -17,7 +17,7 @@ class UserDataStore: ObservableObject {
         }
     }
 
-    func getUser(_ id: Int) {
+    func getUser(_ id: String) {
         self.user = .failure(.loading)
         
         _ = userRepository.getUser(id)

@@ -54,7 +54,7 @@ struct TransactionListItemView: View {
     
     var body: some View {
         NavigationLink(
-            destination: TransactionDetailsView(self.dataStoreProvider, transactionId: transaction.id!)
+            destination: TransactionDetailsView(self.dataStoreProvider, transactionId: transaction.id)
                 .navigationBarTitle("details", displayMode: .inline)
         ) {
             HStack {

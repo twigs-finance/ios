@@ -25,9 +25,9 @@ class TransactionDataStore: ObservableObject {
     func getTransactions(_ category: Category? = nil, from: Date? = nil, count: Int? = nil, page: Int? = nil) {
         self.transactions = .failure(.loading)
         
-        var categoryIds: [Int] = []
+        var categoryIds: [String] = []
         if category != nil {
-            categoryIds.append(category!.id!)
+            categoryIds.append(category!.id)
         }
         _ = self.transactionRepository.getTransactions(
             categoryIds: categoryIds,
@@ -48,7 +48,7 @@ class TransactionDataStore: ObservableObject {
             })
     }
     
-    func getTransaction(_ transactionId: Int) {
+    func getTransaction(_ transactionId: String) {
         self.transaction = .failure(.loading)
         
         _ = self.transactionRepository.getTransaction(transactionId)
@@ -69,7 +69,7 @@ class TransactionDataStore: ObservableObject {
         self.transaction = .failure(.loading)
         
         var transactionSavePublisher: AnyPublisher<Transaction, NetworkError>
-        if (transaction.id != nil) {
+        if (transaction.id != "") {
             transactionSavePublisher = self.transactionRepository.updateTransaction(transaction)
         } else {
             transactionSavePublisher = self.transactionRepository.createTransaction(transaction)
@@ -88,7 +88,7 @@ class TransactionDataStore: ObservableObject {
             })
     }
     
-    func deleteTransaction(_ transactionId: Int) {
+    func deleteTransaction(_ transactionId: String) {
         self.transaction = .failure(.loading)
         
         _ = self.transactionRepository.deleteTransaction(transactionId)

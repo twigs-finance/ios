@@ -10,11 +10,11 @@ import Foundation
 import Combine
 
 protocol TransactionRepository {
-    func getTransactions(categoryIds: [Int]?, from: Date?, count: Int?, page: Int?) -> AnyPublisher<[Transaction], NetworkError>
-    func getTransaction(_ transactionId: Int) -> AnyPublisher<Transaction, NetworkError>
+    func getTransactions(categoryIds: [String]?, from: Date?, count: Int?, page: Int?) -> AnyPublisher<[Transaction], NetworkError>
+    func getTransaction(_ transactionId: String) -> AnyPublisher<Transaction, NetworkError>
     func createTransaction(_ transaction: Transaction) -> AnyPublisher<Transaction, NetworkError>
     func updateTransaction(_ transaction: Transaction) -> AnyPublisher<Transaction, NetworkError>
-    func deleteTransaction(_ transactionId: Int) -> AnyPublisher<Empty, NetworkError>
+    func deleteTransaction(_ transactionId: String) -> AnyPublisher<Empty, NetworkError>
 }
 
 class NetworkTransactionRepository: TransactionRepository {
@@ -24,11 +24,11 @@ class NetworkTransactionRepository: TransactionRepository {
         self.apiService = apiService
     }
     
-    func getTransactions(categoryIds: [Int]?, from: Date?, count: Int?, page: Int?) -> AnyPublisher<[Transaction], NetworkError> {
+    func getTransactions(categoryIds: [String]?, from: Date?, count: Int?, page: Int?) -> AnyPublisher<[Transaction], NetworkError> {
         return apiService.getTransactions(categoryIds: categoryIds, from: from, count: count, page: page)
     }
     
-    func getTransaction(_ transactionId: Int) -> AnyPublisher<Transaction, NetworkError> {
+    func getTransaction(_ transactionId: String) -> AnyPublisher<Transaction, NetworkError> {
         return apiService.getTransaction(transactionId)
     }
     
@@ -40,7 +40,7 @@ class NetworkTransactionRepository: TransactionRepository {
         return apiService.updateTransaction(transaction)
     }
     
-    func deleteTransaction(_ transactionId: Int) -> AnyPublisher<Empty, NetworkError> {
+    func deleteTransaction(_ transactionId: String) -> AnyPublisher<Empty, NetworkError> {
         return apiService.deleteTransaction(transactionId)
     }
 }
@@ -48,22 +48,22 @@ class NetworkTransactionRepository: TransactionRepository {
 #if DEBUG
 class MockTransactionRepository: TransactionRepository {
     static let transaction: Transaction = Transaction(
-        id: 2,
+        id: "2",
         title: "Test Transaction",
         description: "A mock transaction used for testing",
         date: Date(),
         amount: 10000,
-        categoryId: MockCategoryRepository.category.id!,
+        categoryId: MockCategoryRepository.category.id,
         expense: true,
-        createdBy: MockUserRepository.user.id!,
-        budgetId: MockBudgetRepository.budget.id!
+        createdBy: MockUserRepository.user.id,
+        budgetId: MockBudgetRepository.budget.id
     )
 
-    func getTransactions(categoryIds: [Int]?, from: Date?, count: Int?, page: Int?) -> AnyPublisher<[Transaction], NetworkError> {
+    func getTransactions(categoryIds: [String]?, from: Date?, count: Int?, page: Int?) -> AnyPublisher<[Transaction], NetworkError> {
         return Result.Publisher([MockTransactionRepository.transaction]).eraseToAnyPublisher()
     }
     
-    func getTransaction(_ transactionId: Int) -> AnyPublisher<Transaction, NetworkError> {
+    func getTransaction(_ transactionId: String) -> AnyPublisher<Transaction, NetworkError> {
         return Result.Publisher(MockTransactionRepository.transaction).eraseToAnyPublisher()
     }
     
@@ -75,7 +75,7 @@ class MockTransactionRepository: TransactionRepository {
         return Result.Publisher(MockTransactionRepository.transaction).eraseToAnyPublisher()
     }
     
-    func deleteTransaction(_ transactionId: Int) -> AnyPublisher<Empty, NetworkError> {
+    func deleteTransaction(_ transactionId: String) -> AnyPublisher<Empty, NetworkError> {
         return Result.Publisher(.success(Empty())).eraseToAnyPublisher()
     }
 }

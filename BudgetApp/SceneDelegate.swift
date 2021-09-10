@@ -13,9 +13,9 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     #if DEBUG
     // Uncomment this for local development
 //            static let baseUrl = "http://localhost:8080"
-    static let baseUrl = "https://budget-api.intra.wbrawner.com"
+    static let baseUrl = "https://twigs.wbrawner.com"
     #else
-    static let baseUrl = "https://budget-api.intra.wbrawner.com"
+    static let baseUrl = "https://twigs.wbrawner.com"
     #endif
     var window: UIWindow?
     let dataStoreProvider: DataStoreProvider

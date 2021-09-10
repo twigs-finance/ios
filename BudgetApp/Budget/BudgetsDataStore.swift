@@ -39,7 +39,7 @@ class BudgetsDataStore: ObservableObject {
             })
     }
     
-    func getBudget(_ id: Int) {
+    func getBudget(_ id: String) {
         self.budget = .failure(.loading)
         
         _ = self.budgetRepository.getBudget(id)

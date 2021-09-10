@@ -2,7 +2,7 @@ import Foundation
 import Combine
 
 class AuthenticationDataStore: ObservableObject {
-    
+    private var currentRequest: AnyCancellable? = nil
     var currentUser: Result<User, UserStatus> = .failure(.unauthenticated) {
         didSet {
             self.objectWillChange.send()
@@ -13,16 +13,18 @@ class AuthenticationDataStore: ObservableObject {
         
         // Changes the status and notifies any observers of the change
         self.currentUser = .failure(.authenticating)
-        
+        print("Logging in")
         // Perform the login
-        _ = self.userRepository.login(username: username, password: password)
+        currentRequest = self.userRepository.login(username: username, password: password)
             .receive(on: DispatchQueue.main)
             .sink(receiveCompletion: { (status) in
                 switch status {
                 case .finished:
+                    print("Login done")
                     return
                 // Do nothing it means the network request just ended
                 case .failure(let error):
+                    self.currentRequest = nil
                     switch error {
                     case .jsonParsingFailed(let jsonError):
                         print(jsonError.localizedDescription)
@@ -32,11 +34,11 @@ class AuthenticationDataStore: ObservableObject {
                     // Poulate your status with failed authenticating
                     self.currentUser = .failure(.failedAuthentication)
                 }
-            }) { (user) in
-                if let sessionCookie = HTTPCookieStorage.shared.cookies(for: URL(string: SceneDelegate.baseUrl)!)?.first(where: { $0.name == SESSION_KEY }) {
-                    UserDefaults.standard.set(sessionCookie.value, forKey: SESSION_KEY)
-                }
-                self.currentUser = .success(user)
+            }) { (session) in
+                print("Login succeeded, loading user")
+                UserDefaults.standard.set(session.token, forKey: TOKEN)
+                UserDefaults.standard.set(session.userId, forKey: USER_ID)
+                self.loadProfile()
         }
     }
     
@@ -49,7 +51,7 @@ class AuthenticationDataStore: ObservableObject {
             return
         }
         
-        _ = self.userRepository.register(username: username, email: email, password: password)
+        currentRequest = self.userRepository.register(username: username, email: email, password: password)
             .receive(on: DispatchQueue.main)
             .sink(receiveCompletion: { (status) in
                 switch status {
@@ -65,33 +67,32 @@ class AuthenticationDataStore: ObservableObject {
         }
     }
     
-    private func loadFromExistingSession() {
+    private func loadProfile() {
+        guard let userId = UserDefaults.standard.string(forKey: USER_ID) else {
+            self.currentUser = .failure(.unauthenticated)
+            return
+        }
         self.currentUser = .failure(.authenticating)
-        
-        _ = self.userRepository.getProfile()
+        currentRequest = self.userRepository.getUser(userId)
             .receive(on: DispatchQueue.main)
             .sink(receiveCompletion: { (status) in
                 switch status {
                 case .finished:
+                    self.currentRequest = nil
                     return
                 case .failure(_):
                     self.currentUser = .failure(.unauthenticated)
                 }
             }) { (user) in
+                print("Got user, loading budgets")
                 self.currentUser = .success(user)
         }
     }
     
     init(_ userRepository: UserRepository) {
         self.userRepository = userRepository
-        if let sessionKey = UserDefaults.standard.string(forKey: SESSION_KEY) {
-            HTTPCookieStorage.shared.setCookie(HTTPCookie(properties: [
-                HTTPCookiePropertyKey.name: SESSION_KEY,
-                HTTPCookiePropertyKey.value: sessionKey,
-                HTTPCookiePropertyKey.domain: URL(string: SceneDelegate.baseUrl)!.host!,
-                HTTPCookiePropertyKey.path: "/"
-            ])!)
-            loadFromExistingSession()
+        if UserDefaults.standard.string(forKey: TOKEN) != nil {
+            loadProfile()
         }
     }
     
@@ -100,7 +101,8 @@ class AuthenticationDataStore: ObservableObject {
     private let userRepository: UserRepository
 }
 
-private let SESSION_KEY = "SESSION"
+private let TOKEN = "TOKEN"
+private let USER_ID = "USER_ID"
 
 enum UserStatus: Error, Equatable {
     case unauthenticated
@@ -114,7 +116,7 @@ enum UserStatus: Error, Equatable {
 class MockAuthenticationDataStore: AuthenticationDataStore {
     override init(_ userRepository: UserRepository) {
         super.init(userRepository)
-        self.currentUser = .success(User(id: 1, username: "test_user", email: "test@localhost.loc", avatar: nil))
+        self.currentUser = .success(User(id: "1", username: "test_user", email: "test@localhost.loc", avatar: nil))
     }
 }
 #endif
