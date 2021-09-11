@@ -11,15 +11,12 @@ import SwiftUI
 struct ContentView: View {
     @ObservedObject var authenticationDataStore: AuthenticationDataStore
     
+    @ViewBuilder
     var body: some View {
-        stateContent
-    }
-    
-    var stateContent: AnyView {
         if showLogin() {
-            return AnyView(LoginView(authenticationDataStore))
+            LoginView(authenticationDataStore)
         } else {
-            return AnyView(TabbedBudgetView(authenticationDataStore, dataStoreProvider: dataStoreProvider))
+            TabbedBudgetView(authenticationDataStore, dataStoreProvider: dataStoreProvider)
         }
     }
     
