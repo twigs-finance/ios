@@ -24,6 +24,7 @@ class AuthenticationDataStore: ObservableObject {
                     return
                 // Do nothing it means the network request just ended
                 case .failure(let error):
+                    print("Login failed")
                     self.currentRequest = nil
                     switch error {
                     case .jsonParsingFailed(let jsonError):
@@ -35,7 +36,6 @@ class AuthenticationDataStore: ObservableObject {
                     self.currentUser = .failure(.failedAuthentication)
                 }
             }) { (session) in
-                print("Login succeeded, loading user")
                 UserDefaults.standard.set(session.token, forKey: TOKEN)
                 UserDefaults.standard.set(session.userId, forKey: USER_ID)
                 self.loadProfile()
@@ -69,10 +69,17 @@ class AuthenticationDataStore: ObservableObject {
     
     private func loadProfile() {
         guard let userId = UserDefaults.standard.string(forKey: USER_ID) else {
+            print("No saved userId, unable to load profile")
+            self.currentUser = .failure(.unauthenticated)
+            return
+        }
+        guard let token = UserDefaults.standard.string(forKey: TOKEN) else {
+            print("No saved token, unable to load profile")
             self.currentUser = .failure(.unauthenticated)
             return
         }
         self.currentUser = .failure(.authenticating)
+        self.userRepository.setToken(token)
         currentRequest = self.userRepository.getUser(userId)
             .receive(on: DispatchQueue.main)
             .sink(receiveCompletion: { (status) in
@@ -81,6 +88,7 @@ class AuthenticationDataStore: ObservableObject {
                     self.currentRequest = nil
                     return
                 case .failure(_):
+                    print("Failed to load user")
                     self.currentUser = .failure(.unauthenticated)
                 }
             }) { (user) in

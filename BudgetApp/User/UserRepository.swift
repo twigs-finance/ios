@@ -10,6 +10,7 @@ import Foundation
 import Combine
 
 protocol UserRepository {
+    func setToken(_ token: String)
     func getUser(_ id: String) -> AnyPublisher<User, NetworkError>
     func searchUsers(_ withUsername: String) -> AnyPublisher<[User], NetworkError>
     func login(username: String, password: String) -> AnyPublisher<LoginResponse, NetworkError>
@@ -23,6 +24,10 @@ class NetworkUserRepository: UserRepository {
         self.apiService = apiService
     }
     
+    func setToken(_ token: String) {
+        self.apiService.requestHelper.token = token
+    }
+
     func getUser(_ id: String) -> AnyPublisher<User, NetworkError> {
         return apiService.getUser(id: id)
     }
@@ -45,6 +50,11 @@ class NetworkUserRepository: UserRepository {
 class MockUserRepository: UserRepository {
     static let loginResponse = LoginResponse(token: "token", expiration: "2020-01-01T12:00:00Z", userId: "0")
     static let user = User(id: "0", username: "root", email: "root@localhost", avatar: nil)
+    static var token: String? = nil
+
+    func setToken(_ token: String) {
+        MockUserRepository.token = token
+    }
     
     func getUser(_ id: String) -> AnyPublisher<User, NetworkError> {
         return Result<User, NetworkError>.Publisher(MockUserRepository.user)
