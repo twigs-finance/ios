@@ -10,6 +10,7 @@ import Foundation
 import Combine
 
 class BudgetsDataStore: ObservableObject {
+    private var currentRequest: AnyCancellable? = nil
     var budgets: Result<[Budget], NetworkError> = .failure(.loading) {
         didSet {
             self.objectWillChange.send()
@@ -24,13 +25,24 @@ class BudgetsDataStore: ObservableObject {
     func getBudgets(count: Int? = nil, page: Int? = nil) {
         self.budgets = .failure(.loading)
         
-        _ = self.budgetRepository.getBudgets(count: count, page: page)
+        self.currentRequest = self.budgetRepository.getBudgets(count: count, page: page)
             .receive(on: DispatchQueue.main)
             .sink(receiveCompletion: { (status) in
                 switch status {
                 case .finished:
+                    self.currentRequest = nil
                     return
                 case .failure(let error):
+                    switch error {
+                    case .jsonParsingFailed(let wrappedError):
+                        if let networkError = wrappedError as? NetworkError {
+                            print("failed to load budgets: \(networkError.name)")
+                        }
+                    default:
+                        print("failed to load budgets: \(error.name)")
+                    }
+                    
+                    
                     self.budgets = .failure(error)
                     return
                 }
@@ -42,11 +54,12 @@ class BudgetsDataStore: ObservableObject {
     func getBudget(_ id: String) {
         self.budget = .failure(.loading)
         
-        _ = self.budgetRepository.getBudget(id)
+        self.currentRequest = self.budgetRepository.getBudget(id)
             .receive(on: DispatchQueue.main)
             .sink(receiveCompletion: { (status) in
                 switch status {
                 case .finished:
+                    self.currentRequest = nil
                     return
                 case .failure(let error):
                     self.budget = .failure(error)

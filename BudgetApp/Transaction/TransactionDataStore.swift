@@ -10,6 +10,7 @@ import Foundation
 import Combine
 
 class TransactionDataStore: ObservableObject {
+    private var currentRequest: AnyCancellable? = nil
     var transactions: Result<[Transaction], NetworkError> = .failure(.loading) {
         didSet {
             self.objectWillChange.send()
@@ -22,14 +23,16 @@ class TransactionDataStore: ObservableObject {
         }
     }
     
-    func getTransactions(_ category: Category? = nil, from: Date? = nil, count: Int? = nil, page: Int? = nil) {
+    func getTransactions(_ budget: Budget, category: Category? = nil, from: Date? = nil, count: Int? = nil, page: Int? = nil) {
         self.transactions = .failure(.loading)
         
+        let budgetIds: [String] = [budget.id]
         var categoryIds: [String] = []
         if category != nil {
             categoryIds.append(category!.id)
         }
-        _ = self.transactionRepository.getTransactions(
+        self.currentRequest = self.transactionRepository.getTransactions(
+            budgetIds: budgetIds,
             categoryIds: categoryIds,
             from: Date(timeIntervalSince1970: 0),
             count: count,
@@ -39,6 +42,7 @@ class TransactionDataStore: ObservableObject {
             .sink(receiveCompletion: { (completion) in
                 switch completion {
                 case .finished:
+                    self.currentRequest = nil
                     return
                 case .failure(let error):
                     self.transactions = .failure(error)
@@ -51,11 +55,12 @@ class TransactionDataStore: ObservableObject {
     func getTransaction(_ transactionId: String) {
         self.transaction = .failure(.loading)
         
-        _ = self.transactionRepository.getTransaction(transactionId)
+        self.currentRequest = self.transactionRepository.getTransaction(transactionId)
             .receive(on: DispatchQueue.main)
             .sink(receiveCompletion: { (completion) in
                 switch completion {
                 case .finished:
+                    self.currentRequest = nil
                     return
                 case .failure(let error):
                     self.transaction = .failure(error)
@@ -74,11 +79,12 @@ class TransactionDataStore: ObservableObject {
         } else {
             transactionSavePublisher = self.transactionRepository.createTransaction(transaction)
         }
-        _ = transactionSavePublisher
+        self.currentRequest = transactionSavePublisher
             .receive(on: DispatchQueue.main)
             .sink(receiveCompletion: { (completion) in
                 switch completion {
                 case .finished:
+                    self.currentRequest = nil
                     return
                 case .failure(let error):
                     self.transaction = .failure(error)
@@ -91,11 +97,12 @@ class TransactionDataStore: ObservableObject {
     func deleteTransaction(_ transactionId: String) {
         self.transaction = .failure(.loading)
         
-        _ = self.transactionRepository.deleteTransaction(transactionId)
+        self.currentRequest = self.transactionRepository.deleteTransaction(transactionId)
             .receive(on: DispatchQueue.main)
             .sink(receiveCompletion: { completion in
                 switch completion {
                 case .finished:
+                    self.currentRequest = nil
                     return
                 case .failure(let error):
                     self.transaction = .failure(error)

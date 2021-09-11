@@ -12,5 +12,5 @@ struct Budget: Identifiable, Hashable, Codable {
     let id: String
     let name: String
     let description: String?
-    let currencyCode: String
+    let currencyCode: String?
 }

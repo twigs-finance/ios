@@ -9,54 +9,62 @@
 import SwiftUI
 
 struct TabbedBudgetView: View {
-    @ObservedObject var userData: AuthenticationDataStore
     @State var isAddingTransaction = false
+    @State var selectedTab: Int = 0
     
     var body: some View {
         TabView {
-            NavigationView {
-                TransactionListView(dataStoreProvider)
-                    .navigationBarTitle("transactions")
-                    .navigationBarItems(
-                        leading: NavigationLink(destination: EmptyView()) {
-                            Text("filter")
-                        },
-                        trailing: Button(action: {
-                            self.isAddingTransaction = true
-                        }) {
-                            Image(systemName: "plus")
-                            .padding()
-                        }
-                )
-            }
-            .tabItem {
-                Image(systemName: "dollarsign.circle.fill")
-                Text("transactions")
-            }
+            TransactionListView(dataStoreProvider, budget: self.budget)
+                .sheet(isPresented: $isAddingTransaction, content: {
+                    AddTransactionView(self.dataStoreProvider)
+                        .navigationBarTitle("add_transaction")
+                })
+                .tabItem {
+                    Image(systemName: "dollarsign.circle.fill")
+                    Text("transactions")
+                }
+                .tag(0)
+                .onAppear {
+                    selectedTab = 0
+                }
             
             BudgetListsView(dataStoreProvider).tabItem {
                 Image(systemName: "chart.pie.fill")
-                Text("budgets")
+                Text("categories")
+            }
+            .onAppear {
+                selectedTab = 1
             }
             
             ProfileView(dataStoreProvider).tabItem {
                 Image(systemName: "person.circle.fill")
                 Text("profile")
             }
-        }.edgesIgnoringSafeArea(.top)
-        .sheet(isPresented: $isAddingTransaction, content: {
-            AddTransactionView(self.dataStoreProvider)
-                .navigationBarTitle("add_transaction")
-        })
+            .onAppear {
+                selectedTab = 2
+            }
+        }.navigationBarItems(
+            trailing: HStack {
+                NavigationLink(destination: EmptyView()) {
+                    Image(systemName: "magnifyingglass")
+                }
+                Button(action: {
+                    self.isAddingTransaction = true
+                }) {
+                    Image(systemName: "plus")
+                        .padding()
+                }
+            }
+        )
     }
     
     let dataStoreProvider: DataStoreProvider
-    init (_ userData: AuthenticationDataStore, dataStoreProvider: DataStoreProvider) {
-        self.userData = userData
+    let budget: Budget
+    init (_ dataStoreProvider: DataStoreProvider, budget: Budget) {
         self.dataStoreProvider = dataStoreProvider
+        self.budget = budget
         // Warm up the caches
-        self.dataStoreProvider.budgetsDataStore().getBudgets()
-        self.dataStoreProvider.categoryDataStore().getCategories()
+        self.dataStoreProvider.categoryDataStore().getCategories(budgetId: budget.id)
     }
 }
 //

@@ -22,7 +22,7 @@ struct CategoryListView: View {
             return AnyView(
                 Section {
                     List(categories) { category in
-                        CategoryListItemView(self.dataStoreProvider, category: category)
+                        CategoryListItemView(self.dataStoreProvider, budget: budget, category: category)
                     }
                 }
             )
@@ -37,9 +37,11 @@ struct CategoryListView: View {
     }
     
     private let dataStoreProvider: DataStoreProvider
+    private let budget: Budget
     init(_ dataStoreProvider: DataStoreProvider, budget: Budget) {
         self.dataStoreProvider = dataStoreProvider
         let categoryDataStore = dataStoreProvider.categoryDataStore()
+        self.budget = budget
         categoryDataStore.getCategories(budgetId: budget.id)
         self.categoryDataStore = categoryDataStore
     }
@@ -47,11 +49,12 @@ struct CategoryListView: View {
 
 struct CategoryListItemView: View {
     var category: Category
+    let budget: Budget
     let dataStoreProvider: DataStoreProvider
     
     var body: some View {
         NavigationLink(
-            destination: TransactionListView(self.dataStoreProvider, category: category)
+            destination: TransactionListView(self.dataStoreProvider, budget: self.budget, category: category)
                 .navigationBarTitle(category.title)
         ) {
             VStack(alignment: .leading) {
@@ -66,8 +69,9 @@ struct CategoryListItemView: View {
         }
     }
     
-    init (_ dataStoreProvider: DataStoreProvider, category: Category) {
+    init (_ dataStoreProvider: DataStoreProvider, budget: Budget, category: Category) {
         self.dataStoreProvider = dataStoreProvider
+        self.budget = budget
         self.category = category
     }
 }

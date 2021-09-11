@@ -13,31 +13,28 @@ import Combine
 struct BudgetListsView: View {
     @ObservedObject var budgetsDataStore: BudgetsDataStore
     
+    @ViewBuilder
     var body: some View {
         NavigationView {
-            stateContent.navigationBarTitle("budgets")
-        }
-    }
-    
-    var stateContent: AnyView {
-        switch budgetsDataStore.budgets {
-        case .success(let budgets):
-            return AnyView(
+            switch budgetsDataStore.budgets {
+            case .success(let budgets):
                 Section {
                     List(budgets) { budget in
                         BudgetListItemView(self.dataStoreProvider, budget: budget)
                     }
-                }
-            )
-        case .failure(.loading):
-            return AnyView(VStack {
-                ActivityIndicator(isAnimating: .constant(true), style: .large)
-            })
-        default:
-            // TODO: Handle each network failure type
-            return AnyView(Text("budgets_load_failure"))
+                }.navigationBarTitle("budgets")
+            case .failure(.loading):
+                VStack {
+                    ActivityIndicator(isAnimating: .constant(true), style: .large)
+                }.navigationBarTitle("budgets")
+            default:
+                // TODO: Handle each network failure type
+                Text("budgets_load_failure").navigationBarTitle("budgets")
+            }
         }
+        
     }
+    
     
     let dataStoreProvider: DataStoreProvider
     init(_ dataStoreProvider: DataStoreProvider) {
@@ -53,7 +50,7 @@ struct BudgetListItemView: View {
     
     var body: some View {
         NavigationLink(
-            destination: BudgetDetailsView(self.dataStoreProvider, budget: budget)
+            destination: TabbedBudgetView(self.dataStoreProvider, budget: budget)
                 .navigationBarTitle(budget.name)
         ) {
             VStack(alignment: .leading) {

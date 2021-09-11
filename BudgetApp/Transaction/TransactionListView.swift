@@ -12,39 +12,34 @@ import Combine
 struct TransactionListView: View {
     @ObservedObject var transactionDataStore: TransactionDataStore
     
+    @ViewBuilder
     var body: some View {
-        stateContent.onAppear {
-            self.transactionDataStore.getTransactions(self.category)
-        }
-    }
-    
-    var stateContent: AnyView {
         switch transactionDataStore.transactions {
         case .success(let transactions):
-            return AnyView(
-                Section{
-                    List(transactions) { transaction in
-                        TransactionListItemView(self.dataStoreProvider, transaction: transaction)
-                    }
+            Section{
+                List(transactions) { transaction in
+                    TransactionListItemView(self.dataStoreProvider, transaction: transaction)
                 }
-            )
+            }
         case .failure(.loading):
-            return AnyView(VStack {
+            VStack {
                 ActivityIndicator(isAnimating: .constant(true), style: .large)
-            })
+            }
         default:
             // TODO: Handle each network failure type
-            return AnyView(Text("budgets_load_failure"))
+            Text("budgets_load_failure")
         }
     }
     
     let dataStoreProvider: DataStoreProvider
+    let budget: Budget
     let category: Category?
-    init(_ dataStoreProvider: DataStoreProvider, category: Category? = nil) {
+    init(_ dataStoreProvider: DataStoreProvider, budget: Budget, category: Category? = nil) {
         self.dataStoreProvider = dataStoreProvider
         self.transactionDataStore = dataStoreProvider.transactionDataStore()
+        self.budget = budget
         self.category = category
-        self.transactionDataStore.getTransactions(self.category)
+        self.transactionDataStore.getTransactions(self.budget, category: self.category)
     }
 }
 

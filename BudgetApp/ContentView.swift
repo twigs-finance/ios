@@ -16,7 +16,7 @@ struct ContentView: View {
         if showLogin() {
             LoginView(authenticationDataStore)
         } else {
-            TabbedBudgetView(authenticationDataStore, dataStoreProvider: dataStoreProvider)
+            BudgetListsView(dataStoreProvider)
         }
     }
     

@@ -10,7 +10,7 @@ import Foundation
 import Combine
 
 protocol TransactionRepository {
-    func getTransactions(categoryIds: [String]?, from: Date?, count: Int?, page: Int?) -> AnyPublisher<[Transaction], NetworkError>
+    func getTransactions(budgetIds: [String], categoryIds: [String]?, from: Date?, count: Int?, page: Int?) -> AnyPublisher<[Transaction], NetworkError>
     func getTransaction(_ transactionId: String) -> AnyPublisher<Transaction, NetworkError>
     func createTransaction(_ transaction: Transaction) -> AnyPublisher<Transaction, NetworkError>
     func updateTransaction(_ transaction: Transaction) -> AnyPublisher<Transaction, NetworkError>
@@ -24,8 +24,8 @@ class NetworkTransactionRepository: TransactionRepository {
         self.apiService = apiService
     }
     
-    func getTransactions(categoryIds: [String]?, from: Date?, count: Int?, page: Int?) -> AnyPublisher<[Transaction], NetworkError> {
-        return apiService.getTransactions(categoryIds: categoryIds, from: from, count: count, page: page)
+    func getTransactions(budgetIds: [String], categoryIds: [String]?, from: Date?, count: Int?, page: Int?) -> AnyPublisher<[Transaction], NetworkError> {
+        return apiService.getTransactions(budgetIds: budgetIds, categoryIds: categoryIds, from: from, count: count, page: page)
     }
     
     func getTransaction(_ transactionId: String) -> AnyPublisher<Transaction, NetworkError> {
@@ -59,7 +59,7 @@ class MockTransactionRepository: TransactionRepository {
         budgetId: MockBudgetRepository.budget.id
     )
 
-    func getTransactions(categoryIds: [String]?, from: Date?, count: Int?, page: Int?) -> AnyPublisher<[Transaction], NetworkError> {
+    func getTransactions(budgetIds: [String], categoryIds: [String]?, from: Date?, count: Int?, page: Int?) -> AnyPublisher<[Transaction], NetworkError> {
         return Result.Publisher([MockTransactionRepository.transaction]).eraseToAnyPublisher()
     }
     

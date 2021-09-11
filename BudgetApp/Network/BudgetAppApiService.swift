@@ -296,6 +296,7 @@ class RequestHelper {
                     default: throw NetworkError.unknown
                     }
                 }
+                print(String(data: data, encoding: String.Encoding.utf8))
                 return data
             }
             .decode(type: ResultType.self, decoder: self.decoder)
@@ -327,6 +328,29 @@ enum NetworkError: Error, Equatable {
             return error1.localizedDescription == error2.localizedDescription
         default:
             return false
+        }
+    }
+    
+    var name: String {
+        get {
+            switch self {
+            case .loading:
+                return "loading"
+            case .unknown:
+                return "unknown"
+            case .notFound:
+                return "notFound"
+            case .deleted:
+                return "deleted"
+            case .unauthorized:
+                return "unauthorized"
+            case .badRequest:
+                return "badRequest"
+            case .invalidUrl:
+                return "invalidUrl"
+            case .jsonParsingFailed(_):
+                return "jsonParsingFailed"
+            }
         }
     }
     
