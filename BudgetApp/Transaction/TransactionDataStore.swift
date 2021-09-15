@@ -45,6 +45,7 @@ class TransactionDataStore: ObservableObject {
                     self.currentRequest = nil
                     return
                 case .failure(let error):
+                    print("Error loading transactions: \(error.name)")
                     self.transactions = .failure(error)
                 }
             }, receiveValue: { (transactions) in

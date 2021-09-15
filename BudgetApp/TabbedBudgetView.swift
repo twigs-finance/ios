@@ -28,7 +28,7 @@ struct TabbedBudgetView: View {
                     selectedTab = 0
                 }
             
-            BudgetListsView(dataStoreProvider).tabItem {
+            CategoryListView(dataStoreProvider, budget: self.budget).tabItem {
                 Image(systemName: "chart.pie.fill")
                 Text("categories")
             }

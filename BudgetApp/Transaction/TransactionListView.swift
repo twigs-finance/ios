@@ -16,7 +16,7 @@ struct TransactionListView: View {
     var body: some View {
         switch transactionDataStore.transactions {
         case .success(let transactions):
-            Section{
+            Section {
                 List(transactions) { transaction in
                     TransactionListItemView(self.dataStoreProvider, transaction: transaction)
                 }

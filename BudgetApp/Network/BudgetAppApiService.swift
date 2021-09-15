@@ -61,10 +61,10 @@ class BudgetAppApiService {
     ) -> AnyPublisher<[Transaction], NetworkError> {
         var queries = [String: Array<String>]()
         if budgetIds != nil {
-            queries["budgetId"] = budgetIds!
+            queries["budgetIds"] = budgetIds!
         }
         if categoryIds != nil {
-            queries["categoryId"] = categoryIds!
+            queries["categoryIds"] = categoryIds!
         }
         if from != nil {
             queries["from"] = [from!.toISO8601String()]
@@ -99,10 +99,13 @@ class BudgetAppApiService {
     
     // MARK: Categories
     
-    func getCategories(budgetId: String? = nil, count: Int? = nil, page: Int? = nil) -> AnyPublisher<[Category], NetworkError> {
+    func getCategories(budgetId: String? = nil, archived: Bool? = nil, count: Int? = nil, page: Int? = nil) -> AnyPublisher<[Category], NetworkError> {
         var queries = [String: Array<String>]()
         if budgetId != nil {
-            queries["budgetId"] = [String(budgetId!)]
+            queries["budgetIds"] = [String(budgetId!)]
+        }
+        if archived != nil {
+            queries["archived"] = [String(archived!)]
         }
         if count != nil {
             queries["count"] = [String(count!)]
@@ -197,7 +200,7 @@ class RequestHelper {
     
     init(_ baseUrl: String) {
         self.baseUrl = baseUrl
-        self.decoder.dateDecodingStrategy = .iso8601
+        self.decoder.dateDecodingStrategy = .formatted(Date.iso8601DateFormatter)
     }
     
     func get<ResultType: Codable>(
@@ -373,26 +376,26 @@ extension Encodable {
 }
 
 extension Date {
-    var iso8601DateFormatter: DateFormatter {
+    static let iso8601DateFormatter: DateFormatter = {
         let dateFormatter = DateFormatter()
         dateFormatter.locale = Locale(identifier: "en_US_POSIX")
-        dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"
+        dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss'Z'"
         dateFormatter.timeZone = TimeZone(identifier: "UTC")
         return dateFormatter
-    }
+    }()
     
-    var localeDateFormatter: DateFormatter {
+    static let localeDateFormatter: DateFormatter = {
         let dateFormatter = DateFormatter()
         dateFormatter.locale = Locale.current
         dateFormatter.dateFormat = DateFormatter.dateFormat(fromTemplate: "yyyyMMdd", options: 0, locale: Locale.current)
         return dateFormatter
-    }
+    }()
     
     func toISO8601String() -> String {
-        return iso8601DateFormatter.string(from: self)
+        return Date.iso8601DateFormatter.string(from: self)
     }
     
     func toLocaleString() -> String {
-        return localeDateFormatter.string(from: self)
+        return Date.localeDateFormatter.string(from: self)
     }
 }

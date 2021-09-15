@@ -15,4 +15,5 @@ struct Category: Identifiable, Hashable, Codable {
     let description: String?
     let amount: Int
     let expense: Bool
+    let archived: Bool
 }

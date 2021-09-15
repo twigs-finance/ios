@@ -10,6 +10,7 @@ import Foundation
 import Combine
 
 class CategoryDataStore: ObservableObject {
+    private var currentRequest: AnyCancellable? = nil
     var categories: Result<[Category], NetworkError> = .failure(.loading) {
         didSet {
             self.objectWillChange.send()
@@ -22,14 +23,15 @@ class CategoryDataStore: ObservableObject {
         }
     }
     
-    func getCategories(budgetId: String? = nil, count: Int? = nil, page: Int? = nil) {
+    func getCategories(budgetId: String? = nil, archived: Bool? = false, count: Int? = nil, page: Int? = nil) {
         self.categories = .failure(.loading)
         
-        _ = categoryRepository.getCategories(budgetId: budgetId, count: count, page: page)
+        self.currentRequest = categoryRepository.getCategories(budgetId: budgetId, archived: archived, count: count, page: page)
             .receive(on: DispatchQueue.main)
             .sink(receiveCompletion: { (completion) in
                 switch completion {
                 case .finished:
+                    self.currentRequest = nil
                     return
                 case .failure(let error):
                     self.categories = .failure(error)
@@ -43,11 +45,12 @@ class CategoryDataStore: ObservableObject {
     func getCategory(_ categoryId: String) {
         self.category = .failure(.loading)
         
-        _ = categoryRepository.getCategory(categoryId)
+        self.currentRequest = categoryRepository.getCategory(categoryId)
             .receive(on: DispatchQueue.main)
             .sink(receiveCompletion: { (completion) in
                 switch completion {
                 case .finished:
+                    self.currentRequest = nil
                     return
                 case .failure(let error):
                     self.category = .failure(error)

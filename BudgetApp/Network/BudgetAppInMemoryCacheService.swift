@@ -61,10 +61,13 @@ class BudgetAppInMemoryCacheService {
     }
     
     // MARK: Categories
-    func getCategories(budgetId: String? = nil, count: Int? = nil, page: Int? = nil) -> AnyPublisher<[Category], NetworkError>? {
+    func getCategories(budgetId: String? = nil, archived: Bool? = nil, count: Int? = nil, page: Int? = nil) -> AnyPublisher<[Category], NetworkError>? {
         var results = categories
         if budgetId != nil {
             results = categories.filter { $0.budgetId == budgetId }
+        }
+        if archived != nil {
+            results = results.filter { $0.archived == archived }
         }
         if results.isEmpty {
             return nil
