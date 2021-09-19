@@ -61,10 +61,13 @@ class BudgetAppInMemoryCacheService {
     }
     
     // MARK: Categories
-    func getCategories(budgetId: String? = nil, archived: Bool? = nil, count: Int? = nil, page: Int? = nil) -> AnyPublisher<[Category], NetworkError>? {
+    func getCategories(budgetId: String? = nil, expense: Bool? = nil, archived: Bool? = nil, count: Int? = nil, page: Int? = nil) -> AnyPublisher<[Category], NetworkError>? {
         var results = categories
         if budgetId != nil {
             results = categories.filter { $0.budgetId == budgetId }
+        }
+        if expense != nil {
+            results = results.filter { $0.expense == expense }
         }
         if archived != nil {
             results = results.filter { $0.archived == archived }
@@ -73,9 +76,7 @@ class BudgetAppInMemoryCacheService {
             return nil
         }
         let sortedResults = results.sorted { $0.title < $1.title }
-        // TODO: Figure out why this crashes on transaction editing screens
-//        return Result.Publisher(.success(sortedResults.slice(count: count, page: page))).eraseToAnyPublisher()
-        return nil
+        return Result.Publisher(.success(sortedResults.slice(count: count, page: page))).eraseToAnyPublisher()
     }
     
     func getCategory(_ id: String) -> AnyPublisher<Category, NetworkError>? {

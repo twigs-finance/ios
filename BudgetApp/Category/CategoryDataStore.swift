@@ -23,10 +23,10 @@ class CategoryDataStore: ObservableObject {
         }
     }
     
-    func getCategories(budgetId: String? = nil, archived: Bool? = false, count: Int? = nil, page: Int? = nil) {
+    func getCategories(budgetId: String? = nil, expense: Bool? = nil, archived: Bool? = false, count: Int? = nil, page: Int? = nil) {
         self.categories = .failure(.loading)
         
-        self.currentRequest = categoryRepository.getCategories(budgetId: budgetId, archived: archived, count: count, page: page)
+        self.currentRequest = categoryRepository.getCategories(budgetId: budgetId, expense: expense, archived: archived, count: count, page: page)
             .receive(on: DispatchQueue.main)
             .sink(receiveCompletion: { (completion) in
                 switch completion {

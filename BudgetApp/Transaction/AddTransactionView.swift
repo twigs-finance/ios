@@ -16,8 +16,8 @@ struct AddTransactionView: View {
     @State var date: Date = Date()
     @State var amount: String = ""
     @State var type: TransactionType = .expense
-    @State var budgetId: String? = nil
-    @State var categoryId: String? = nil
+    @State var budgetId: String = ""
+    @State var categoryId: String = ""
     let createdBy: String
     
     var stateContent: AnyView {
@@ -60,7 +60,7 @@ struct AddTransactionView: View {
                             categoryId: self.categoryId,
                             expense: self.type == TransactionType.expense,
                             createdBy: self.createdBy,
-                            budgetId: self.budgetId!
+                            budgetId: self.budgetId
                         ))
                 })
         }
@@ -70,8 +70,8 @@ struct AddTransactionView: View {
             self.date = Date()
             self.amount = ""
             self.type = .expense
-            self.budgetId = nil
-            self.categoryId = nil
+            self.budgetId = ""
+            self.categoryId = ""
         }
     }
     

@@ -10,13 +10,13 @@ import SwiftUI
 
 struct TransactionEditView: View {
     @Environment(\.presentationMode) var presentationMode
-    var title: State<String>
-    var description: State<String>
-    var date: State<Date>
-    var amount: State<String>
-    var type: State<TransactionType>
-    var budgetId: State<String?>
-    var categoryId: State<String?>
+    @State var title: String
+    @State var description: String
+    @State var date: Date
+    @State var amount: String
+    @State var type: TransactionType
+    @State var budgetId: String
+    @State var categoryId: String
     let createdBy: String
     let id: String?
     var shouldNavigateUp: Binding<Bool>
@@ -31,13 +31,13 @@ struct TransactionEditView: View {
             return AnyView(EmbeddedLoadingView())
         default:
             return AnyView(EditTransactionForm(
-                title: self.title.projectedValue,
-                description: self.description.projectedValue,
-                date: self.date.projectedValue,
-                amount: self.amount.projectedValue,
-                type: self.type.projectedValue,
-                budgetId: self.budgetId.projectedValue,
-                categoryId: self.categoryId.projectedValue,
+                title: self.$title,
+                description: self.$description,
+                date: self.$date,
+                amount: self.$amount,
+                type: self.$type,
+                budgetId: self.$budgetId,
+                categoryId: self.$categoryId,
                 dataStoreProvider: self.dataStoreProvider,
                 deleteAction: {
                     self.transactionDataStore.deleteTransaction(self.id!)
@@ -49,17 +49,17 @@ struct TransactionEditView: View {
     var body: some View {
         stateContent
             .navigationBarItems(trailing: Button("save") {
-                let amount = Double(self.amount.wrappedValue) ?? 0.0
+                let amount = Double(self.amount) ?? 0.0
                 self.transactionDataStore.saveTransaction(Transaction(
                     id: self.id ?? "",
-                    title: self.title.wrappedValue,
-                    description: self.description.wrappedValue,
-                    date: self.date.wrappedValue,
+                    title: self.title,
+                    description: self.description,
+                    date: self.date,
                     amount: Int(amount * 100.0),
-                    categoryId: self.categoryId.wrappedValue,
-                    expense: self.type.wrappedValue == TransactionType.expense,
+                    categoryId: self.categoryId,
+                    expense: self.type == TransactionType.expense,
                     createdBy: self.createdBy,
-                    budgetId: self.budgetId.wrappedValue!
+                    budgetId: self.budgetId
                 ))
             })
     }
@@ -71,13 +71,13 @@ struct TransactionEditView: View {
         self.transactionDataStore = dataStoreProvider.transactionDataStore()
         self.createdBy = try! dataStoreProvider.authenticationDataStore().currentUser.get().id
         self.id = transaction.id
-        self.title = State<String>(initialValue: transaction.title)
-        self.description = State<String>(initialValue: transaction.description ?? "")
-        self.date = State<Date>(initialValue: transaction.date)
-        self.amount = State<String>(initialValue: transaction.amountString)
-        self.type = State<TransactionType>(initialValue: transaction.type)
-        self.budgetId = State<String?>(initialValue: transaction.budgetId)
-        self.categoryId = State<String?>(initialValue: transaction.categoryId)
+        self._title = State<String>(initialValue: transaction.title)
+        self._description = State<String>(initialValue: transaction.description ?? "")
+        self._date = State<Date>(initialValue: transaction.date)
+        self._amount = State<String>(initialValue: transaction.amountString)
+        self._type = State<TransactionType>(initialValue: transaction.type)
+        self._budgetId = State<String>(initialValue: transaction.budgetId)
+        self._categoryId = State<String>(initialValue: transaction.categoryId ?? "")
         self.shouldNavigateUp = shouldNavigateUp
     }
 }

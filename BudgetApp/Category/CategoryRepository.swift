@@ -10,7 +10,7 @@ import Foundation
 import Combine
 
 protocol CategoryRepository {
-    func getCategories(budgetId: String?, archived: Bool?, count: Int?, page: Int?) -> AnyPublisher<[Category], NetworkError>
+    func getCategories(budgetId: String?, expense: Bool?, archived: Bool?, count: Int?, page: Int?) -> AnyPublisher<[Category], NetworkError>
     func getCategory(_ categoryId: String) -> AnyPublisher<Category, NetworkError>
 }
 
@@ -23,14 +23,14 @@ class NetworkCategoryRepository: CategoryRepository {
         self.cacheService = cacheService
     }
     
-    func getCategories(budgetId: String?, archived: Bool?, count: Int?, page: Int?) -> AnyPublisher<[Category], NetworkError> {
-        if let categories = cacheService?.getCategories(budgetId: budgetId, archived: archived, count: count, page: page) {
+    func getCategories(budgetId: String?, expense: Bool?, archived: Bool?, count: Int?, page: Int?) -> AnyPublisher<[Category], NetworkError> {
+        if let categories = cacheService?.getCategories(budgetId: budgetId, expense: expense, archived: archived, count: count, page: page) {
             print("Returning categories from cache")
             return categories
         }
         
         print("No cached categories, fetching from network")
-        return apiService.getCategories(budgetId: budgetId, archived: archived, count: count, page: page).map { (categories: [Category]) in
+        return apiService.getCategories(budgetId: budgetId, expense: expense, archived: archived, count: count, page: page).map { (categories: [Category]) in
             self.cacheService?.addCategories(categories)
             return categories
         }.eraseToAnyPublisher()
@@ -62,7 +62,7 @@ class MockCategoryRepository: CategoryRepository {
         archived: false
     )
     
-    func getCategories(budgetId: String?, archived: Bool?, count: Int?, page: Int?) -> AnyPublisher<[Category], NetworkError> {
+    func getCategories(budgetId: String?, expense: Bool?, archived: Bool?, count: Int?, page: Int?) -> AnyPublisher<[Category], NetworkError> {
         return Result.Publisher([MockCategoryRepository.category]).eraseToAnyPublisher()
     }
     

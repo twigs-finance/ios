@@ -38,7 +38,7 @@ class BudgetAppApiService {
     }
     
     func newBudget(_ budget: Budget) -> AnyPublisher<Budget, NetworkError> {
-        return requestHelper.post("/api/budgets/new", data: budget, type: Budget.self)
+        return requestHelper.post("/api/budgets", data: budget, type: Budget.self)
     }
     
     func updateBudget(_ budget: Budget) -> AnyPublisher<Budget, NetworkError> {
@@ -86,7 +86,7 @@ class BudgetAppApiService {
     }
     
     func newTransaction(_ transaction: Transaction) -> AnyPublisher<Transaction, NetworkError> {
-        return requestHelper.post("/api/transactions/new", data: transaction, type: Transaction.self)
+        return requestHelper.post("/api/transactions", data: transaction, type: Transaction.self)
     }
     
     func updateTransaction(_ transaction: Transaction) -> AnyPublisher<Transaction, NetworkError> {
@@ -99,10 +99,13 @@ class BudgetAppApiService {
     
     // MARK: Categories
     
-    func getCategories(budgetId: String? = nil, archived: Bool? = nil, count: Int? = nil, page: Int? = nil) -> AnyPublisher<[Category], NetworkError> {
+    func getCategories(budgetId: String? = nil, expense: Bool? = nil, archived: Bool? = nil, count: Int? = nil, page: Int? = nil) -> AnyPublisher<[Category], NetworkError> {
         var queries = [String: Array<String>]()
         if budgetId != nil {
             queries["budgetIds"] = [String(budgetId!)]
+        }
+        if expense != nil {
+            queries["expense"] = [String(expense!)]
         }
         if archived != nil {
             queries["archived"] = [String(archived!)]
@@ -125,7 +128,7 @@ class BudgetAppApiService {
     }
     
     func newCategory(_ category: Category) -> AnyPublisher<Category, NetworkError> {
-        return requestHelper.post("/api/categories/new", data: category, type: Category.self)
+        return requestHelper.post("/api/categories", data: category, type: Category.self)
     }
     
     func updateCategory(_ category: Category) -> AnyPublisher<Category, NetworkError> {
@@ -149,7 +152,7 @@ class BudgetAppApiService {
     
     func register(username: String, email: String, password: String) -> AnyPublisher<User, NetworkError> {
         return requestHelper.post(
-            "/api/users/new",
+            "/api/users/register",
             data: RegistrationRequest(username: username, email: email, password: password),
             type: User.self
         ).map { (user) -> User in
@@ -181,7 +184,7 @@ class BudgetAppApiService {
     }
     
     func newUser(_ user: User) -> AnyPublisher<User, NetworkError> {
-        return requestHelper.post("/api/users/new", data: user, type: User.self)
+        return requestHelper.post("/api/users", data: user, type: User.self)
     }
     
     func updateUser(_ user: User) -> AnyPublisher<User, NetworkError> {

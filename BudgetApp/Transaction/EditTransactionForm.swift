@@ -14,8 +14,8 @@ struct EditTransactionForm: View {
     @Binding var date: Date
     @Binding var amount: String
     @Binding var type: TransactionType
-    @Binding var budgetId: String?
-    @Binding var categoryId: String?
+    @Binding var budgetId: String
+    @Binding var categoryId: String
     @State private var showingAlert = false
     let dataStoreProvider: DataStoreProvider
     let deleteAction: (() -> ())?
@@ -33,7 +33,7 @@ struct EditTransactionForm: View {
                 }
             }
             BudgetPicker(self.dataStoreProvider, budgetId: self.$budgetId)
-            CategoryPicker(self.dataStoreProvider, budgetId: self.$budgetId, categoryId: self.$categoryId)
+            CategoryPicker(self.dataStoreProvider, budgetId: self.$budgetId, categoryId: self.$categoryId, expense: self.$type)
             if deleteAction != nil {
                 Button(action: {
                     self.showingAlert = true
@@ -52,7 +52,7 @@ struct EditTransactionForm: View {
 }
 
 struct BudgetPicker: View {
-    var budgetId: Binding<String?>
+    var budgetId: Binding<String>
     var stateContent: AnyView {
         switch self.budgetsDataStore.budgets {
         case .success(let budgets):
@@ -77,7 +77,7 @@ struct BudgetPicker: View {
     }
     
     @ObservedObject var budgetsDataStore: BudgetsDataStore
-    init(_ dataStoreProvider: DataStoreProvider, budgetId: Binding<String?>) {
+    init(_ dataStoreProvider: DataStoreProvider, budgetId: Binding<String>) {
         let budgetsDataStore = dataStoreProvider.budgetsDataStore()
         budgetsDataStore.getBudgets()
         self.budgetsDataStore = budgetsDataStore
@@ -86,7 +86,7 @@ struct BudgetPicker: View {
 }
 
 struct CategoryPicker: View {
-    var categoryId: Binding<String?>
+    var categoryId: Binding<String>
     var stateContent: AnyView {
         switch self.categoryDataStore.categories {
         case .success(let categories):
@@ -110,11 +110,11 @@ struct CategoryPicker: View {
     }
     
     @ObservedObject var categoryDataStore: CategoryDataStore
-    init(_ dataStoreProvider: DataStoreProvider, budgetId: Binding<String?>, categoryId: Binding<String?>) {
+    init(_ dataStoreProvider: DataStoreProvider, budgetId: Binding<String>, categoryId: Binding<String>, expense: Binding<TransactionType>) {
         let categoryDataStore = dataStoreProvider.categoryDataStore()
         print("Requesting categories")
-        if let id = budgetId.wrappedValue {
-            categoryDataStore.getCategories(budgetId: id, count: nil, page: nil)
+        if budgetId.wrappedValue != "" {
+            categoryDataStore.getCategories(budgetId: budgetId.wrappedValue, expense: expense.wrappedValue == TransactionType.expense, count: nil, page: nil)
         }
         self.categoryDataStore = categoryDataStore
         self.categoryId = categoryId
