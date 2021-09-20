@@ -16,8 +16,6 @@ struct TransactionDetailsView: View {
             .onAppear {
                 if self.shouldNavigateUp {
                     self.presentationMode.wrappedValue.dismiss()
-                } else {
-                    self.transactionDataStore.getTransaction(self.transactionId)
                 }
         }
     }
@@ -71,6 +69,7 @@ struct TransactionDetailsView: View {
         let transactionDataStore = dataStoreProvider.transactionDataStore()
         self.transactionDataStore = transactionDataStore
         self.transactionId = transactionId
+        self.transactionDataStore.getTransaction(self.transactionId)
     }
 }
 
