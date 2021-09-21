@@ -9,12 +9,12 @@
 import Foundation
 
 extension Int {
-    func toCurrencyString() -> String? {
+    func toCurrencyString() -> String {
         let currencyFormatter = NumberFormatter()
         currencyFormatter.locale = Locale.current
         currencyFormatter.numberStyle = .currency
         let doubleSelf = Double(self) / 100.0
-        return currencyFormatter.string(from: NSNumber(value: doubleSelf))
+        return currencyFormatter.string(from: NSNumber(value: doubleSelf)) ?? ""
     }
 }
 

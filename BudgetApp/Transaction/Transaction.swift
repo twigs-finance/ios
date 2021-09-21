@@ -21,6 +21,10 @@ struct Transaction: Identifiable, Hashable, Codable {
     let budgetId: String
 }
 
+struct BalanceResponse: Codable {
+    let balance: Int
+}
+
 enum TransactionType: Int, CaseIterable, Identifiable, Hashable {
     case expense
     case income

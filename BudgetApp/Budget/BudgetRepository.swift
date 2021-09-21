@@ -12,7 +12,6 @@ import Combine
 protocol BudgetRepository {
     func getBudgets(count: Int?, page: Int?) -> AnyPublisher<[Budget], NetworkError>
     func getBudget(_ id: String) -> AnyPublisher<Budget, NetworkError>
-    func getBudgetBalance(_ id: String) -> AnyPublisher<Int, NetworkError>
     func newBudget(_ budget: Budget) -> AnyPublisher<Budget, NetworkError>
     func updateBudget(_ budget: Budget) -> AnyPublisher<Budget, NetworkError>
     func deleteBudget(_ id: String) -> AnyPublisher<Empty, NetworkError>
@@ -48,10 +47,6 @@ class NetworkBudgetRepository: BudgetRepository {
         }.eraseToAnyPublisher()
     }
     
-    func getBudgetBalance(_ id: String) -> AnyPublisher<Int, NetworkError> {
-        return apiService.getBudgetBalance(id)
-    }
-    
     func newBudget(_ budget: Budget) -> AnyPublisher<Budget, NetworkError> {
         return apiService.newBudget(budget)
     }
@@ -81,10 +76,6 @@ class MockBudgetRepository: BudgetRepository {
     
     func getBudget(_ id: String) -> AnyPublisher<Budget, NetworkError> {
         return Result.Publisher(MockBudgetRepository.budget).eraseToAnyPublisher()
-    }
-    
-    func getBudgetBalance(_ id: String) -> AnyPublisher<Int, NetworkError> {
-        return Result.Publisher(10000).eraseToAnyPublisher()
     }
     
     func newBudget(_ budget: Budget) -> AnyPublisher<Budget, NetworkError> {

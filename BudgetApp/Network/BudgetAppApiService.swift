@@ -33,10 +33,6 @@ class BudgetAppApiService {
         return requestHelper.get("/api/budgets/\(id)")
     }
     
-    func getBudgetBalance(_ id: String) -> AnyPublisher<Int, NetworkError> {
-        return requestHelper.get("/api/budgets/\(id)/balance")
-    }
-    
     func newBudget(_ budget: Budget) -> AnyPublisher<Budget, NetworkError> {
         return requestHelper.post("/api/budgets", data: budget, type: Budget.self)
     }
@@ -95,6 +91,23 @@ class BudgetAppApiService {
     
     func deleteTransaction(_ id: String) -> AnyPublisher<Empty, NetworkError> {
         return requestHelper.delete("/api/transactions/\(id)")
+    }
+    
+    func sumTransactions(budgetId: String? = nil, categoryId: String? = nil, from: Date? = nil, to: Date? = nil) -> AnyPublisher<BalanceResponse, NetworkError> {
+        var queries = [String: Array<String>]()
+        if let budgetId = budgetId {
+            queries["budgetId"] = [budgetId]
+        }
+        if let categoryId = categoryId {
+            queries["categoryId"] = [categoryId]
+        }
+        if let from = from {
+            queries["from"] = [from.toISO8601String()]
+        }
+        if let to = to {
+            queries["to"] = [to.toISO8601String()]
+        }
+        return requestHelper.get("/api/transactions/sum", queries: queries)
     }
     
     // MARK: Categories

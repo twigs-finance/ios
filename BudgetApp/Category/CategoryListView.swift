@@ -11,7 +11,7 @@ import Combine
 
 struct CategoryListView: View {
     @ObservedObject var categoryDataStore: CategoryDataStore
-    
+
     var body: some View {
         stateContent
     }
@@ -51,6 +51,18 @@ struct CategoryListItemView: View {
     var category: Category
     let budget: Budget
     let dataStoreProvider: DataStoreProvider
+    let sumId: String
+    @ObservedObject var transactionDataStore: TransactionDataStore
+    
+    var progressTintColor: Color {
+        get {
+            if category.expense {
+                return Color.red
+            } else {
+                return Color.green
+            }
+        }
+    }
     
     var body: some View {
         NavigationLink(
@@ -58,21 +70,56 @@ struct CategoryListItemView: View {
                 .navigationBarTitle(category.title)
         ) {
             VStack(alignment: .leading) {
-                Text(verbatim: category.title)
+                HStack {
+                    Text(verbatim: category.title)
+                    Spacer()
+                    remaining
+                }
                 if category.description?.isEmpty == false {
                     Text(verbatim: category.description!)
                         .font(.subheadline)
                         .foregroundColor(.secondary)
                         .lineLimit(1)
                 }
+                progressView
             }
         }
+    }
+    
+    var progressView: ProgressView {
+        var balance: Float = 0.0
+        if case .success(let sum) = transactionDataStore.sums[sumId] {
+            balance = Float(abs(sum.balance))
+        }
+        return ProgressView(value: balance, maxValue: Float(category.amount), progressTintColor: progressTintColor, progressBarHeight: 4.0)
+    }
+    
+    var remaining: Text {
+        var remaining = ""
+        var color = Color.primary
+        if case .success(let sum) = transactionDataStore.sums[sumId] {
+            let amount = category.amount - abs(sum.balance)
+            if amount < 0 {
+                remaining = abs(amount).toCurrencyString() + " over budget"
+                if category.expense {
+                    color = Color.red
+                } else {
+                    color = Color.green
+                }
+            } else {
+                remaining = amount.toCurrencyString() + " remaining"
+            }
+        }
+        return Text(verbatim: remaining).foregroundColor(color)
     }
     
     init (_ dataStoreProvider: DataStoreProvider, budget: Budget, category: Category) {
         self.dataStoreProvider = dataStoreProvider
         self.budget = budget
         self.category = category
+        let transactionDataStore = dataStoreProvider.transactionDataStore()
+        self.transactionDataStore = transactionDataStore
+        self.sumId = transactionDataStore.sum(categoryId: category.id)
     }
 }
 

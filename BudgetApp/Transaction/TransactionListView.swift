@@ -65,7 +65,7 @@ struct TransactionListItemView: View {
                 }
                 Spacer()
                 VStack(alignment: .trailing) {
-                    Text(verbatim: transaction.amount.toCurrencyString() ?? "")
+                    Text(verbatim: transaction.amount.toCurrencyString())
                         .foregroundColor(transaction.expense ? .red : .green)
                         .multilineTextAlignment(.trailing)
                 }

@@ -15,6 +15,7 @@ protocol TransactionRepository {
     func createTransaction(_ transaction: Transaction) -> AnyPublisher<Transaction, NetworkError>
     func updateTransaction(_ transaction: Transaction) -> AnyPublisher<Transaction, NetworkError>
     func deleteTransaction(_ transactionId: String) -> AnyPublisher<Empty, NetworkError>
+    func sumTransactions(budgetId: String?, categoryId: String?, from: Date?, to: Date?) -> AnyPublisher<BalanceResponse, NetworkError>
 }
 
 class NetworkTransactionRepository: TransactionRepository {
@@ -42,6 +43,10 @@ class NetworkTransactionRepository: TransactionRepository {
     
     func deleteTransaction(_ transactionId: String) -> AnyPublisher<Empty, NetworkError> {
         return apiService.deleteTransaction(transactionId)
+    }
+    
+    func sumTransactions(budgetId: String?, categoryId: String?, from: Date?, to: Date?) -> AnyPublisher<BalanceResponse, NetworkError> {
+        return apiService.sumTransactions(budgetId: budgetId, categoryId: categoryId, from: from, to: to)
     }
 }
 
@@ -77,6 +82,10 @@ class MockTransactionRepository: TransactionRepository {
     
     func deleteTransaction(_ transactionId: String) -> AnyPublisher<Empty, NetworkError> {
         return Result.Publisher(.success(Empty())).eraseToAnyPublisher()
+    }
+    
+    func sumTransactions(budgetId: String?, categoryId: String?, from: Date?, to: Date?) -> AnyPublisher<BalanceResponse, NetworkError> {
+        return Result.Publisher(.success(BalanceResponse(balance: 1000))).eraseToAnyPublisher()
     }
 }
 #endif

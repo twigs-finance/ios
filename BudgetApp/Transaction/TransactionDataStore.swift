@@ -11,6 +11,7 @@ import Combine
 
 class TransactionDataStore: ObservableObject {
     private var currentRequest: AnyCancellable? = nil
+    private var sumRequests: [String:AnyCancellable] = [:]
     var transactions: Result<[Transaction], NetworkError> = .failure(.loading) {
         didSet {
             self.objectWillChange.send()
@@ -23,6 +24,12 @@ class TransactionDataStore: ObservableObject {
         }
     }
     
+    var sums: [String:Result<BalanceResponse, NetworkError>] = [:] {
+        didSet {
+            self.objectWillChange.send()
+        }
+    }
+
     func getTransactions(_ budget: Budget, category: Category? = nil, from: Date? = nil, count: Int? = nil, page: Int? = nil) {
         self.transactions = .failure(.loading)
         
@@ -111,6 +118,25 @@ class TransactionDataStore: ObservableObject {
             }, receiveValue: { (empty) in
                 self.transaction = .failure(.deleted)
             })
+    }
+    
+    func sum(budgetId: String? = nil, categoryId: String? = nil, from: Date? = nil, to: Date? = nil) -> String {
+        let sumId = "\(String(describing: budgetId)):\(String(describing: categoryId)):\(String(describing: from)):\(String(describing: to))"
+        self.sums[sumId] = .failure(.loading)
+        self.sumRequests[sumId] = self.transactionRepository.sumTransactions(budgetId: budgetId, categoryId: categoryId, from: from, to: to)
+            .receive(on: DispatchQueue.main)
+            .sink(receiveCompletion: { completion in
+                switch completion {
+                case .finished:
+                    self.sumRequests.removeValue(forKey: sumId)
+                    return
+                case .failure(let error):
+                    self.sums[sumId] = .failure(error)
+                }
+            }, receiveValue: { (sum) in
+                self.sums[sumId] = .success(sum)
+            })
+        return sumId
     }
     
     func reset() {

@@ -27,7 +27,7 @@ struct TransactionDetailsView: View {
                 VStack(alignment: .leading) {
                     Text(transaction.title)
                         .font(.title)
-                    Text(transaction.amount.toCurrencyString() ?? "")
+                    Text(transaction.amount.toCurrencyString())
                         .font(.headline)
                         .foregroundColor(transaction.expense ? .red : .green)
                         .multilineTextAlignment(.trailing)
