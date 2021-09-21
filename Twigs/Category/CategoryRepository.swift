@@ -15,10 +15,10 @@ protocol CategoryRepository {
 }
 
 class NetworkCategoryRepository: CategoryRepository {
-    let apiService: BudgetAppApiService
-    let cacheService: BudgetAppInMemoryCacheService?
+    let apiService: TwigsApiService
+    let cacheService: TwigsInMemoryCacheService?
 
-    init(_ apiService: BudgetAppApiService, cacheService: BudgetAppInMemoryCacheService? = nil) {
+    init(_ apiService: TwigsApiService, cacheService: TwigsInMemoryCacheService? = nil) {
         self.apiService = apiService
         self.cacheService = cacheService
     }

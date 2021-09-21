@@ -1,6 +1,6 @@
 //
 //  ProfileView.swift
-//  BudgetApp
+//  Twigs
 //
 //  Created by Billy Brawner on 10/17/19.
 //  Copyright © 2019 William Brawner. All rights reserved.

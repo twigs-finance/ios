@@ -10,7 +10,7 @@
 		2821266023555FD300072D52 /* EditTransactionForm.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2821265F23555FD300072D52 /* EditTransactionForm.swift */; };
 		282126622357E45F00072D52 /* TransactionEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 282126612357E45F00072D52 /* TransactionEditView.swift */; };
 		282126A1235929B800072D52 /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 282126A0235929B800072D52 /* ProfileView.swift */; };
-		282126A3235ABC1800072D52 /* BudgetAppInMemoryCacheService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 282126A2235ABC1800072D52 /* BudgetAppInMemoryCacheService.swift */; };
+		282126A3235ABC1800072D52 /* TwigsInMemoryCacheService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 282126A2235ABC1800072D52 /* TwigsInMemoryCacheService.swift */; };
 		282126BB235CDD3C00072D52 /* BudgetDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 282126BA235CDD3C00072D52 /* BudgetDetailsView.swift */; };
 		282126BD235CDE1400072D52 /* ProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 282126BC235CDE1400072D52 /* ProgressView.swift */; };
 		284102252341998300EAFA29 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 284102242341998300EAFA29 /* ContentView.swift */; };
@@ -31,7 +31,7 @@
 		28AC9505233C373A00BFB70A /* BudgetTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28AC9504233C373A00BFB70A /* BudgetTests.swift */; };
 		28AC9510233C373A00BFB70A /* BudgetUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28AC950F233C373A00BFB70A /* BudgetUITests.swift */; };
 		28AC951F233C381C00BFB70A /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 28AC9521233C381C00BFB70A /* Localizable.strings */; };
-		28AC9525233C42D100BFB70A /* BudgetAppApiService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28AC9524233C42D100BFB70A /* BudgetAppApiService.swift */; };
+		28AC9525233C42D100BFB70A /* TwigsApiService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28AC9524233C42D100BFB70A /* TwigsApiService.swift */; };
 		28AC9529233C433400BFB70A /* TransactionRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28AC9528233C433400BFB70A /* TransactionRepository.swift */; };
 		28AC952C233C434800BFB70A /* UserRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28AC952B233C434800BFB70A /* UserRepository.swift */; };
 		28AC952E233C43A300BFB70A /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28AC952D233C43A300BFB70A /* User.swift */; };
@@ -71,8 +71,8 @@
 		2821265F23555FD300072D52 /* EditTransactionForm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditTransactionForm.swift; sourceTree = "<group>"; };
 		282126612357E45F00072D52 /* TransactionEditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionEditView.swift; sourceTree = "<group>"; };
 		282126A0235929B800072D52 /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
-		282126A2235ABC1800072D52 /* BudgetAppInMemoryCacheService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BudgetAppInMemoryCacheService.swift; sourceTree = "<group>"; };
-		282126A4235BCB7500072D52 /* BudgetApp.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = BudgetApp.entitlements; sourceTree = "<group>"; };
+		282126A2235ABC1800072D52 /* TwigsInMemoryCacheService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TwigsInMemoryCacheService.swift; sourceTree = "<group>"; };
+		282126A4235BCB7500072D52 /* Twigs.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Twigs.entitlements; sourceTree = "<group>"; };
 		282126BA235CDD3C00072D52 /* BudgetDetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BudgetDetailsView.swift; sourceTree = "<group>"; };
 		282126BC235CDE1400072D52 /* ProgressView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressView.swift; sourceTree = "<group>"; };
 		284102242341998300EAFA29 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -84,7 +84,7 @@
 		2888234623512DBF003D3847 /* Observable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Observable.swift; sourceTree = "<group>"; };
 		289510232352AAFC00BC862B /* UserDataStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDataStore.swift; sourceTree = "<group>"; };
 		28A1E959235006A300CA57FE /* AddTransactionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddTransactionView.swift; sourceTree = "<group>"; };
-		28AC94EA233C373900BFB70A /* BudgetApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BudgetApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		28AC94EA233C373900BFB70A /* Twigs.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Twigs.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		28AC94ED233C373900BFB70A /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		28AC94EF233C373900BFB70A /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		28AC94F1233C373900BFB70A /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
@@ -92,16 +92,16 @@
 		28AC94F6233C373A00BFB70A /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		28AC94F9233C373A00BFB70A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		28AC94FB233C373A00BFB70A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		28AC9500233C373A00BFB70A /* BudgetAppTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BudgetAppTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		28AC9500233C373A00BFB70A /* TwigsTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TwigsTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		28AC9504233C373A00BFB70A /* BudgetTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BudgetTests.swift; sourceTree = "<group>"; };
 		28AC9506233C373A00BFB70A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		28AC950B233C373A00BFB70A /* BudgetAppUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BudgetAppUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		28AC950B233C373A00BFB70A /* TwigsUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TwigsUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		28AC950F233C373A00BFB70A /* BudgetUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BudgetUITests.swift; sourceTree = "<group>"; };
 		28AC9511233C373A00BFB70A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		28AC9520233C381C00BFB70A /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		28AC9522233C384C00BFB70A /* es-419 */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "es-419"; path = "es-419.lproj/LaunchScreen.strings"; sourceTree = "<group>"; };
 		28AC9523233C384C00BFB70A /* es-419 */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "es-419"; path = "es-419.lproj/Localizable.strings"; sourceTree = "<group>"; };
-		28AC9524233C42D100BFB70A /* BudgetAppApiService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BudgetAppApiService.swift; sourceTree = "<group>"; };
+		28AC9524233C42D100BFB70A /* TwigsApiService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TwigsApiService.swift; sourceTree = "<group>"; };
 		28AC9528233C433400BFB70A /* TransactionRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionRepository.swift; sourceTree = "<group>"; };
 		28AC952B233C434800BFB70A /* UserRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserRepository.swift; sourceTree = "<group>"; };
 		28AC952D233C43A300BFB70A /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
@@ -188,9 +188,9 @@
 		28AC94E1233C373900BFB70A = {
 			isa = PBXGroup;
 			children = (
-				28AC94EC233C373900BFB70A /* BudgetApp */,
-				28AC9503233C373A00BFB70A /* BudgetAppTests */,
-				28AC950E233C373A00BFB70A /* BudgetAppUITests */,
+				28AC94EC233C373900BFB70A /* Twigs */,
+				28AC9503233C373A00BFB70A /* TwigsTests */,
+				28AC950E233C373A00BFB70A /* TwigsUITests */,
 				28AC94EB233C373900BFB70A /* Products */,
 			);
 			sourceTree = "<group>";
@@ -198,17 +198,17 @@
 		28AC94EB233C373900BFB70A /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				28AC94EA233C373900BFB70A /* BudgetApp.app */,
-				28AC9500233C373A00BFB70A /* BudgetAppTests.xctest */,
-				28AC950B233C373A00BFB70A /* BudgetAppUITests.xctest */,
+				28AC94EA233C373900BFB70A /* Twigs.app */,
+				28AC9500233C373A00BFB70A /* TwigsTests.xctest */,
+				28AC950B233C373A00BFB70A /* TwigsUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		28AC94EC233C373900BFB70A /* BudgetApp */ = {
+		28AC94EC233C373900BFB70A /* Twigs */ = {
 			isa = PBXGroup;
 			children = (
-				282126A4235BCB7500072D52 /* BudgetApp.entitlements */,
+				282126A4235BCB7500072D52 /* Twigs.entitlements */,
 				2821269F2359299D00072D52 /* Profile */,
 				2841022A2342D8CB00EAFA29 /* Category */,
 				284102292342D8BB00EAFA29 /* Budget */,
@@ -231,7 +231,7 @@
 				2888234623512DBF003D3847 /* Observable.swift */,
 				28CE8B9423525F990072BC4C /* Extensions.swift */,
 			);
-			path = BudgetApp;
+			path = Twigs;
 			sourceTree = "<group>";
 		};
 		28AC94F5233C373A00BFB70A /* Preview Content */ = {
@@ -242,22 +242,22 @@
 			path = "Preview Content";
 			sourceTree = "<group>";
 		};
-		28AC9503233C373A00BFB70A /* BudgetAppTests */ = {
+		28AC9503233C373A00BFB70A /* TwigsTests */ = {
 			isa = PBXGroup;
 			children = (
 				28AC9504233C373A00BFB70A /* BudgetTests.swift */,
 				28AC9506233C373A00BFB70A /* Info.plist */,
 			);
-			path = BudgetAppTests;
+			path = TwigsTests;
 			sourceTree = "<group>";
 		};
-		28AC950E233C373A00BFB70A /* BudgetAppUITests */ = {
+		28AC950E233C373A00BFB70A /* TwigsUITests */ = {
 			isa = PBXGroup;
 			children = (
 				28AC950F233C373A00BFB70A /* BudgetUITests.swift */,
 				28AC9511233C373A00BFB70A /* Info.plist */,
 			);
-			path = BudgetAppUITests;
+			path = TwigsUITests;
 			sourceTree = "<group>";
 		};
 		28AC9526233C42F800BFB70A /* Transaction */ = {
@@ -278,8 +278,8 @@
 		28AC9527233C430A00BFB70A /* Network */ = {
 			isa = PBXGroup;
 			children = (
-				28AC9524233C42D100BFB70A /* BudgetAppApiService.swift */,
-				282126A2235ABC1800072D52 /* BudgetAppInMemoryCacheService.swift */,
+				28AC9524233C42D100BFB70A /* TwigsApiService.swift */,
+				282126A2235ABC1800072D52 /* TwigsInMemoryCacheService.swift */,
 			);
 			path = Network;
 			sourceTree = "<group>";
@@ -298,9 +298,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		28AC94E9233C373900BFB70A /* BudgetApp */ = {
+		28AC94E9233C373900BFB70A /* Twigs */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 28AC9514233C373A00BFB70A /* Build configuration list for PBXNativeTarget "BudgetApp" */;
+			buildConfigurationList = 28AC9514233C373A00BFB70A /* Build configuration list for PBXNativeTarget "Twigs" */;
 			buildPhases = (
 				28AC94E6233C373900BFB70A /* Sources */,
 				28AC94E7233C373900BFB70A /* Frameworks */,
@@ -310,14 +310,14 @@
 			);
 			dependencies = (
 			);
-			name = BudgetApp;
+			name = Twigs;
 			productName = Budget;
-			productReference = 28AC94EA233C373900BFB70A /* BudgetApp.app */;
+			productReference = 28AC94EA233C373900BFB70A /* Twigs.app */;
 			productType = "com.apple.product-type.application";
 		};
-		28AC94FF233C373A00BFB70A /* BudgetAppTests */ = {
+		28AC94FF233C373A00BFB70A /* TwigsTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 28AC9517233C373A00BFB70A /* Build configuration list for PBXNativeTarget "BudgetAppTests" */;
+			buildConfigurationList = 28AC9517233C373A00BFB70A /* Build configuration list for PBXNativeTarget "TwigsTests" */;
 			buildPhases = (
 				28AC94FC233C373A00BFB70A /* Sources */,
 				28AC94FD233C373A00BFB70A /* Frameworks */,
@@ -328,14 +328,14 @@
 			dependencies = (
 				28AC9502233C373A00BFB70A /* PBXTargetDependency */,
 			);
-			name = BudgetAppTests;
+			name = TwigsTests;
 			productName = BudgetTests;
-			productReference = 28AC9500233C373A00BFB70A /* BudgetAppTests.xctest */;
+			productReference = 28AC9500233C373A00BFB70A /* TwigsTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		28AC950A233C373A00BFB70A /* BudgetAppUITests */ = {
+		28AC950A233C373A00BFB70A /* TwigsUITests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 28AC951A233C373A00BFB70A /* Build configuration list for PBXNativeTarget "BudgetAppUITests" */;
+			buildConfigurationList = 28AC951A233C373A00BFB70A /* Build configuration list for PBXNativeTarget "TwigsUITests" */;
 			buildPhases = (
 				28AC9507233C373A00BFB70A /* Sources */,
 				28AC9508233C373A00BFB70A /* Frameworks */,
@@ -346,9 +346,9 @@
 			dependencies = (
 				28AC950D233C373A00BFB70A /* PBXTargetDependency */,
 			);
-			name = BudgetAppUITests;
+			name = TwigsUITests;
 			productName = BudgetUITests;
-			productReference = 28AC950B233C373A00BFB70A /* BudgetAppUITests.xctest */;
+			productReference = 28AC950B233C373A00BFB70A /* TwigsUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
 		};
 /* End PBXNativeTarget section */
@@ -374,7 +374,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 28AC94E5233C373900BFB70A /* Build configuration list for PBXProject "BudgetApp" */;
+			buildConfigurationList = 28AC94E5233C373900BFB70A /* Build configuration list for PBXProject "Twigs" */;
 			compatibilityVersion = "Xcode 9.3";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -388,9 +388,9 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				28AC94E9233C373900BFB70A /* BudgetApp */,
-				28AC94FF233C373A00BFB70A /* BudgetAppTests */,
-				28AC950A233C373A00BFB70A /* BudgetAppUITests */,
+				28AC94E9233C373900BFB70A /* Twigs */,
+				28AC94FF233C373A00BFB70A /* TwigsTests */,
+				28AC950A233C373A00BFB70A /* TwigsUITests */,
 			);
 		};
 /* End PBXProject section */
@@ -443,10 +443,10 @@
 				28FE6B04234449DC00D5543E /* TransactionListView.swift in Sources */,
 				28AC94F2233C373900BFB70A /* LoginView.swift in Sources */,
 				282126BB235CDD3C00072D52 /* BudgetDetailsView.swift in Sources */,
-				28AC9525233C42D100BFB70A /* BudgetAppApiService.swift in Sources */,
+				28AC9525233C42D100BFB70A /* TwigsApiService.swift in Sources */,
 				2888234723512DBF003D3847 /* Observable.swift in Sources */,
 				2857EAED233DA30B0026BC83 /* LoadingView.swift in Sources */,
-				282126A3235ABC1800072D52 /* BudgetAppInMemoryCacheService.swift in Sources */,
+				282126A3235ABC1800072D52 /* TwigsInMemoryCacheService.swift in Sources */,
 				28FE6AFA23441E3700D5543E /* CategoryDataStore.swift in Sources */,
 				28B9E50E2346BCB2007C3909 /* RegistrationView.swift in Sources */,
 				284102322342E12F00EAFA29 /* CategoryListView.swift in Sources */,
@@ -487,12 +487,12 @@
 /* Begin PBXTargetDependency section */
 		28AC9502233C373A00BFB70A /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 28AC94E9233C373900BFB70A /* BudgetApp */;
+			target = 28AC94E9233C373900BFB70A /* Twigs */;
 			targetProxy = 28AC9501233C373A00BFB70A /* PBXContainerItemProxy */;
 		};
 		28AC950D233C373A00BFB70A /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 28AC94E9233C373900BFB70A /* BudgetApp */;
+			target = 28AC94E9233C373900BFB70A /* Twigs */;
 			targetProxy = 28AC950C233C373A00BFB70A /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -643,14 +643,14 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_ENTITLEMENTS = BudgetApp/BudgetApp.entitlements;
+				CODE_SIGN_ENTITLEMENTS = Twigs/Twigs.entitlements;
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				DERIVE_MACCATALYST_PRODUCT_BUNDLE_IDENTIFIER = YES;
-				DEVELOPMENT_ASSET_PATHS = "\"BudgetApp/Preview Content\"";
+				DEVELOPMENT_ASSET_PATHS = "\"Twigs/Preview Content\"";
 				DEVELOPMENT_TEAM = 9Z6DE6KNJ9;
 				ENABLE_PREVIEWS = YES;
-				INFOPLIST_FILE = BudgetApp/Info.plist;
+				INFOPLIST_FILE = Twigs/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -667,14 +667,14 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_ENTITLEMENTS = BudgetApp/BudgetApp.entitlements;
+				CODE_SIGN_ENTITLEMENTS = Twigs/Twigs.entitlements;
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				DERIVE_MACCATALYST_PRODUCT_BUNDLE_IDENTIFIER = YES;
-				DEVELOPMENT_ASSET_PATHS = "\"BudgetApp/Preview Content\"";
+				DEVELOPMENT_ASSET_PATHS = "\"Twigs/Preview Content\"";
 				DEVELOPMENT_TEAM = 9Z6DE6KNJ9;
 				ENABLE_PREVIEWS = YES;
-				INFOPLIST_FILE = BudgetApp/Info.plist;
+				INFOPLIST_FILE = Twigs/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -694,7 +694,7 @@
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 9Z6DE6KNJ9;
-				INFOPLIST_FILE = BudgetAppTests/Info.plist;
+				INFOPLIST_FILE = TwigsTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -705,7 +705,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/BudgetApp.app/BudgetApp";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Twigs.app/Twigs";
 			};
 			name = Debug;
 		};
@@ -716,7 +716,7 @@
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 9Z6DE6KNJ9;
-				INFOPLIST_FILE = BudgetAppTests/Info.plist;
+				INFOPLIST_FILE = TwigsTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -727,7 +727,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/BudgetApp.app/BudgetApp";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Twigs.app/Twigs";
 			};
 			name = Release;
 		};
@@ -737,7 +737,7 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 9Z6DE6KNJ9;
-				INFOPLIST_FILE = BudgetAppUITests/Info.plist;
+				INFOPLIST_FILE = TwigsUITests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -757,7 +757,7 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 9Z6DE6KNJ9;
-				INFOPLIST_FILE = BudgetAppUITests/Info.plist;
+				INFOPLIST_FILE = TwigsUITests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -774,7 +774,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		28AC94E5233C373900BFB70A /* Build configuration list for PBXProject "BudgetApp" */ = {
+		28AC94E5233C373900BFB70A /* Build configuration list for PBXProject "Twigs" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				28AC9512233C373A00BFB70A /* Debug */,
@@ -783,7 +783,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		28AC9514233C373A00BFB70A /* Build configuration list for PBXNativeTarget "BudgetApp" */ = {
+		28AC9514233C373A00BFB70A /* Build configuration list for PBXNativeTarget "Twigs" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				28AC9515233C373A00BFB70A /* Debug */,
@@ -792,7 +792,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		28AC9517233C373A00BFB70A /* Build configuration list for PBXNativeTarget "BudgetAppTests" */ = {
+		28AC9517233C373A00BFB70A /* Build configuration list for PBXNativeTarget "TwigsTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				28AC9518233C373A00BFB70A /* Debug */,
@@ -801,7 +801,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		28AC951A233C373A00BFB70A /* Build configuration list for PBXNativeTarget "BudgetAppUITests" */ = {
+		28AC951A233C373A00BFB70A /* Build configuration list for PBXNativeTarget "TwigsUITests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				28AC951B233C373A00BFB70A /* Debug */,

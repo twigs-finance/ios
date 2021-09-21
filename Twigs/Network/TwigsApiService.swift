@@ -9,7 +9,7 @@
 import Foundation
 import Combine
 
-class BudgetAppApiService {
+class TwigsApiService {
     let requestHelper: RequestHelper
     
     init(_ requestHelper: RequestHelper) {

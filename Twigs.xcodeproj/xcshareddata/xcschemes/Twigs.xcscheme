@@ -15,9 +15,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "28AC94E9233C373900BFB70A"
-               BuildableName = "BudgetApp.app"
-               BlueprintName = "BudgetApp"
-               ReferencedContainer = "container:BudgetApp.xcodeproj">
+               BuildableName = "Twigs.app"
+               BlueprintName = "Twigs"
+               ReferencedContainer = "container:Twigs.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -33,9 +33,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "28AC94FF233C373A00BFB70A"
-               BuildableName = "BudgetAppTests.xctest"
-               BlueprintName = "BudgetAppTests"
-               ReferencedContainer = "container:BudgetApp.xcodeproj">
+               BuildableName = "TwigsTests.xctest"
+               BlueprintName = "TwigsTests"
+               ReferencedContainer = "container:Twigs.xcodeproj">
             </BuildableReference>
          </TestableReference>
          <TestableReference
@@ -43,9 +43,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "28AC950A233C373A00BFB70A"
-               BuildableName = "BudgetAppUITests.xctest"
-               BlueprintName = "BudgetAppUITests"
-               ReferencedContainer = "container:BudgetApp.xcodeproj">
+               BuildableName = "TwigsUITests.xctest"
+               BlueprintName = "TwigsUITests"
+               ReferencedContainer = "container:Twigs.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
@@ -65,9 +65,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "28AC94E9233C373900BFB70A"
-            BuildableName = "BudgetApp.app"
-            BlueprintName = "BudgetApp"
-            ReferencedContainer = "container:BudgetApp.xcodeproj">
+            BuildableName = "Twigs.app"
+            BlueprintName = "Twigs"
+            ReferencedContainer = "container:Twigs.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </LaunchAction>
@@ -82,9 +82,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "28AC94E9233C373900BFB70A"
-            BuildableName = "BudgetApp.app"
-            BlueprintName = "BudgetApp"
-            ReferencedContainer = "container:BudgetApp.xcodeproj">
+            BuildableName = "Twigs.app"
+            BlueprintName = "Twigs"
+            ReferencedContainer = "container:Twigs.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>

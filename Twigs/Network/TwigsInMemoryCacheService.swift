@@ -9,7 +9,7 @@
 import Foundation
 import Combine
 
-class BudgetAppInMemoryCacheService {
+class TwigsInMemoryCacheService {
     var budgets = Set<Budget>()
     var categories = Set<Category>()
     var transactions = Set<Transaction>()

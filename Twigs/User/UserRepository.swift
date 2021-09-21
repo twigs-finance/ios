@@ -18,9 +18,9 @@ protocol UserRepository {
 }
 
 class NetworkUserRepository: UserRepository {
-    let apiService: BudgetAppApiService
+    let apiService: TwigsApiService
     
-    init(_ apiService: BudgetAppApiService) {
+    init(_ apiService: TwigsApiService) {
         self.apiService = apiService
     }
     

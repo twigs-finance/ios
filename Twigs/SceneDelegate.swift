@@ -23,8 +23,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     override init() {
         // TODO: Dependency injection?
         let requestHelper = RequestHelper(SceneDelegate.baseUrl)
-        let cacheService = BudgetAppInMemoryCacheService()
-        let apiService = BudgetAppApiService(requestHelper)
+        let cacheService = TwigsInMemoryCacheService()
+        let apiService = TwigsApiService(requestHelper)
         let budgetRepository = NetworkBudgetRepository(apiService, cacheService: cacheService)
         let categoryRepository = NetworkCategoryRepository(apiService, cacheService: cacheService)
         let transactionRepository = NetworkTransactionRepository(apiService)

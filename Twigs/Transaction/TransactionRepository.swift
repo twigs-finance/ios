@@ -19,9 +19,9 @@ protocol TransactionRepository {
 }
 
 class NetworkTransactionRepository: TransactionRepository {
-    let apiService: BudgetAppApiService
+    let apiService: TwigsApiService
     
-    init(_ apiService: BudgetAppApiService) {
+    init(_ apiService: TwigsApiService) {
         self.apiService = apiService
     }
     

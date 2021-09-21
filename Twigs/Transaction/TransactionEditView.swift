@@ -1,6 +1,6 @@
 //
 //  TransactionEditView.swift
-//  BudgetApp
+//  Twigs
 //
 //  Created by Billy Brawner on 10/16/19.
 //  Copyright © 2019 William Brawner. All rights reserved.
