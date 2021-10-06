@@ -19,6 +19,7 @@ struct ProfileView: View {
     var body: some View {
         VStack(spacing: 10) {
             Image(systemName: "person.circle.fill")
+                .resizable()
                 .frame(width: 100, height: 100, alignment: .center)
                 .scaledToFill()
                 .clipShape(Circle())
