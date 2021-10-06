@@ -12,8 +12,16 @@ import Combine
 struct LoginView: View {
     @State var username: String = ""
     @State var password: String = ""
-    @ObservedObject var userData: AuthenticationDataStore
-    let showLoader: Bool
+    @EnvironmentObject var userData: AuthenticationDataStore
+    var showLoader: Bool {
+        get {
+            if case self.userData.currentUser = Result<User, UserStatus>.failure(UserStatus.authenticating) {
+                return true
+            } else {
+                return false
+            }
+        }
+    }
     
     var body: some View {
         LoadingView(
@@ -40,15 +48,6 @@ struct LoginView: View {
                     }
                 }.padding()
             }.navigationBarHidden(true)
-        }
-    }
-    
-    init (_ userData: AuthenticationDataStore) {
-        self.userData = userData
-        if case userData.currentUser = Result<User, UserStatus>.failure(UserStatus.authenticating) {
-            self.showLoader = true
-        } else {
-            self.showLoader = false
         }
     }
 }

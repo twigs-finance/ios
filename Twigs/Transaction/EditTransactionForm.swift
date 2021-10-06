@@ -17,7 +17,6 @@ struct EditTransactionForm: View {
     @Binding var budgetId: String
     @Binding var categoryId: String
     @State private var showingAlert = false
-    let dataStoreProvider: DataStoreProvider
     let deleteAction: (() -> ())?
     
     var body: some View {
@@ -32,8 +31,8 @@ struct EditTransactionForm: View {
                     Text(type.localizedKey)
                 }
             }
-            BudgetPicker(self.dataStoreProvider, budgetId: self.$budgetId)
-            CategoryPicker(self.dataStoreProvider, budgetId: self.$budgetId, categoryId: self.$categoryId, expense: self.$type)
+            BudgetPicker(self.$budgetId)
+            CategoryPicker(self.$budgetId, categoryId: self.$categoryId, expense: self.$type)
             if deleteAction != nil {
                 Button(action: {
                     self.showingAlert = true
@@ -53,71 +52,68 @@ struct EditTransactionForm: View {
 
 struct BudgetPicker: View {
     var budgetId: Binding<String>
-    var stateContent: AnyView {
+
+    @ViewBuilder
+    var body: some View {
         switch self.budgetsDataStore.budgets {
         case .success(let budgets):
-            return AnyView(
-                Picker("prompt_budget", selection: self.budgetId) {
-                    ForEach(budgets) { budget in
-                        Text(budget.name)
-                    }
+            Picker("prompt_budget", selection: self.budgetId) {
+                ForEach(budgets) { budget in
+                    Text(budget.name)
                 }
-            )
+            }
         default:
-            return AnyView(
-                Picker("prompt_budget", selection: self.budgetId) {
-                    Text("")
-                }
-            )
+            Picker("prompt_budget", selection: self.budgetId) {
+                Text("")
+            }
         }
     }
     
-    var body: some View {
-        stateContent
-    }
-    
-    @ObservedObject var budgetsDataStore: BudgetsDataStore
-    init(_ dataStoreProvider: DataStoreProvider, budgetId: Binding<String>) {
-        let budgetsDataStore = dataStoreProvider.budgetsDataStore()
-        budgetsDataStore.getBudgets()
-        self.budgetsDataStore = budgetsDataStore
+    @EnvironmentObject var budgetsDataStore: BudgetsDataStore
+    init(_ budgetId: Binding<String>) {
         self.budgetId = budgetId
     }
 }
 
 struct CategoryPicker: View {
+    let budgetId: Binding<String>
     var categoryId: Binding<String>
-    var stateContent: AnyView {
-        switch self.categoryDataStore.categories {
+    let expense: Binding<TransactionType>
+    @State var requestId: String = ""
+    
+    @ViewBuilder
+    var body: some View {
+        switch self.categoryDataStore.categories[requestId] {
         case .success(let categories):
-            print("Using returned categories")
-            return AnyView(
-                Picker("prompt_category", selection: self.categoryId) {
-                    ForEach(categories) { category in
-                        Text(category.title)
+            Picker("prompt_category", selection: self.categoryId) {
+                ForEach(categories) { category in
+                    Text(category.title)
+                }
+            }.onAppear {
+                if !self.requestId.contains(budgetId.wrappedValue) {
+                    self.requestId = categoryDataStore.getCategories(budgetId: self.budgetId.wrappedValue, expense: self.expense.wrappedValue == TransactionType.expense, count: nil, page: nil)
+                }
+            }
+        case .failure(.loading):
+            VStack {
+                ActivityIndicator(isAnimating: .constant(true), style: .large)
+            }.onAppear {
+                if budgetId.wrappedValue != "" {
+                    if !self.requestId.contains(budgetId.wrappedValue) {
+                        self.requestId = categoryDataStore.getCategories(budgetId: self.budgetId.wrappedValue, expense: self.expense.wrappedValue == TransactionType.expense, count: nil, page: nil)
                     }
                 }
-            )
+            }
         default:
-            return AnyView(
-                EmptyView()
-            )
+            EmptyView()
         }
     }
     
-    var body: some View {
-        stateContent
-    }
-    
-    @ObservedObject var categoryDataStore: CategoryDataStore
-    init(_ dataStoreProvider: DataStoreProvider, budgetId: Binding<String>, categoryId: Binding<String>, expense: Binding<TransactionType>) {
-        let categoryDataStore = dataStoreProvider.categoryDataStore()
-        print("Requesting categories")
-        if budgetId.wrappedValue != "" {
-            categoryDataStore.getCategories(budgetId: budgetId.wrappedValue, expense: expense.wrappedValue == TransactionType.expense, count: nil, page: nil)
-        }
-        self.categoryDataStore = categoryDataStore
+    @EnvironmentObject var categoryDataStore: CategoryDataStore
+    init(_ budgetId: Binding<String>, categoryId: Binding<String>, expense: Binding<TransactionType>) {
+        self.budgetId = budgetId
         self.categoryId = categoryId
+        self.expense = expense
     }
 }
 

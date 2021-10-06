@@ -12,11 +12,7 @@ import Combine
 class TransactionDataStore: ObservableObject {
     private var currentRequest: AnyCancellable? = nil
     private var sumRequests: [String:AnyCancellable] = [:]
-    var transactions: Result<[Transaction], NetworkError> = .failure(.loading) {
-        didSet {
-            self.objectWillChange.send()
-        }
-    }
+    @Published var transactions: [String:Result<[Transaction], NetworkError>] = ["": .failure(.loading)]
     
     var transaction: Result<Transaction, NetworkError> = .failure(.unknown) {
         didSet {
@@ -30,16 +26,16 @@ class TransactionDataStore: ObservableObject {
         }
     }
 
-    func getTransactions(_ budget: Budget, category: Category? = nil, from: Date? = nil, count: Int? = nil, page: Int? = nil) {
-        self.transactions = .failure(.loading)
+    func getTransactions(_ budgetId: String, categoryId: String? = nil, from: Date? = nil, count: Int? = nil, page: Int? = nil) -> String {
+        let requestId = "\(budgetId)-\(categoryId ?? "all")"
+        self.transactions[requestId] = .failure(.loading)
         
-        let budgetIds: [String] = [budget.id]
         var categoryIds: [String] = []
-        if category != nil {
-            categoryIds.append(category!.id)
+        if let categoryId = categoryId {
+            categoryIds.append(categoryId)
         }
         self.currentRequest = self.transactionRepository.getTransactions(
-            budgetIds: budgetIds,
+            budgetIds: [budgetId],
             categoryIds: categoryIds,
             from: Date(timeIntervalSince1970: 0),
             count: count,
@@ -50,14 +46,17 @@ class TransactionDataStore: ObservableObject {
                 switch completion {
                 case .finished:
                     self.currentRequest = nil
+                    self.objectWillChange.send() // TODO: Remove this hack for updating dictionary values
                     return
                 case .failure(let error):
                     print("Error loading transactions: \(error.name)")
-                    self.transactions = .failure(error)
+                    self.transactions[requestId] = .failure(error)
                 }
             }, receiveValue: { (transactions) in
-                self.transactions = .success(transactions)
+                self.transactions[requestId] = .success(transactions)
             })
+        
+        return requestId
     }
     
     func getTransaction(_ transactionId: String) {
@@ -141,7 +140,7 @@ class TransactionDataStore: ObservableObject {
     
     func reset() {
         self.transaction = .failure(.unknown)
-        self.transactions = .failure(.loading)
+        self.transactions = ["": .failure(.loading)]
     }
     
     let objectWillChange = ObservableObjectPublisher()

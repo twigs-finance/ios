@@ -10,49 +10,43 @@ import SwiftUI
 import Combine
 
 struct CategoryListView: View {
-    @ObservedObject var categoryDataStore: CategoryDataStore
+    @EnvironmentObject var categoryDataStore: CategoryDataStore
+    @State var requestId: String = ""
 
+    @ViewBuilder
     var body: some View {
-        stateContent
-    }
-    
-    var stateContent: AnyView {
-        switch self.categoryDataStore.categories {
+        switch self.categoryDataStore.categories[requestId] {
         case .success(let categories):
-            return AnyView(
                 Section {
                     List(categories) { category in
-                        CategoryListItemView(self.dataStoreProvider, budget: budget, category: category)
+                        CategoryListItemView(budget, category: category)
                     }
                 }
-            )
         case .failure(.loading):
-            return AnyView(VStack {
+            VStack {
                 ActivityIndicator(isAnimating: .constant(true), style: .large)
-            })
+            }.onAppear {
+                if self.requestId == "" {
+                    self.requestId = categoryDataStore.getCategories(budgetId: budget.id)
+                }
+            }
         default:
             // TODO: Handle each network failure type
-            return AnyView(Text("budgets_load_failure"))
+            Text("budgets_load_failure")
         }
     }
     
-    private let dataStoreProvider: DataStoreProvider
     private let budget: Budget
-    init(_ dataStoreProvider: DataStoreProvider, budget: Budget) {
-        self.dataStoreProvider = dataStoreProvider
-        let categoryDataStore = dataStoreProvider.categoryDataStore()
+    init(_ budget: Budget) {
         self.budget = budget
-        categoryDataStore.getCategories(budgetId: budget.id)
-        self.categoryDataStore = categoryDataStore
     }
 }
 
 struct CategoryListItemView: View {
     var category: Category
     let budget: Budget
-    let dataStoreProvider: DataStoreProvider
-    let sumId: String
-    @ObservedObject var transactionDataStore: TransactionDataStore
+    @State var sumId: String = ""
+    @EnvironmentObject var transactionDataStore: TransactionDataStore
     
     var progressTintColor: Color {
         get {
@@ -66,7 +60,7 @@ struct CategoryListItemView: View {
     
     var body: some View {
         NavigationLink(
-            destination: TransactionListView(self.dataStoreProvider, budget: self.budget, category: category)
+            destination: TransactionListView(self.budget, category: category)
                 .navigationBarTitle(category.title)
         ) {
             VStack(alignment: .leading) {
@@ -82,6 +76,10 @@ struct CategoryListItemView: View {
                         .lineLimit(1)
                 }
                 progressView
+            }
+        }.onAppear {
+            if self.sumId == "" {
+                self.sumId = transactionDataStore.sum(categoryId: category.id)
             }
         }
     }
@@ -113,13 +111,9 @@ struct CategoryListItemView: View {
         return Text(verbatim: remaining).foregroundColor(color)
     }
     
-    init (_ dataStoreProvider: DataStoreProvider, budget: Budget, category: Category) {
-        self.dataStoreProvider = dataStoreProvider
+    init (_ budget: Budget, category: Category) {
         self.budget = budget
         self.category = category
-        let transactionDataStore = dataStoreProvider.transactionDataStore()
-        self.transactionDataStore = transactionDataStore
-        self.sumId = transactionDataStore.sum(categoryId: category.id)
     }
 }
 

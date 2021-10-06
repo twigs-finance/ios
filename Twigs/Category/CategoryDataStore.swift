@@ -11,11 +11,7 @@ import Combine
 
 class CategoryDataStore: ObservableObject {
     private var currentRequest: AnyCancellable? = nil
-    var categories: Result<[Category], NetworkError> = .failure(.loading) {
-        didSet {
-            self.objectWillChange.send()
-        }
-    }
+    @Published var categories: [String:Result<[Category], NetworkError>] = ["":.failure(.loading)]
     
     var category: Result<Category, NetworkError> = .failure(.loading) {
         didSet {
@@ -23,8 +19,9 @@ class CategoryDataStore: ObservableObject {
         }
     }
     
-    func getCategories(budgetId: String? = nil, expense: Bool? = nil, archived: Bool? = false, count: Int? = nil, page: Int? = nil) {
-        self.categories = .failure(.loading)
+    func getCategories(budgetId: String? = nil, expense: Bool? = nil, archived: Bool? = false, count: Int? = nil, page: Int? = nil) -> String {
+        let requestId = "\(budgetId ?? "all")-\(String(describing: expense))"
+        self.categories[requestId] = .failure(.loading)
         
         self.currentRequest = categoryRepository.getCategories(budgetId: budgetId, expense: expense, archived: archived, count: count, page: page)
             .receive(on: DispatchQueue.main)
@@ -32,14 +29,17 @@ class CategoryDataStore: ObservableObject {
                 switch completion {
                 case .finished:
                     self.currentRequest = nil
+                    self.objectWillChange.send() // TODO: Remove hack after finding better way to update dictionary values
                     return
                 case .failure(let error):
-                    self.categories = .failure(error)
+                    self.categories[requestId] = .failure(error)
                 }
             }, receiveValue: { (categories) in
                 print("Received \(categories.count) categories")
-                self.categories = .success(categories)
+                self.categories[requestId] = .success(categories)
             })
+        
+        return requestId
     }
     
     func getCategory(_ categoryId: String) {

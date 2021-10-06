@@ -17,7 +17,11 @@ struct TransactionEditView: View {
     @State var type: TransactionType
     @State var budgetId: String
     @State var categoryId: String
-    let createdBy: String
+    var createdBy: String {
+        get {
+            try! authDataStore.currentUser.get().id
+        }
+    }
     let id: String?
     var shouldNavigateUp: Binding<Bool>
     
@@ -38,7 +42,6 @@ struct TransactionEditView: View {
                 type: self.$type,
                 budgetId: self.$budgetId,
                 categoryId: self.$categoryId,
-                dataStoreProvider: self.dataStoreProvider,
                 deleteAction: {
                     self.transactionDataStore.deleteTransaction(self.id!)
             }
@@ -64,12 +67,9 @@ struct TransactionEditView: View {
             })
     }
     
-    @ObservedObject var transactionDataStore: TransactionDataStore
-    let dataStoreProvider: DataStoreProvider
-    init(_ dataStoreProvider: DataStoreProvider, transaction: Transaction, shouldNavigateUp: Binding<Bool>) {
-        self.dataStoreProvider = dataStoreProvider
-        self.transactionDataStore = dataStoreProvider.transactionDataStore()
-        self.createdBy = try! dataStoreProvider.authenticationDataStore().currentUser.get().id
+    @EnvironmentObject var transactionDataStore: TransactionDataStore
+    @EnvironmentObject var authDataStore: AuthenticationDataStore
+    init(_ transaction: Transaction, shouldNavigateUp: Binding<Bool>) {
         self.id = transaction.id
         self._title = State<String>(initialValue: transaction.title)
         self._description = State<String>(initialValue: transaction.description ?? "")
@@ -85,7 +85,7 @@ struct TransactionEditView: View {
 #if DEBUG
 struct TransactionEditView_Previews: PreviewProvider {
     static var previews: some View {
-        TransactionEditView(MockDataStoreProvider(), transaction: MockTransactionRepository.transaction, shouldNavigateUp: .constant(false))
+        TransactionEditView(MockTransactionRepository.transaction, shouldNavigateUp: .constant(false))
     }
 }
 #endif

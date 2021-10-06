@@ -9,14 +9,15 @@
 import SwiftUI
 
 struct TabbedBudgetView: View {
+    let budget: Budget
     @State var isAddingTransaction = false
     @State var selectedTab: Int = 0
     
     var body: some View {
         TabView {
-            TransactionListView(dataStoreProvider, budget: self.budget)
+            TransactionListView(self.budget)
                 .sheet(isPresented: $isAddingTransaction, content: {
-                    AddTransactionView(self.dataStoreProvider)
+                    AddTransactionView(budgetId: self.budget.id)
                         .navigationBarTitle("add_transaction")
                 })
                 .tabItem {
@@ -28,18 +29,20 @@ struct TabbedBudgetView: View {
                     selectedTab = 0
                 }
             
-            CategoryListView(dataStoreProvider, budget: self.budget).tabItem {
+            CategoryListView(self.budget).tabItem {
                 Image(systemName: "chart.pie.fill")
                 Text("categories")
             }
+            .tag(1)
             .onAppear {
                 selectedTab = 1
             }
             
-            ProfileView(dataStoreProvider).tabItem {
+            ProfileView().tabItem {
                 Image(systemName: "person.circle.fill")
                 Text("profile")
             }
+            .tag(2)
             .onAppear {
                 selectedTab = 2
             }
@@ -58,13 +61,8 @@ struct TabbedBudgetView: View {
         )
     }
     
-    let dataStoreProvider: DataStoreProvider
-    let budget: Budget
-    init (_ dataStoreProvider: DataStoreProvider, budget: Budget) {
-        self.dataStoreProvider = dataStoreProvider
+    init (_ budget: Budget) {
         self.budget = budget
-        // Warm up the caches
-        self.dataStoreProvider.categoryDataStore().getCategories(budgetId: budget.id)
     }
 }
 //

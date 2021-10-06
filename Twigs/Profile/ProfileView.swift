@@ -9,7 +9,12 @@
 import SwiftUI
 
 struct ProfileView: View {
-    let currentUser: User
+    @EnvironmentObject var authDataStore: AuthenticationDataStore
+    var currentUser: User {
+        get {
+            return try! authDataStore.currentUser.get()
+        }
+    }
     
     var body: some View {
         VStack(spacing: 10) {
@@ -32,18 +37,12 @@ struct ProfileView: View {
             }
         }
     }
-    
-    let dataStoreProvider: DataStoreProvider
-    init(_ dataStoreProvider: DataStoreProvider) {
-        self.dataStoreProvider = dataStoreProvider
-        self.currentUser = try! dataStoreProvider.authenticationDataStore().currentUser.get()
-    }
 }
 
 #if DEBUG
 struct ProfileView_Previews: PreviewProvider {
     static var previews: some View {
-        ProfileView(MockDataStoreProvider())
+        ProfileView()
     }
 }
 #endif

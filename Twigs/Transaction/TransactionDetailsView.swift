@@ -37,22 +37,23 @@ struct TransactionDetailsView: View {
                         .foregroundColor(.secondary)
                     Spacer().frame(height: 20.0)
                     LabeledField(label: "notes", value: transaction.description, showDivider: true)
-                    CategoryLineItem(self.dataStoreProvider, categoryId: transaction.categoryId)
-                    BudgetLineItem(self.dataStoreProvider, budgetId: transaction.budgetId)
-                    UserLineItem(self.dataStoreProvider, userId: transaction.createdBy)
+                    CategoryLineItem(transaction.categoryId)
+                    BudgetLineItem(transaction.budgetId)
+                    UserLineItem(transaction.createdBy)
                 }.padding()
             }
             .navigationBarItems(trailing: NavigationLink(
                 destination: TransactionEditView(
-                    self.dataStoreProvider,
-                    transaction: transaction,
+                    transaction,
                     shouldNavigateUp: self.$shouldNavigateUp
                 ).navigationBarTitle("edit")
             ) {
                 Text("edit")
             }))
         case .failure(.loading):
-            return AnyView(EmbeddedLoadingView())
+            return AnyView(EmbeddedLoadingView().onAppear {
+                self.transactionDataStore.getTransaction(self.transactionId)
+            })
         case.failure(.deleted):
             self.presentationMode.wrappedValue.dismiss()
             return AnyView(EmptyView())
@@ -61,15 +62,10 @@ struct TransactionDetailsView: View {
         }
     }
         
-    let dataStoreProvider: DataStoreProvider
     let transactionId: String
-    @ObservedObject var transactionDataStore: TransactionDataStore
-    init(_ dataStoreProvider: DataStoreProvider, transactionId: String) {
-        self.dataStoreProvider = dataStoreProvider
-        let transactionDataStore = dataStoreProvider.transactionDataStore()
-        self.transactionDataStore = transactionDataStore
+    @EnvironmentObject var transactionDataStore: TransactionDataStore
+    init(_ transactionId: String) {
         self.transactionId = transactionId
-        self.transactionDataStore.getTransaction(self.transactionId)
     }
 }
 
@@ -96,7 +92,11 @@ struct LabeledField: View {
 
 struct CategoryLineItem: View {
     var body: some View {
-        stateContent
+        stateContent.onAppear {
+            if let id = self.categoryId {
+                categoryDataStore.getCategory(id)
+            }
+        }
     }
     
     var stateContent: AnyView {
@@ -108,19 +108,18 @@ struct CategoryLineItem: View {
         }
     }
     
-    @ObservedObject var categoryDataStore: CategoryDataStore
-    init(_ dataStoreProvider: DataStoreProvider, categoryId: String?) {
-        let categoryDataStore = dataStoreProvider.categoryDataStore()
-        if let id = categoryId {
-            categoryDataStore.getCategory(id)
-        }
-        self.categoryDataStore = categoryDataStore
+    @EnvironmentObject var categoryDataStore: CategoryDataStore
+    let categoryId: String?
+    init(_ categoryId: String?) {
+        self.categoryId = categoryId
     }
 }
 
 struct BudgetLineItem: View {
     var body: some View {
-        stateContent
+        stateContent.onAppear {
+            budgetDataStore.getBudget(budgetId)
+        }
     }
     
     var stateContent: AnyView {
@@ -132,17 +131,18 @@ struct BudgetLineItem: View {
         }
     }
     
-    @ObservedObject var budgetDataStore: BudgetsDataStore
-    init(_ dataStoreProvider: DataStoreProvider, budgetId: String) {
-        let budgetDataStore = dataStoreProvider.budgetsDataStore()
-        budgetDataStore.getBudget(budgetId)
-        self.budgetDataStore = budgetDataStore
+    @EnvironmentObject var budgetDataStore: BudgetsDataStore
+    let budgetId: String
+    init(_ budgetId: String) {
+        self.budgetId = budgetId
     }
 }
 
 struct UserLineItem: View {
     var body: some View {
-        stateContent
+        stateContent.onAppear {
+            userDataStore.getUser(userId)
+        }
     }
     
     var stateContent: AnyView {
@@ -154,18 +154,17 @@ struct UserLineItem: View {
         }
     }
     
-    @ObservedObject var userDataStore: UserDataStore
-    init(_ dataStoreProvider: DataStoreProvider, userId: String) {
-        let userDataStore = dataStoreProvider.userDataStore()
-        userDataStore.getUser(userId)
-        self.userDataStore = userDataStore
+    @EnvironmentObject var userDataStore: UserDataStore
+    let userId: String
+    init(_ userId: String) {
+        self.userId = userId
     }
 }
 
 #if DEBUG
 struct TransactionDetailsView_Previews: PreviewProvider {
     static var previews: some View {
-        TransactionDetailsView(MockDataStoreProvider(), transactionId: "2")
+        TransactionDetailsView("2")
     }
 }
 #endif

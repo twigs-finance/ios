@@ -9,14 +9,14 @@
 import SwiftUI
 
 struct ContentView: View {
-    @ObservedObject var authenticationDataStore: AuthenticationDataStore
+    @EnvironmentObject var authenticationDataStore: AuthenticationDataStore
     
     @ViewBuilder
     var body: some View {
         if showLogin() {
-            LoginView(authenticationDataStore)
+            LoginView()
         } else {
-            BudgetListsView(dataStoreProvider)
+            BudgetListsView()
         }
     }
     
@@ -27,13 +27,6 @@ struct ContentView: View {
         default:
             return false
         }
-    }
-    
-    private let dataStoreProvider: DataStoreProvider
-    
-    init (_ dataStoreProvider: DataStoreProvider) {
-        self.dataStoreProvider = dataStoreProvider
-        self.authenticationDataStore = dataStoreProvider.authenticationDataStore()
     }
 }
 

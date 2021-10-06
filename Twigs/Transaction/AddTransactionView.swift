@@ -11,6 +11,8 @@ import Combine
 
 struct AddTransactionView: View {
     @Environment(\.presentationMode) var presentationMode
+    @EnvironmentObject var authDataStore: AuthenticationDataStore
+    @EnvironmentObject var transactionDataStore: TransactionDataStore
     @State var title: String = ""
     @State var description: String = ""
     @State var date: Date = Date()
@@ -18,7 +20,11 @@ struct AddTransactionView: View {
     @State var type: TransactionType = .expense
     @State var budgetId: String = ""
     @State var categoryId: String = ""
-    let createdBy: String
+    var createdBy: String {
+        get {
+            return try! authDataStore.currentUser.get().id
+        }
+    }
     
     var stateContent: AnyView {
         switch transactionDataStore.transaction {
@@ -36,7 +42,6 @@ struct AddTransactionView: View {
                     type: self.$type,
                     budgetId: self.$budgetId,
                     categoryId: self.$categoryId,
-                    dataStoreProvider: self.dataStoreProvider,
                     deleteAction: nil
                 ))
         }
@@ -65,22 +70,19 @@ struct AddTransactionView: View {
                 })
         }
         .onDisappear {
+            _ = self.transactionDataStore.getTransactions(self.budgetId, categoryId: self.categoryId)
             self.title = ""
             self.description = ""
             self.date = Date()
             self.amount = ""
             self.type = .expense
-            self.budgetId = ""
             self.categoryId = ""
         }
     }
     
-    @ObservedObject var transactionDataStore: TransactionDataStore
-    let dataStoreProvider: DataStoreProvider
-    init(_ dataStoreProvider: DataStoreProvider) {
-        self.dataStoreProvider = dataStoreProvider
-        self.transactionDataStore = dataStoreProvider.transactionDataStore()
-        self.createdBy = try! dataStoreProvider.authenticationDataStore().currentUser.get().id
+    init(budgetId: String, categoryId: String = "") {
+        self._budgetId = State(initialValue: budgetId)
+        self._categoryId = State(initialValue: categoryId)
     }
 }
 

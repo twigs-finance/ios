@@ -11,7 +11,7 @@ import SwiftUI
 import Combine
 
 struct BudgetListsView: View {
-    @ObservedObject var budgetsDataStore: BudgetsDataStore
+    @EnvironmentObject var budgetsDataStore: BudgetsDataStore
     
     @ViewBuilder
     var body: some View {
@@ -20,7 +20,7 @@ struct BudgetListsView: View {
             case .success(let budgets):
                 Section {
                     List(budgets) { budget in
-                        BudgetListItemView(self.dataStoreProvider, budget: budget)
+                        BudgetListItemView(budget)
                     }
                 }.navigationBarTitle("budgets")
             case .failure(.loading):
@@ -31,26 +31,19 @@ struct BudgetListsView: View {
                 // TODO: Handle each network failure type
                 Text("budgets_load_failure").navigationBarTitle("budgets")
             }
+        }.onAppear {
+            self.budgetsDataStore.getBudgets()
         }
         
-    }
-    
-    
-    let dataStoreProvider: DataStoreProvider
-    init(_ dataStoreProvider: DataStoreProvider) {
-        self.dataStoreProvider = dataStoreProvider
-        self.budgetsDataStore = dataStoreProvider.budgetsDataStore()
-        self.budgetsDataStore.getBudgets()
     }
 }
 
 struct BudgetListItemView: View {
     var budget: Budget
-    let dataStoreProvider: DataStoreProvider
     
     var body: some View {
         NavigationLink(
-            destination: TabbedBudgetView(self.dataStoreProvider, budget: budget)
+            destination: TabbedBudgetView(budget)
                 .navigationBarTitle(budget.name)
         ) {
             VStack(alignment: .leading) {
@@ -66,8 +59,7 @@ struct BudgetListItemView: View {
         }
     }
     
-    init (_ dataStoreProvider: DataStoreProvider, budget: Budget) {
-        self.dataStoreProvider = dataStoreProvider
+    init (_ budget: Budget) {
         self.budget = budget
     }
 }
@@ -75,7 +67,7 @@ struct BudgetListItemView: View {
 #if DEBUG
 struct BudgetListsView_Previews: PreviewProvider {
     static var previews: some View {
-        BudgetListsView(MockDataStoreProvider())
+        BudgetListsView()
     }
 }
 #endif

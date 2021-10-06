@@ -10,20 +10,25 @@ import SwiftUI
 import Combine
 
 struct TransactionListView: View {
-    @ObservedObject var transactionDataStore: TransactionDataStore
+    @EnvironmentObject var transactionDataStore: TransactionDataStore
+    @State var requestId: String = ""
     
     @ViewBuilder
     var body: some View {
-        switch transactionDataStore.transactions {
+        switch transactionDataStore.transactions[requestId] {
         case .success(let transactions):
             Section {
                 List(transactions) { transaction in
-                    TransactionListItemView(self.dataStoreProvider, transaction: transaction)
+                    TransactionListItemView(transaction)
                 }
             }
         case .failure(.loading):
             VStack {
                 ActivityIndicator(isAnimating: .constant(true), style: .large)
+            }.onAppear {
+                if self.requestId == "" {
+                    self.requestId = transactionDataStore.getTransactions(self.budget.id, categoryId: self.category?.id)
+                }
             }
         default:
             // TODO: Handle each network failure type
@@ -31,25 +36,20 @@ struct TransactionListView: View {
         }
     }
     
-    let dataStoreProvider: DataStoreProvider
     let budget: Budget
     let category: Category?
-    init(_ dataStoreProvider: DataStoreProvider, budget: Budget, category: Category? = nil) {
-        self.dataStoreProvider = dataStoreProvider
-        self.transactionDataStore = dataStoreProvider.transactionDataStore()
+    init(_ budget: Budget, category: Category? = nil) {
         self.budget = budget
         self.category = category
-        self.transactionDataStore.getTransactions(self.budget, category: self.category)
     }
 }
 
 struct TransactionListItemView: View {
     var transaction: Transaction
-    let dataStoreProvider: DataStoreProvider
     
     var body: some View {
         NavigationLink(
-            destination: TransactionDetailsView(self.dataStoreProvider, transactionId: transaction.id)
+            destination: TransactionDetailsView(transaction.id)
                 .navigationBarTitle("details", displayMode: .inline)
         ) {
             HStack {
@@ -74,8 +74,7 @@ struct TransactionListItemView: View {
         }
     }
     
-    init (_ dataStoreProvider: DataStoreProvider, transaction: Transaction) {
-        self.dataStoreProvider = dataStoreProvider
+    init (_ transaction: Transaction) {
         self.transaction = transaction
     }
 }
