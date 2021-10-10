@@ -12,11 +12,21 @@ struct TabbedBudgetView: View {
     @EnvironmentObject var categoryDataStore: CategoryDataStore
     let budget: Budget
     @State var isAddingTransaction = false
-    @State var selectedTab: Int = 0
     @State var categoryRequestId: String = ""
     
     var body: some View {
         TabView {
+            BudgetDetailsView(budget: self.budget)
+                .tabItem {
+                    Image(systemName: "briefcase.circle.fill")
+                    Text("Overview")
+                }
+                .tag(0)
+                .onAppear {
+                    if categoryRequestId == "" {
+                        categoryRequestId = categoryDataStore.getCategories(budgetId: budget.id, archived: false)
+                    }
+                }
             TransactionListView(self.budget)
                 .sheet(isPresented: $isAddingTransaction,
                        onDismiss: {
@@ -30,31 +40,16 @@ struct TabbedBudgetView: View {
                     Image(systemName: "dollarsign.circle.fill")
                     Text("transactions")
                 }
-                .tag(0)
-                .onAppear {
-                    selectedTab = 0
-                    if categoryRequestId == "" {
-                        categoryRequestId = categoryDataStore.getCategories(budgetId: budget.id, archived: false)
-                    }
-                }
             
             // TODO: Figure out why this is breaking when requestId is set from inside CategoryListView
             CategoryListView(self.budget, requestId: categoryRequestId).tabItem {
                 Image(systemName: "chart.pie.fill")
                 Text("categories")
             }
-            .tag(1)
-            .onAppear {
-                selectedTab = 1
-            }
             
             ProfileView().tabItem {
                 Image(systemName: "person.circle.fill")
                 Text("profile")
-            }
-            .tag(2)
-            .onAppear {
-                selectedTab = 2
             }
         }.navigationBarItems(
             trailing: HStack {
@@ -69,10 +64,6 @@ struct TabbedBudgetView: View {
                 }
             }
         )
-            .onAppear {
-                // Prefetch categories to avoid tab switching bug
-                _ = categoryDataStore.getCategories(budgetId: budget.id)
-            }
     }
     
     init (_ budget: Budget) {

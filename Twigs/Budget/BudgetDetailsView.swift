@@ -9,25 +9,35 @@
 import SwiftUI
 
 struct BudgetDetailsView: View {
+    @EnvironmentObject var transactionDataStore: TransactionDataStore
+    @State var sumId: String = ""
+    let budget: Budget
+
+    @ViewBuilder
     var body: some View {
         ScrollView {
             VStack {
-//                ProgressView(value: .constant(50.0, maxValue: 100))
-//                CategoryListView(budget)
+                switch transactionDataStore.sums[sumId] {
+                case .failure(.loading):
+                    ActivityIndicator(isAnimating: .constant(true), style: .large).onAppear {
+                        if self.sumId == "" {
+                            self.sumId = transactionDataStore.sum(budgetId: self.budget.id)
+                        }
+                    }
+                case .success(let sum):
+                    Text("Current Balance:")
+                    Text(verbatim: sum.balance.toCurrencyString())
+                        .foregroundColor(sum.balance < 0 ? .red : .green)
+                default:
+                    Text("An error has ocurred")
+                }
             }
         }
-    }
-    
-    let dataStoreProvider: DataStoreProvider
-    let budget: Budget
-    init(_ dataStoreProvider: DataStoreProvider, budget: Budget) {
-        self.dataStoreProvider = dataStoreProvider
-        self.budget = budget
     }
 }
 
 struct BudgetDetailsView_Previews: PreviewProvider {
     static var previews: some View {
-        BudgetDetailsView(MockDataStoreProvider(), budget: MockBudgetRepository.budget)
+        BudgetDetailsView(budget: MockBudgetRepository.budget)
     }
 }

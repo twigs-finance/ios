@@ -16,7 +16,7 @@ class TransactionDataStore: ObservableObject {
     
     @Published var transaction: Result<Transaction, NetworkError> = .failure(.unknown)
     
-    @Published var sums: [String:Result<BalanceResponse, NetworkError>] = [:]
+    @Published var sums: [String:Result<BalanceResponse, NetworkError>] = ["": .failure(.loading)]
 
     func getTransactions(_ budgetId: String, categoryId: String? = nil, from: Date? = nil, count: Int? = nil, page: Int? = nil) -> String {
         let requestId = "\(budgetId)-\(categoryId ?? "all")"
