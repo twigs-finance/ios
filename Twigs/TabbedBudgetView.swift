@@ -9,9 +9,11 @@
 import SwiftUI
 
 struct TabbedBudgetView: View {
+    @EnvironmentObject var categoryDataStore: CategoryDataStore
     let budget: Budget
     @State var isAddingTransaction = false
     @State var selectedTab: Int = 0
+    @State var categoryRequestId: String = ""
     
     var body: some View {
         TabView {
@@ -27,9 +29,13 @@ struct TabbedBudgetView: View {
                 .tag(0)
                 .onAppear {
                     selectedTab = 0
+                    if categoryRequestId == "" {
+                        categoryRequestId = categoryDataStore.getCategories(budgetId: budget.id, archived: false)
+                    }
                 }
             
-            CategoryListView(self.budget).tabItem {
+            // TODO: Figure out why this is breaking when requestId is set from inside CategoryListView
+            CategoryListView(self.budget, requestId: categoryRequestId).tabItem {
                 Image(systemName: "chart.pie.fill")
                 Text("categories")
             }
@@ -59,6 +65,10 @@ struct TabbedBudgetView: View {
                 }
             }
         )
+            .onAppear {
+                // Prefetch categories to avoid tab switching bug
+                _ = categoryDataStore.getCategories(budgetId: budget.id)
+            }
     }
     
     init (_ budget: Budget) {

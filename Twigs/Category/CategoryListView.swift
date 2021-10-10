@@ -11,7 +11,7 @@ import Combine
 
 struct CategoryListView: View {
     @EnvironmentObject var categoryDataStore: CategoryDataStore
-    @State var requestId: String = ""
+    let requestId: String
 
     @ViewBuilder
     var body: some View {
@@ -25,10 +25,6 @@ struct CategoryListView: View {
         case .failure(.loading):
             VStack {
                 ActivityIndicator(isAnimating: .constant(true), style: .large)
-            }.onAppear {
-                if self.requestId == "" {
-                    self.requestId = categoryDataStore.getCategories(budgetId: budget.id)
-                }
             }
         default:
             // TODO: Handle each network failure type
@@ -37,8 +33,9 @@ struct CategoryListView: View {
     }
     
     private let budget: Budget
-    init(_ budget: Budget) {
+    init(_ budget: Budget, requestId: String) {
         self.budget = budget
+        self.requestId = requestId
     }
 }
 

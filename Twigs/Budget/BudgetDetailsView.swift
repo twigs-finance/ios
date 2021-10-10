@@ -13,7 +13,7 @@ struct BudgetDetailsView: View {
         ScrollView {
             VStack {
 //                ProgressView(value: .constant(50.0, maxValue: 100))
-                CategoryListView(budget)
+//                CategoryListView(budget)
             }
         }
     }
