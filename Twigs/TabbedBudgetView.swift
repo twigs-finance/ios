@@ -9,6 +9,7 @@
 import SwiftUI
 
 struct TabbedBudgetView: View {
+    @EnvironmentObject var budgetDataStore: BudgetsDataStore
     @EnvironmentObject var categoryDataStore: CategoryDataStore
     let budget: Budget
     @State var isAddingTransaction = false
@@ -18,7 +19,7 @@ struct TabbedBudgetView: View {
         TabView {
             BudgetDetailsView(budget: self.budget)
                 .tabItem {
-                    Image(systemName: "briefcase.circle.fill")
+                    Image(systemName: "chart.line.uptrend.xyaxis.circle.fill")
                     Text("Overview")
                 }
                 .tag(0)

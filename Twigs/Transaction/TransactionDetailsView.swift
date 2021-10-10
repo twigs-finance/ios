@@ -38,7 +38,7 @@ struct TransactionDetailsView: View {
                     Spacer().frame(height: 20.0)
                     LabeledField(label: "notes", value: transaction.description, showDivider: true)
                     CategoryLineItem(transaction.categoryId)
-                    BudgetLineItem(transaction.budgetId)
+                    BudgetLineItem()
                     UserLineItem(transaction.createdBy)
                 }.padding()
             }
@@ -116,25 +116,10 @@ struct CategoryLineItem: View {
 }
 
 struct BudgetLineItem: View {
-    var body: some View {
-        stateContent.onAppear {
-            budgetDataStore.getBudget(budgetId)
-        }
-    }
-    
-    var stateContent: AnyView {
-        switch budgetDataStore.budget {
-        case .success(let budget):
-            return AnyView(LabeledField(label: "budget", value: budget.name, showDivider: true))
-        default:
-            return AnyView(LabeledField(label: "budget", value: "", showDivider: true))
-        }
-    }
-    
     @EnvironmentObject var budgetDataStore: BudgetsDataStore
-    let budgetId: String
-    init(_ budgetId: String) {
-        self.budgetId = budgetId
+    
+    var body: some View {
+        LabeledField(label: "budget", value: budgetDataStore.budget?.name ?? "", showDivider: true)
     }
 }
 

@@ -39,24 +39,19 @@ struct BudgetListsView: View {
 }
 
 struct BudgetListItemView: View {
+    @EnvironmentObject var budgetsDataStore: BudgetsDataStore
     var budget: Budget
     
     var body: some View {
         NavigationLink(
-            destination: TabbedBudgetView(budget)
+            budget.name,
+            tag: budget,
+            selection: $budgetsDataStore.budget,
+            destination: {
+                TabbedBudgetView(budget)
                 .navigationBarTitle(budget.name)
-        ) {
-            VStack(alignment: .leading) {
-                Text(verbatim: budget.name)
-                    .lineLimit(1)
-                if budget.description?.isEmpty == false {
-                    Text(verbatim: budget.description!)
-                        .font(.subheadline)
-                        .foregroundColor(.secondary)
-                        .lineLimit(1)
-                }
             }
-        }
+        )
     }
     
     init (_ budget: Budget) {

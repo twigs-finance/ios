@@ -11,14 +11,10 @@ import Combine
 
 class BudgetsDataStore: ObservableObject {
     private var currentRequest: AnyCancellable? = nil
-    var budgets: Result<[Budget], NetworkError> = .failure(.loading) {
+    @Published var budgets: Result<[Budget], NetworkError> = .failure(.loading)
+    @Published var budget: Budget? = nil {
         didSet {
-            self.objectWillChange.send()
-        }
-    }
-    var budget: Result<Budget, NetworkError> = .failure(.loading) {
-        didSet {
-            self.objectWillChange.send()
+            UserDefaults.standard.set(budget?.id, forKey: LAST_BUDGET)
         }
     }
     
@@ -47,34 +43,20 @@ class BudgetsDataStore: ObservableObject {
                     return
                 }
             }, receiveValue: { (budgets) in
-                self.budgets = .success(budgets)
-            })
-    }
-    
-    func getBudget(_ id: String) {
-        self.budget = .failure(.loading)
-        
-        self.currentRequest = self.budgetRepository.getBudget(id)
-            .receive(on: DispatchQueue.main)
-            .sink(receiveCompletion: { (status) in
-                switch status {
-                case .finished:
-                    self.currentRequest = nil
-                    return
-                case .failure(let error):
-                    self.budget = .failure(error)
-                    return
+                self.budgets = .success(budgets.sorted(by: { $0.name < $1.name }))
+                if let id = UserDefaults.standard.string(forKey: LAST_BUDGET) {
+                    if let budget = budgets.first(where: { $0.id == id }) {
+                        self.budget = budget
+                    }
                 }
-            }, receiveValue: { (budget) in
-                self.budget = .success(budget)
             })
     }
-    
+        
     init(_ budgetRepository: BudgetRepository) {
         self.budgetRepository = budgetRepository
     }
     
     private let budgetRepository: BudgetRepository
-    // Needed since the default implementation is currently broken
-    let objectWillChange = ObservableObjectPublisher()
 }
+
+private let LAST_BUDGET = "LAST_BUDGET"
