@@ -14,17 +14,9 @@ class TransactionDataStore: ObservableObject {
     private var sumRequests: [String:AnyCancellable] = [:]
     @Published var transactions: [String:Result<[Transaction], NetworkError>] = ["": .failure(.loading)]
     
-    var transaction: Result<Transaction, NetworkError> = .failure(.unknown) {
-        didSet {
-            self.objectWillChange.send()
-        }
-    }
+    @Published var transaction: Result<Transaction, NetworkError> = .failure(.unknown)
     
-    var sums: [String:Result<BalanceResponse, NetworkError>] = [:] {
-        didSet {
-            self.objectWillChange.send()
-        }
-    }
+    @Published var sums: [String:Result<BalanceResponse, NetworkError>] = [:]
 
     func getTransactions(_ budgetId: String, categoryId: String? = nil, from: Date? = nil, count: Int? = nil, page: Int? = nil) -> String {
         let requestId = "\(budgetId)-\(categoryId ?? "all")"
@@ -138,12 +130,15 @@ class TransactionDataStore: ObservableObject {
         return sumId
     }
     
+    func clearSelectedTransaction() {
+        self.transaction = .failure(.unknown)
+    }
+    
     func reset() {
         self.transaction = .failure(.unknown)
         self.transactions = ["": .failure(.loading)]
     }
-    
-    let objectWillChange = ObservableObjectPublisher()
+        
     private let transactionRepository: TransactionRepository
     init(_ transactionRepository: TransactionRepository) {
         self.transactionRepository = transactionRepository

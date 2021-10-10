@@ -18,8 +18,12 @@ struct TabbedBudgetView: View {
     var body: some View {
         TabView {
             TransactionListView(self.budget)
-                .sheet(isPresented: $isAddingTransaction, content: {
-                    AddTransactionView(budgetId: self.budget.id)
+                .sheet(isPresented: $isAddingTransaction,
+                       onDismiss: {
+                    isAddingTransaction = false
+                },
+                       content: {
+                    AddTransactionView(showSheet: self.$isAddingTransaction, budgetId: self.budget.id)
                         .navigationBarTitle("add_transaction")
                 })
                 .tabItem {

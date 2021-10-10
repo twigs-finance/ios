@@ -10,7 +10,7 @@ import SwiftUI
 import Combine
 
 struct AddTransactionView: View {
-    @Environment(\.presentationMode) var presentationMode
+    @Binding var showSheet: Bool
     @EnvironmentObject var authDataStore: AuthenticationDataStore
     @EnvironmentObject var transactionDataStore: TransactionDataStore
     @State var title: String = ""
@@ -29,7 +29,7 @@ struct AddTransactionView: View {
     var stateContent: AnyView {
         switch transactionDataStore.transaction {
         case .success(_):
-            self.presentationMode.wrappedValue.dismiss()
+            self.showSheet = false
             return AnyView(EmptyView())
         case .failure(.loading):
             return AnyView(EmbeddedLoadingView())
@@ -52,7 +52,7 @@ struct AddTransactionView: View {
             stateContent
                 .navigationBarItems(
                     leading: Button("cancel") {
-                        self.presentationMode.wrappedValue.dismiss()
+                        self.showSheet = false
                     },
                     trailing: Button("save") {
                         let amount = Double(self.amount) ?? 0.0
@@ -71,6 +71,7 @@ struct AddTransactionView: View {
         }
         .onDisappear {
             _ = self.transactionDataStore.getTransactions(self.budgetId, categoryId: self.categoryId)
+            self.transactionDataStore.clearSelectedTransaction()
             self.title = ""
             self.description = ""
             self.date = Date()
@@ -80,7 +81,8 @@ struct AddTransactionView: View {
         }
     }
     
-    init(budgetId: String, categoryId: String = "") {
+    init(showSheet: Binding<Bool>, budgetId: String, categoryId: String = "") {
+        self._showSheet = showSheet
         self._budgetId = State(initialValue: budgetId)
         self._categoryId = State(initialValue: categoryId)
     }
