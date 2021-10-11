@@ -14,3 +14,12 @@ struct Budget: Identifiable, Hashable, Codable {
     let description: String?
     let currencyCode: String?
 }
+
+struct BudgetOverview {
+    let budget: Budget
+    let balance: Int
+    var expectedIncome: Int = 0
+    var actualIncome: Int = 0
+    var expectedExpenses: Int = 0
+    var actualExpenses: Int = 0
+}

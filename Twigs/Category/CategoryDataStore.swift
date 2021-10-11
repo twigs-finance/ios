@@ -20,7 +20,7 @@ class CategoryDataStore: ObservableObject {
     }
     
     func getCategories(budgetId: String? = nil, expense: Bool? = nil, archived: Bool? = false, count: Int? = nil, page: Int? = nil) -> String {
-        let requestId = "\(budgetId ?? "all")-\(String(describing: expense))"
+        let requestId = "\(budgetId ?? "all")-\(String(describing: expense))-\(String(describing: archived))"
         self.categories[requestId] = .failure(.loading)
         
         self.currentRequest = categoryRepository.getCategories(budgetId: budgetId, expense: expense, archived: archived, count: count, page: page)

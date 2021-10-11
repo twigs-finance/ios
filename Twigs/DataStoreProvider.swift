@@ -20,7 +20,7 @@ class DataStoreProvider {
     private let _authenticationDataStore: AuthenticationDataStore
     
     func budgetsDataStore() -> BudgetsDataStore {
-        return BudgetsDataStore(budgetRepository)
+        return BudgetsDataStore(budgetRepository: budgetRepository, categoryRepository: categoryRepository, transactionRepository: transactionRepository)
     }
     
     func categoryDataStore() -> CategoryDataStore {

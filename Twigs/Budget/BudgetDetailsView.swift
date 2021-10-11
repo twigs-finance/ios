@@ -9,27 +9,39 @@
 import SwiftUI
 
 struct BudgetDetailsView: View {
-    @EnvironmentObject var transactionDataStore: TransactionDataStore
-    @State var sumId: String = ""
+    @EnvironmentObject var budgetDataStore: BudgetsDataStore
+    @State var requestedOverview = ""
     let budget: Budget
 
     @ViewBuilder
     var body: some View {
         ScrollView {
             VStack {
-                switch transactionDataStore.sums[sumId] {
+                switch budgetDataStore.overview {
                 case .failure(.loading):
-                    ActivityIndicator(isAnimating: .constant(true), style: .large).onAppear {
-                        if self.sumId == "" {
-                            self.sumId = transactionDataStore.sum(budgetId: self.budget.id)
-                        }
-                    }
-                case .success(let sum):
+                    ActivityIndicator(isAnimating: .constant(true), style: .large)
+                case .success(let overview):
                     Text("Current Balance:")
-                    Text(verbatim: sum.balance.toCurrencyString())
-                        .foregroundColor(sum.balance < 0 ? .red : .green)
+                    Text(verbatim: overview.balance.toCurrencyString())
+                        .foregroundColor(overview.balance < 0 ? .red : .green)
+                    Text("Expected Income:")
+                    Text(verbatim: overview.expectedIncome.toCurrencyString())
+                    Text("Actual Income:")
+                    Text(verbatim: overview.actualIncome.toCurrencyString())
+                        .foregroundColor(.green)
+                    Text("Expected Expenses:")
+                    Text(verbatim: overview.expectedExpenses.toCurrencyString())
+                    Text("Actual Expenses:")
+                    Text(verbatim: overview.actualExpenses.toCurrencyString())
+                        .foregroundColor(.red)
                 default:
                     Text("An error has ocurred")
+                }
+            }.onAppear {
+                if requestedOverview != budget.id {
+                    print("requesting overview")
+                    requestedOverview = budget.id
+                    budgetDataStore.loadOverview(budget)
                 }
             }
         }

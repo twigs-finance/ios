@@ -17,3 +17,8 @@ struct Category: Identifiable, Hashable, Codable {
     let expense: Bool
     let archived: Bool
 }
+
+struct CategoryBalance {
+    let category: Category
+    let balance: Int
+}
