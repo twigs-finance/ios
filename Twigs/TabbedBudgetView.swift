@@ -13,21 +13,16 @@ struct TabbedBudgetView: View {
     @EnvironmentObject var categoryDataStore: CategoryDataStore
     let budget: Budget
     @State var isAddingTransaction = false
-    @State var categoryRequestId: String = ""
+    @State var tabSelection: Int = 0
     
     var body: some View {
-        TabView {
+        TabView(selection: $tabSelection) {
             BudgetDetailsView(budget: self.budget)
                 .tabItem {
                     Image(systemName: "chart.line.uptrend.xyaxis.circle.fill")
                     Text("Overview")
                 }
                 .tag(0)
-                .onAppear {
-                    if categoryRequestId == "" {
-                        categoryRequestId = categoryDataStore.getCategories(budgetId: budget.id, archived: false)
-                    }
-                }
             TransactionListView(self.budget)
                 .sheet(isPresented: $isAddingTransaction,
                        onDismiss: {
@@ -41,17 +36,20 @@ struct TabbedBudgetView: View {
                     Image(systemName: "dollarsign.circle.fill")
                     Text("transactions")
                 }
+                .tag(1)
             
             // TODO: Figure out why this is breaking when requestId is set from inside CategoryListView
-            CategoryListView(self.budget, requestId: categoryRequestId).tabItem {
+            CategoryListView(self.budget).tabItem {
                 Image(systemName: "chart.pie.fill")
                 Text("categories")
             }
+            .tag(2)
             
             ProfileView().tabItem {
                 Image(systemName: "person.circle.fill")
                 Text("profile")
             }
+            .tag(3)
         }.navigationBarItems(
             trailing: HStack {
                 NavigationLink(destination: EmptyView()) {
