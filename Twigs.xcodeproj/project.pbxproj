@@ -647,16 +647,18 @@
 				CODE_SIGN_ENTITLEMENTS = Twigs/Twigs.entitlements;
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 4;
 				DERIVE_MACCATALYST_PRODUCT_BUNDLE_IDENTIFIER = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"Twigs/Preview Content\"";
 				DEVELOPMENT_TEAM = 9Z6DE6KNJ9;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = Twigs/Info.plist;
+				"IPHONEOS_DEPLOYMENT_TARGET[sdk=macosx*]" = 14.5;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.wbrawner.twigs.ios;
+				PRODUCT_BUNDLE_IDENTIFIER = com.wbrawner.projects.budget.ios;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTS_MACCATALYST = YES;
 				SWIFT_VERSION = 5.0;
@@ -672,16 +674,18 @@
 				CODE_SIGN_ENTITLEMENTS = Twigs/Twigs.entitlements;
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 4;
 				DERIVE_MACCATALYST_PRODUCT_BUNDLE_IDENTIFIER = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"Twigs/Preview Content\"";
 				DEVELOPMENT_TEAM = 9Z6DE6KNJ9;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = Twigs/Info.plist;
+				"IPHONEOS_DEPLOYMENT_TARGET[sdk=macosx*]" = 14.5;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.wbrawner.twigs.ios;
+				PRODUCT_BUNDLE_IDENTIFIER = com.wbrawner.projects.budget.ios;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTS_MACCATALYST = YES;
 				SWIFT_VERSION = 5.0;

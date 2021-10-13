@@ -48,8 +48,10 @@ struct BudgetDetailsView: View {
     }
 }
 
+#if DEBUG
 struct BudgetDetailsView_Previews: PreviewProvider {
     static var previews: some View {
         BudgetDetailsView(budget: MockBudgetRepository.budget)
     }
 }
+#endif
