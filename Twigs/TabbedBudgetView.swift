@@ -38,7 +38,6 @@ struct TabbedBudgetView: View {
                 }
                 .tag(1)
             
-            // TODO: Figure out why this is breaking when requestId is set from inside CategoryListView
             CategoryListView(self.budget).tabItem {
                 Image(systemName: "chart.pie.fill")
                 Text("categories")
