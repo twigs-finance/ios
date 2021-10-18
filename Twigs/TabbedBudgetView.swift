@@ -23,6 +23,7 @@ struct TabbedBudgetView: View {
                     Text("Overview")
                 }
                 .tag(0)
+                .keyboardShortcut("1")
             TransactionListView(self.budget)
                 .sheet(isPresented: $isAddingTransaction,
                        onDismiss: {
@@ -37,18 +38,19 @@ struct TabbedBudgetView: View {
                     Text("transactions")
                 }
                 .tag(1)
-            
+                .keyboardShortcut("2")
             CategoryListView(self.budget).tabItem {
                 Image(systemName: "chart.pie.fill")
                 Text("categories")
             }
             .tag(2)
-            
+            .keyboardShortcut("3")
             ProfileView().tabItem {
                 Image(systemName: "person.circle.fill")
                 Text("profile")
             }
             .tag(3)
+            .keyboardShortcut("4")
         }.navigationBarItems(
             trailing: HStack {
                 if tabSelection == 1 {
@@ -58,9 +60,20 @@ struct TabbedBudgetView: View {
                         Image(systemName: "plus")
                             .padding()
                     }
+                    .keyboardShortcut("n")
                 }
             }
         )
+            .onReceive(NotificationCenter.default.publisher(for: Notification.Name("switchTabs"))) { notification in
+                if let tabTag = notification.object as? Int {
+                    if 0...3 ~= tabTag {
+                        self.tabSelection = tabTag
+                        print("Updating tabSelection to \(tabTag)")
+                    } else {
+                        print("Ignoring value \(tabTag)")
+                    }
+                }
+            }
     }
     
     init (_ budget: Budget) {

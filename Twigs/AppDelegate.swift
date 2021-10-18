@@ -11,6 +11,21 @@ import UIKit
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
+    override var keyCommands: [UIKeyCommand]? {
+        return [
+            UIKeyCommand(title: "First Tab", action: #selector(handleKeyCommand(sender:)), input: "1", modifierFlags: .command, propertyList: 0),
+            UIKeyCommand(title: "Second Tab", action: #selector(handleKeyCommand(sender:)), input: "2", modifierFlags: .command, propertyList: 1),
+            UIKeyCommand(title: "Third Tab", action: #selector(handleKeyCommand(sender:)), input: "3", modifierFlags: .command, propertyList: 2),
+            UIKeyCommand(title: "Fourth Tab", action: #selector(handleKeyCommand(sender:)), input: "4", modifierFlags: .command, propertyList: 3),
+            UIKeyCommand(title: "Fifth Tab", action: #selector(handleKeyCommand(sender:)), input: "5", modifierFlags: .command, propertyList: 4),
+        ]
+    }
+    
+    @objc func handleKeyCommand(sender: UIKeyCommand) {
+        if let tabTag = sender.propertyList as? Int {
+            NotificationCenter.default.post(name: .init("switchTabs"), object: tabTag)
+        }
+    }
 
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
