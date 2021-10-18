@@ -52,9 +52,6 @@ struct TabbedBudgetView: View {
         }.navigationBarItems(
             trailing: HStack {
                 if tabSelection == 1 {
-                    NavigationLink(destination: EmptyView()) {
-                        Image(systemName: "magnifyingglass")
-                    }
                     Button(action: {
                         self.isAddingTransaction = true
                     }) {
