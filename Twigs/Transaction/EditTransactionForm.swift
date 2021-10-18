@@ -90,7 +90,7 @@ struct CategoryPicker: View {
                     Text(category.title)
                 }
             }.onAppear {
-                if !self.requestId.contains(budgetId.wrappedValue) {
+                if !self.requestId.contains(budgetId.wrappedValue) || !self.requestId.contains(String(describing: self.expense.wrappedValue)) {
                     self.requestId = categoryDataStore.getCategories(budgetId: self.budgetId.wrappedValue, expense: self.expense.wrappedValue == TransactionType.expense, count: nil, page: nil)
                 }
             }
