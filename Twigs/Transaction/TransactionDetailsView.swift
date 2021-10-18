@@ -11,8 +11,36 @@ import SwiftUI
 struct TransactionDetailsView: View {
     @Environment(\.presentationMode) var presentationMode
     @State var shouldNavigateUp: Bool = false
+    let transaction: Transaction
+    
     var body: some View {
-        stateContent
+        ScrollView {
+            VStack(alignment: .leading) {
+                Text(transaction.title)
+                    .font(.title)
+                Text(transaction.amount.toCurrencyString())
+                    .font(.headline)
+                    .foregroundColor(transaction.expense ? .red : .green)
+                    .multilineTextAlignment(.trailing)
+                Spacer().frame(height: 10)
+                Text(transaction.date.toLocaleString())
+                    .font(.subheadline)
+                    .foregroundColor(.secondary)
+                Spacer().frame(height: 20.0)
+                LabeledField(label: "notes", value: transaction.description, showDivider: true)
+                CategoryLineItem(transaction.categoryId)
+                BudgetLineItem()
+                UserLineItem(transaction.createdBy)
+            }.padding()
+        }
+        .navigationBarItems(trailing: NavigationLink(
+            destination: TransactionEditView(
+                transaction,
+                shouldNavigateUp: self.$shouldNavigateUp
+            ).navigationBarTitle("edit")
+        ) {
+            Text("edit")
+        })
             .onAppear {
                 if self.shouldNavigateUp {
                     self.presentationMode.wrappedValue.dismiss()
@@ -20,52 +48,8 @@ struct TransactionDetailsView: View {
         }
     }
     
-    var stateContent: AnyView {
-        switch transactionDataStore.transaction {
-        case .success(let transaction):
-            return AnyView(ScrollView {
-                VStack(alignment: .leading) {
-                    Text(transaction.title)
-                        .font(.title)
-                    Text(transaction.amount.toCurrencyString())
-                        .font(.headline)
-                        .foregroundColor(transaction.expense ? .red : .green)
-                        .multilineTextAlignment(.trailing)
-                    Spacer().frame(height: 10)
-                    Text(transaction.date.toLocaleString())
-                        .font(.subheadline)
-                        .foregroundColor(.secondary)
-                    Spacer().frame(height: 20.0)
-                    LabeledField(label: "notes", value: transaction.description, showDivider: true)
-                    CategoryLineItem(transaction.categoryId)
-                    BudgetLineItem()
-                    UserLineItem(transaction.createdBy)
-                }.padding()
-            }
-            .navigationBarItems(trailing: NavigationLink(
-                destination: TransactionEditView(
-                    transaction,
-                    shouldNavigateUp: self.$shouldNavigateUp
-                ).navigationBarTitle("edit")
-            ) {
-                Text("edit")
-            }))
-        case .failure(.loading):
-            return AnyView(EmbeddedLoadingView().onAppear {
-                self.transactionDataStore.getTransaction(self.transactionId)
-            })
-        case.failure(.deleted):
-            self.presentationMode.wrappedValue.dismiss()
-            return AnyView(EmptyView())
-        default:
-            return AnyView(Text("transaction_details_error"))
-        }
-    }
-        
-    let transactionId: String
-    @EnvironmentObject var transactionDataStore: TransactionDataStore
-    init(_ transactionId: String) {
-        self.transactionId = transactionId
+    init(_ transaction: Transaction) {
+        self.transaction = transaction
     }
 }
 
@@ -124,6 +108,7 @@ struct BudgetLineItem: View {
 }
 
 struct UserLineItem: View {
+    
     var body: some View {
         stateContent.onAppear {
             userDataStore.getUser(userId)
@@ -149,7 +134,7 @@ struct UserLineItem: View {
 #if DEBUG
 struct TransactionDetailsView_Previews: PreviewProvider {
     static var previews: some View {
-        TransactionDetailsView("2")
+        TransactionDetailsView(MockTransactionRepository.transaction)
     }
 }
 #endif

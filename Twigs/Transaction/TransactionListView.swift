@@ -49,7 +49,7 @@ struct TransactionListItemView: View {
     
     var body: some View {
         NavigationLink(
-            destination: TransactionDetailsView(transaction.id)
+            destination: TransactionDetailsView(transaction)
                 .navigationBarTitle("details", displayMode: .inline)
         ) {
             HStack {
