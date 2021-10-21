@@ -39,7 +39,6 @@ struct BudgetDetailsView: View {
                 }
             }.onAppear {
                 if requestedOverview != budget.id {
-                    print("requesting overview")
                     requestedOverview = budget.id
                     budgetDataStore.loadOverview(budget)
                 }
@@ -52,6 +51,7 @@ struct BudgetDetailsView: View {
 struct BudgetDetailsView_Previews: PreviewProvider {
     static var previews: some View {
         BudgetDetailsView(budget: MockBudgetRepository.budget)
+            .environmentObject(BudgetsDataStore(budgetRepository: MockBudgetRepository(), categoryRepository: MockCategoryRepository(), transactionRepository: MockTransactionRepository()))
     }
 }
 #endif

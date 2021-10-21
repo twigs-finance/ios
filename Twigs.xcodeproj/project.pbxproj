@@ -48,6 +48,7 @@
 		28FE6B04234449DC00D5543E /* TransactionListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28FE6B03234449DC00D5543E /* TransactionListView.swift */; };
 		28FE6B0623444A9800D5543E /* TransactionDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28FE6B0523444A9800D5543E /* TransactionDetailsView.swift */; };
 		543ECE42233E82A40018A9D9 /* AuthenticationDataStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 543ECE41233E82A40018A9D9 /* AuthenticationDataStore.swift */; };
+		8043EB84271F26ED00498E73 /* CategoryDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8043EB83271F26ED00498E73 /* CategoryDetailsView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -118,6 +119,7 @@
 		28FE6B03234449DC00D5543E /* TransactionListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionListView.swift; sourceTree = "<group>"; };
 		28FE6B0523444A9800D5543E /* TransactionDetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionDetailsView.swift; sourceTree = "<group>"; };
 		543ECE41233E82A40018A9D9 /* AuthenticationDataStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationDataStore.swift; sourceTree = "<group>"; };
+		8043EB83271F26ED00498E73 /* CategoryDetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryDetailsView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -172,6 +174,7 @@
 				28FE6AF723441E1D00D5543E /* Category.swift */,
 				28FE6AF923441E3700D5543E /* CategoryDataStore.swift */,
 				28FE6AFB23441E4500D5543E /* CategoryRepository.swift */,
+				8043EB83271F26ED00498E73 /* CategoryDetailsView.swift */,
 			);
 			path = Category;
 			sourceTree = "<group>";
@@ -451,6 +454,7 @@
 				28B9E50E2346BCB2007C3909 /* RegistrationView.swift in Sources */,
 				284102322342E12F00EAFA29 /* CategoryListView.swift in Sources */,
 				284102252341998300EAFA29 /* ContentView.swift in Sources */,
+				8043EB84271F26ED00498E73 /* CategoryDetailsView.swift in Sources */,
 				289510242352AAFC00BC862B /* UserDataStore.swift in Sources */,
 				28FE6B002344308600D5543E /* Transaction.swift in Sources */,
 				28FE6AF823441E1D00D5543E /* Category.swift in Sources */,

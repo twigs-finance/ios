@@ -61,7 +61,7 @@ struct CategoryListItemView: View {
     
     var body: some View {
         NavigationLink(
-            destination: TransactionListView(self.budget, category: category)
+            destination: CategoryDetailsView(category, budget: self.budget)
                 .navigationBarTitle(category.title)
         ) {
             VStack(alignment: .leading) {
