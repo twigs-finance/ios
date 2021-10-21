@@ -50,10 +50,22 @@
 // MARK: Categories
 "category" = "Category";
 "categories" = "Categories";
+"amount_budgeted" = "Budgeted";
+"amount_spent" = "Spent";
+"amount_earned" = "Earned";
+"amount_remaining" = "Remaining";
 
 // MARK: Budgets
 "budget" = "Budget";
 "budgets" = "Budgets";
+"current_balance" = "Current Balance:";
+"expected_income" = "Expected Income:";
+"actual_income" = "Actual Income:";
+"expected_expenses" = "Expected Expenses:";
+"actual_expenses" = "Actual Expenses:";
 
 // MARK: Profile
 "profile" = "Profile";
+"change_password" = "Change Password";
+"change_email" = "Change Email";
+"delete_account" = "Delete Account";

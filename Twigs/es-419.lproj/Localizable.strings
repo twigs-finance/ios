@@ -50,10 +50,23 @@
 // MARK: Categories
 "category" = "Categoría";
 "categories" = "Categorías";
+"amount_budgeted" = "Planeado";
+"amount_spent" = "Gastado";
+"amount_earned" = "Ganado";
+"amount_remaining" = "Restante";
 
 // MARK: Budgets
 "budget" = "Presupuesto";
 "budgets" = "Presupuestos";
+"current_balance" = "Saldo Actual:";
+"expected_income" = "Ingresos Estimados:";
+"actual_income" = "Ingresos Actuales:";
+"expected_expenses" = "Gastos Estimados:";
+"actual_expenses" = "Gastos Actuales:";
+
 
 // MARK: Profile
 "profile" = "Perfil";
+"change_password" = "Cambiar Contraseña";
+"change_email" = "Cambiar Correo";
+"delete_account" = "Eliminar Cuenta";

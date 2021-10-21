@@ -21,17 +21,17 @@ struct BudgetDetailsView: View {
                 case .failure(.loading):
                     ActivityIndicator(isAnimating: .constant(true), style: .large)
                 case .success(let overview):
-                    Text("Current Balance:")
+                    Text("current_balance")
                     Text(verbatim: overview.balance.toCurrencyString())
                         .foregroundColor(overview.balance < 0 ? .red : .green)
-                    Text("Expected Income:")
+                    Text("expected_income")
                     Text(verbatim: overview.expectedIncome.toCurrencyString())
-                    Text("Actual Income:")
+                    Text("actual_income")
                     Text(verbatim: overview.actualIncome.toCurrencyString())
                         .foregroundColor(.green)
-                    Text("Expected Expenses:")
+                    Text("expected_expenses")
                     Text(verbatim: overview.expectedExpenses.toCurrencyString())
-                    Text("Actual Expenses:")
+                    Text("actual_expenses")
                     Text(verbatim: overview.actualExpenses.toCurrencyString())
                         .foregroundColor(.red)
                 default:
