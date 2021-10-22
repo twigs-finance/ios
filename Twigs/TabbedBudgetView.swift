@@ -20,7 +20,7 @@ struct TabbedBudgetView: View {
             BudgetDetailsView(budget: self.budget)
                 .tabItem {
                     Image(systemName: "chart.line.uptrend.xyaxis.circle.fill")
-                    Text("Overview")
+                    Text("overview")
                 }
                 .tag(0)
                 .keyboardShortcut("1")

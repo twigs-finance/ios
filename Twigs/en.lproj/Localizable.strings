@@ -28,6 +28,7 @@
 "retry" = "Retry";
 "confirm_delete" = "Are you sure you want to delete this?";
 "cannot_undo" = "This cannot be undone";
+"overview" = "Overview";
 
 // MARK: Login
 "info_login" = "Login to start managing your budget";

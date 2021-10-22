@@ -102,9 +102,11 @@ struct CategoryFormSheet: View {
     }
 }
 
+#if DEBUG
 struct CategoryFormSheet_Previews: PreviewProvider {
     static var previews: some View {
         CategoryFormSheet(showSheet: .constant(true), category: nil, budgetId: "")
             .environmentObject(CategoryDataStore(MockCategoryRepository()))
     }
 }
+#endif

@@ -21,12 +21,12 @@ struct EditTransactionForm: View {
     
     var body: some View {
         Form {
-            TextField("prompt_name", text: self.$title)
-            TextField("prompt_description", text: self.$description)
-            DatePicker(selection: self.$date, label: { Text("prompt_date") })
-            TextField("prompt_amount", text: self.$amount)
+            TextField(LocalizedStringKey("prompt_name"), text: self.$title)
+            TextField(LocalizedStringKey("prompt_description"), text: self.$description)
+            DatePicker(selection: self.$date, label: { Text(LocalizedStringKey("prompt_date")) })
+            TextField(LocalizedStringKey("prompt_amount"), text: self.$amount)
                 .keyboardType(.decimalPad)
-            Picker("prompt_type", selection: self.$type) {
+            Picker(LocalizedStringKey("prompt_type"), selection: self.$type) {
                 ForEach(TransactionType.allCases) { type in
                     Text(type.localizedKey)
                 }
@@ -37,11 +37,11 @@ struct EditTransactionForm: View {
                 Button(action: {
                     self.showingAlert = true
                 }) {
-                    Text("delete")
+                    Text(LocalizedStringKey("delete"))
                         .foregroundColor(.red)
                 }
                 .alert(isPresented:$showingAlert) {
-                    Alert(title: Text("confirm_delete"), message: Text("cannot_undo"), primaryButton: .destructive(Text("delete"), action: deleteAction), secondaryButton: .cancel())
+                    Alert(title: Text(LocalizedStringKey("confirm_delete")), message: Text(LocalizedStringKey("cannot_undo")), primaryButton: .destructive(Text(LocalizedStringKey("delete")), action: deleteAction), secondaryButton: .cancel())
                 }
             } else {
                 EmptyView()
@@ -57,13 +57,13 @@ struct BudgetPicker: View {
     var body: some View {
         switch self.budgetsDataStore.budgets {
         case .success(let budgets):
-            Picker("prompt_budget", selection: self.budgetId) {
+            Picker(LocalizedStringKey("prompt_budget"), selection: self.budgetId) {
                 ForEach(budgets) { budget in
                     Text(budget.name)
                 }
             }
         default:
-            Picker("prompt_budget", selection: self.budgetId) {
+            Picker(LocalizedStringKey("prompt_budget"), selection: self.budgetId) {
                 Text("")
             }
         }
@@ -85,7 +85,7 @@ struct CategoryPicker: View {
     var body: some View {
         switch self.categoryDataStore.categories[requestId] {
         case .success(let categories):
-            Picker("prompt_category", selection: self.categoryId) {
+            Picker(LocalizedStringKey("prompt_category"), selection: self.categoryId) {
                 ForEach(categories) { category in
                     Text(category.title)
                 }
