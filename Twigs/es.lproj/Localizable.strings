@@ -1,4 +1,4 @@
-/* 
+/*
   Localizable.strings
   Budget
 
@@ -22,6 +22,7 @@
 "prompt_category" = "Categoría";
 "prompt_budget" = "Presupuesto";
 "prompt_type" = "Tipo";
+"prompt_archived" = "Archivada";
 "type_income" = "Ingreso";
 "type_expense" = "Gasto";
 "retry" = "Volver a intentar";

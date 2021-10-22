@@ -13,6 +13,7 @@ struct CategoryDetailsView: View {
     let budget: Budget
     let category: Category
     @State var sumRequest: String = ""
+    @State var editingCategory: Bool = false
     var spent: Int {
         get {
             if case let .success(res) = transactionDataStore.sums[sumRequest] {
@@ -53,6 +54,17 @@ struct CategoryDetailsView: View {
                 sumRequest = transactionDataStore.sum(budgetId: nil, categoryId: category.id, from: nil, to: nil)
             }
         }
+        .navigationBarItems(trailing: Button(action: {
+                self.editingCategory = true
+            }) {
+                Text("edit")
+            }
+        )
+        .sheet(isPresented: self.$editingCategory, onDismiss: {
+            self.editingCategory = false
+        }, content: {
+            CategoryFormSheet(showSheet: self.$editingCategory, category: self.category, budgetId: self.category.budgetId)
+        })
     }
     
     init (_ category: Category, budget: Budget) {

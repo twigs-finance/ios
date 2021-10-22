@@ -97,7 +97,19 @@ class TwigsInMemoryCacheService {
     func addCategory(_ category: Category) {
         self.categories.insert(category)
     }
+    
+    func updateCategory(_ category: Category) {
+        if let index = self.categories.firstIndex(where: { $0.id == category.id }) {
+            self.categories.remove(at: index)
+        }
+        self.categories.insert(category)
+    }
 
+    func removeCategory(_ id: String) {
+        if let index = self.categories.firstIndex(where: { $0.id == id }) {
+            self.categories.remove(at: index)
+        }
+    }
     
     // MARK: Users
     func getUser(id: String) -> AnyPublisher<User, NetworkError>? {

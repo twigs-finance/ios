@@ -12,12 +12,7 @@ import Combine
 class CategoryDataStore: ObservableObject {
     private var currentRequest: AnyCancellable? = nil
     @Published var categories: [String:Result<[Category], NetworkError>] = ["":.failure(.loading)]
-    
-    var category: Result<Category, NetworkError> = .failure(.loading) {
-        didSet {
-            self.objectWillChange.send()
-        }
-    }
+    @Published var category: Result<Category, NetworkError> = .failure(.unknown)
     
     func getCategories(budgetId: String? = nil, expense: Bool? = nil, archived: Bool? = false, count: Int? = nil, page: Int? = nil) -> String {
         let requestId = "\(budgetId ?? "all")-\(String(describing: expense))-\(String(describing: archived))"
@@ -59,8 +54,52 @@ class CategoryDataStore: ObservableObject {
                 self.category = .success(category)
             })
     }
-
-    let objectWillChange = ObservableObjectPublisher()
+    
+    func selectCategory(_ category: Category) {
+        self.category = .success(category)
+    }
+    
+    func save(_ category: Category) {
+        self.category = .failure(.loading)
+        
+        var savePublisher: AnyPublisher<Category, NetworkError>
+        if (category.id != "") {
+            savePublisher = self.categoryRepository.updateCategory(category)
+        } else {
+            savePublisher = self.categoryRepository.createCategory(category)
+        }
+        self.currentRequest = savePublisher
+            .receive(on: DispatchQueue.main)
+            .sink(receiveCompletion: { (completion) in
+                switch completion {
+                case .finished:
+                    self.currentRequest = nil
+                    return
+                case .failure(let error):
+                    self.category = .failure(error)
+                }
+            }, receiveValue: { (category) in
+                self.category = .success(category)
+            })
+    }
+    
+    func delete(_ id: String) {
+        self.category = .failure(.loading)
+        self.currentRequest = self.categoryRepository.deleteCategory(id)
+            .receive(on: DispatchQueue.main)
+            .sink(receiveCompletion: { (completion) in
+                switch completion {
+                case .finished:
+                    self.currentRequest = nil
+                    return
+                case .failure(let error):
+                    self.category = .failure(error)
+                }
+            }, receiveValue: { _ in
+                self.category = .failure(.deleted)
+            })
+    }
+    
     private let categoryRepository: CategoryRepository
     init(_ categoryRepository: CategoryRepository) {
         self.categoryRepository = categoryRepository

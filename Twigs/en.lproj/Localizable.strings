@@ -22,6 +22,7 @@
 "prompt_category" = "Category";
 "prompt_budget" = "Budget";
 "prompt_type" = "Type";
+"prompt_archived" = "Archived";
 "type_income" = "Income";
 "type_expense" = "Expense";
 "retry" = "Retry";

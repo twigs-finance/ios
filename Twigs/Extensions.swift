@@ -9,6 +9,10 @@
 import Foundation
 
 extension Int {
+    func toDecimalString() -> String {
+        return String(format: "%.2f", Double(self) / 100.0)
+    }
+    
     func toCurrencyString() -> String {
         let currencyFormatter = NumberFormatter()
         currencyFormatter.locale = Locale.current

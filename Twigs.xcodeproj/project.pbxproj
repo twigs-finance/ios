@@ -49,6 +49,7 @@
 		28FE6B0623444A9800D5543E /* TransactionDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28FE6B0523444A9800D5543E /* TransactionDetailsView.swift */; };
 		543ECE42233E82A40018A9D9 /* AuthenticationDataStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 543ECE41233E82A40018A9D9 /* AuthenticationDataStore.swift */; };
 		8043EB84271F26ED00498E73 /* CategoryDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8043EB83271F26ED00498E73 /* CategoryDetailsView.swift */; };
+		809B942327221EC800B1DAE2 /* CategoryFormSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 809B942227221EC800B1DAE2 /* CategoryFormSheet.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -100,8 +101,6 @@
 		28AC950F233C373A00BFB70A /* BudgetUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BudgetUITests.swift; sourceTree = "<group>"; };
 		28AC9511233C373A00BFB70A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		28AC9520233C381C00BFB70A /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
-		28AC9522233C384C00BFB70A /* es-419 */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "es-419"; path = "es-419.lproj/LaunchScreen.strings"; sourceTree = "<group>"; };
-		28AC9523233C384C00BFB70A /* es-419 */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "es-419"; path = "es-419.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		28AC9524233C42D100BFB70A /* TwigsApiService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TwigsApiService.swift; sourceTree = "<group>"; };
 		28AC9528233C433400BFB70A /* TransactionRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionRepository.swift; sourceTree = "<group>"; };
 		28AC952B233C434800BFB70A /* UserRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserRepository.swift; sourceTree = "<group>"; };
@@ -120,6 +119,8 @@
 		28FE6B0523444A9800D5543E /* TransactionDetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionDetailsView.swift; sourceTree = "<group>"; };
 		543ECE41233E82A40018A9D9 /* AuthenticationDataStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationDataStore.swift; sourceTree = "<group>"; };
 		8043EB83271F26ED00498E73 /* CategoryDetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryDetailsView.swift; sourceTree = "<group>"; };
+		809B942227221EC800B1DAE2 /* CategoryFormSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryFormSheet.swift; sourceTree = "<group>"; };
+		809B94242722597800B1DAE2 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/Localizable.strings; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -170,11 +171,12 @@
 		2841022A2342D8CB00EAFA29 /* Category */ = {
 			isa = PBXGroup;
 			children = (
-				284102312342E12F00EAFA29 /* CategoryListView.swift */,
 				28FE6AF723441E1D00D5543E /* Category.swift */,
 				28FE6AF923441E3700D5543E /* CategoryDataStore.swift */,
-				28FE6AFB23441E4500D5543E /* CategoryRepository.swift */,
 				8043EB83271F26ED00498E73 /* CategoryDetailsView.swift */,
+				284102312342E12F00EAFA29 /* CategoryListView.swift */,
+				28FE6AFB23441E4500D5543E /* CategoryRepository.swift */,
+				809B942227221EC800B1DAE2 /* CategoryFormSheet.swift */,
 			);
 			path = Category;
 			sourceTree = "<group>";
@@ -212,27 +214,27 @@
 			isa = PBXGroup;
 			children = (
 				282126A4235BCB7500072D52 /* Twigs.entitlements */,
-				2821269F2359299D00072D52 /* Profile */,
-				2841022A2342D8CB00EAFA29 /* Category */,
-				284102292342D8BB00EAFA29 /* Budget */,
-				2857EAEB233DA2F90026BC83 /* Views */,
-				28AC952A233C433C00BFB70A /* User */,
-				28AC9527233C430A00BFB70A /* Network */,
-				28AC9526233C42F800BFB70A /* Transaction */,
-				28AC94ED233C373900BFB70A /* AppDelegate.swift */,
-				28AC94EF233C373900BFB70A /* SceneDelegate.swift */,
-				28AC94F1233C373900BFB70A /* LoginView.swift */,
-				28B9E50D2346BCB2007C3909 /* RegistrationView.swift */,
-				2841022623419A2B00EAFA29 /* TabbedBudgetView.swift */,
-				284102242341998300EAFA29 /* ContentView.swift */,
-				28AC9521233C381C00BFB70A /* Localizable.strings */,
-				28AC94F3233C373A00BFB70A /* Assets.xcassets */,
-				28AC94F8233C373A00BFB70A /* LaunchScreen.storyboard */,
 				28AC94FB233C373A00BFB70A /* Info.plist */,
-				28AC94F5233C373A00BFB70A /* Preview Content */,
+				28AC94ED233C373900BFB70A /* AppDelegate.swift */,
+				284102242341998300EAFA29 /* ContentView.swift */,
 				28FE6AFD234428BF00D5543E /* DataStoreProvider.swift */,
-				2888234623512DBF003D3847 /* Observable.swift */,
 				28CE8B9423525F990072BC4C /* Extensions.swift */,
+				28AC94F1233C373900BFB70A /* LoginView.swift */,
+				2888234623512DBF003D3847 /* Observable.swift */,
+				28B9E50D2346BCB2007C3909 /* RegistrationView.swift */,
+				28AC94EF233C373900BFB70A /* SceneDelegate.swift */,
+				2841022623419A2B00EAFA29 /* TabbedBudgetView.swift */,
+				28AC94F3233C373A00BFB70A /* Assets.xcassets */,
+				284102292342D8BB00EAFA29 /* Budget */,
+				2841022A2342D8CB00EAFA29 /* Category */,
+				28AC94F8233C373A00BFB70A /* LaunchScreen.storyboard */,
+				28AC9521233C381C00BFB70A /* Localizable.strings */,
+				28AC9527233C430A00BFB70A /* Network */,
+				28AC94F5233C373A00BFB70A /* Preview Content */,
+				2821269F2359299D00072D52 /* Profile */,
+				28AC9526233C42F800BFB70A /* Transaction */,
+				28AC952A233C433C00BFB70A /* User */,
+				2857EAEB233DA2F90026BC83 /* Views */,
 			);
 			path = Twigs;
 			sourceTree = "<group>";
@@ -384,7 +386,7 @@
 			knownRegions = (
 				en,
 				Base,
-				"es-419",
+				es,
 			);
 			mainGroup = 28AC94E1233C373900BFB70A;
 			productRefGroup = 28AC94EB233C373900BFB70A /* Products */;
@@ -460,6 +462,7 @@
 				28FE6AF823441E1D00D5543E /* Category.swift in Sources */,
 				282126A1235929B800072D52 /* ProfileView.swift in Sources */,
 				28AC9529233C433400BFB70A /* TransactionRepository.swift in Sources */,
+				809B942327221EC800B1DAE2 /* CategoryFormSheet.swift in Sources */,
 				28FE6AF62342E4CC00D5543E /* BudgetRepository.swift in Sources */,
 				28FE6B022344331B00D5543E /* TransactionDataStore.swift in Sources */,
 				543ECE42233E82A40018A9D9 /* AuthenticationDataStore.swift in Sources */,
@@ -506,7 +509,6 @@
 			isa = PBXVariantGroup;
 			children = (
 				28AC94F9233C373A00BFB70A /* Base */,
-				28AC9522233C384C00BFB70A /* es-419 */,
 			);
 			name = LaunchScreen.storyboard;
 			sourceTree = "<group>";
@@ -515,7 +517,7 @@
 			isa = PBXVariantGroup;
 			children = (
 				28AC9520233C381C00BFB70A /* en */,
-				28AC9523233C384C00BFB70A /* es-419 */,
+				809B94242722597800B1DAE2 /* es */,
 			);
 			name = Localizable.strings;
 			sourceTree = "<group>";

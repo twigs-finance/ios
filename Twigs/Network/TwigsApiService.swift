@@ -315,7 +315,7 @@ class RequestHelper {
                     default: throw NetworkError.unknown
                     }
                 }
-                print(String(data: data, encoding: String.Encoding.utf8))
+//                print(String(data: data, encoding: String.Encoding.utf8))
                 return data
             }
             .decode(type: ResultType.self, decoder: self.decoder)

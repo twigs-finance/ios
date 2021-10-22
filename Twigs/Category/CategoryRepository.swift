@@ -12,6 +12,9 @@ import Combine
 protocol CategoryRepository {
     func getCategories(budgetId: String?, expense: Bool?, archived: Bool?, count: Int?, page: Int?) -> AnyPublisher<[Category], NetworkError>
     func getCategory(_ categoryId: String) -> AnyPublisher<Category, NetworkError>
+    func createCategory(_ category: Category) -> AnyPublisher<Category, NetworkError>
+    func updateCategory(_ category: Category) -> AnyPublisher<Category, NetworkError>
+    func deleteCategory(_ id: String) -> AnyPublisher<Empty, NetworkError>
 }
 
 class NetworkCategoryRepository: CategoryRepository {
@@ -47,6 +50,27 @@ class NetworkCategoryRepository: CategoryRepository {
             return category
         }.eraseToAnyPublisher()
     }
+    
+    func createCategory(_ category: Category) -> AnyPublisher<Category, NetworkError> {
+        return apiService.newCategory(category).map {
+            self.cacheService?.addCategory($0)
+            return $0
+        }.eraseToAnyPublisher()
+    }
+
+    func updateCategory(_ category: Category) -> AnyPublisher<Category, NetworkError> {
+        return apiService.updateCategory(category).map {
+            self.cacheService?.updateCategory($0)
+            return $0
+        }.eraseToAnyPublisher()
+    }
+    
+    func deleteCategory(_ id: String) -> AnyPublisher<Empty, NetworkError> {
+        return apiService.deleteCategory(id).map {
+            self.cacheService?.removeCategory(id)
+            return $0
+        }.eraseToAnyPublisher()
+    }
 }
 
 #if DEBUG
@@ -68,6 +92,18 @@ class MockCategoryRepository: CategoryRepository {
     
     func getCategory(_ categoryId: String) -> AnyPublisher<Category, NetworkError> {
         return Result.Publisher(MockCategoryRepository.category).eraseToAnyPublisher()
+    }
+    
+    func createCategory(_ category: Category) -> AnyPublisher<Category, NetworkError> {
+        return Result.Publisher(MockCategoryRepository.category).eraseToAnyPublisher()
+    }
+
+    func updateCategory(_ category: Category) -> AnyPublisher<Category, NetworkError> {
+        return Result.Publisher(MockCategoryRepository.category).eraseToAnyPublisher()
+    }
+    
+    func deleteCategory(_ id: String) -> AnyPublisher<Empty, NetworkError> {
+        return Result.Publisher(.success(Empty())).eraseToAnyPublisher()
     }
 }
 
