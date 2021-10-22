@@ -78,6 +78,8 @@ struct CategoryFormSheet: View {
                             archived: false
                         ))
                     })
+        }.onDisappear {
+            self.categoryDataStore.clearSelectedCategory()
         }
     }
     

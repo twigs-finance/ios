@@ -100,6 +100,10 @@ class CategoryDataStore: ObservableObject {
             })
     }
     
+    func clearSelectedCategory() {
+        self.category = .failure(.unknown)
+    }
+    
     private let categoryRepository: CategoryRepository
     init(_ categoryRepository: CategoryRepository) {
         self.categoryRepository = categoryRepository
