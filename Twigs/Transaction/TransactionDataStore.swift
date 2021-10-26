@@ -90,7 +90,8 @@ class TransactionDataStore: ObservableObject {
                 }
             }, receiveValue: { (transaction) in
                 self.transaction = .success(transaction)
-            })
+                self.transactions = ["": .failure(.loading)]
+ })
     }
     
     func deleteTransaction(_ transactionId: String) {
@@ -108,6 +109,7 @@ class TransactionDataStore: ObservableObject {
                 }
             }, receiveValue: { (empty) in
                 self.transaction = .failure(.deleted)
+                self.transactions = ["": .failure(.loading)]
             })
     }
     

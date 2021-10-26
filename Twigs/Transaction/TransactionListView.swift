@@ -22,17 +22,20 @@ struct TransactionListView: View {
                     TransactionListItemView(transaction)
                 }
             }
-        case .failure(.loading):
+        case nil, .failure(.loading):
             VStack {
                 ActivityIndicator(isAnimating: .constant(true), style: .large)
             }.onAppear {
-                if self.requestId == "" {
+                if transactionDataStore.transactions[requestId] == nil || self.requestId == "" {
                     self.requestId = transactionDataStore.getTransactions(self.budget.id, categoryId: self.category?.id)
                 }
             }
         default:
             // TODO: Handle each network failure type
             Text("budgets_load_failure")
+            Button("action_retry", action: {
+                self.requestId = transactionDataStore.getTransactions(self.budget.id, categoryId: self.category?.id)
+            })
         }
     }
     
