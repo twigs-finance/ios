@@ -24,13 +24,14 @@ class CategoryDataStore: ObservableObject {
                 switch completion {
                 case .finished:
                     self.currentRequest = nil
-                    self.objectWillChange.send() // TODO: Remove hack after finding better way to update dictionary values
                     return
                 case .failure(let error):
+                    self.objectWillChange.send() // TODO: Remove hack after finding better way to update dictionary values
                     self.categories[requestId] = .failure(error)
                 }
             }, receiveValue: { (categories) in
                 print("Received \(categories.count) categories")
+                self.objectWillChange.send() // TODO: Remove hack after finding better way to update dictionary values
                 self.categories[requestId] = .success(categories)
             })
         
