@@ -25,7 +25,7 @@
 "prompt_archived" = "Archived";
 "type_income" = "Income";
 "type_expense" = "Expense";
-"retry" = "Retry";
+"action_retry" = "Retry";
 "confirm_delete" = "Are you sure you want to delete this?";
 "cannot_undo" = "This cannot be undone";
 "overview" = "Overview";

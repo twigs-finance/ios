@@ -34,6 +34,9 @@ struct CategoryListView: View {
         default:
             // TODO: Handle each network failure type
             Text("budgets_load_failure")
+            Button("action_retry", action: {
+                requestId = categoryDataStore.getCategories(budgetId: budget.id, archived: false)
+            })
         }
     }
     

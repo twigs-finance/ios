@@ -30,6 +30,9 @@ struct BudgetListsView: View {
             default:
                 // TODO: Handle each network failure type
                 Text("budgets_load_failure").navigationBarTitle("budgets")
+                Button("action_retry", action: {
+                    self.budgetsDataStore.getBudgets()
+                })
             }
         }.onAppear {
             self.budgetsDataStore.getBudgets()
