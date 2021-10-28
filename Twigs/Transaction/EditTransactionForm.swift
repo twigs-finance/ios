@@ -52,7 +52,7 @@ struct EditTransactionForm: View {
 
 struct BudgetPicker: View {
     var budgetId: Binding<String>
-
+    
     @ViewBuilder
     var body: some View {
         switch self.budgetsDataStore.budgets {
@@ -80,6 +80,13 @@ struct CategoryPicker: View {
     var categoryId: Binding<String>
     let expense: Binding<TransactionType>
     @State var requestId: String = ""
+    var isRequestIdValid: Bool {
+        get {
+            return self.requestId != ""
+            && self.requestId.contains(budgetId.wrappedValue)
+            && self.requestId.split(separator: "-")[1].contains(String(describing: self.expense.wrappedValue == TransactionType.expense))
+        }
+    }
     
     @ViewBuilder
     var body: some View {
@@ -90,16 +97,16 @@ struct CategoryPicker: View {
                     Text(category.title)
                 }
             }.onAppear {
-                if !self.requestId.contains(budgetId.wrappedValue) || !self.requestId.contains(String(describing: self.expense.wrappedValue)) {
+                if !self.isRequestIdValid {
                     self.requestId = categoryDataStore.getCategories(budgetId: self.budgetId.wrappedValue, expense: self.expense.wrappedValue == TransactionType.expense, count: nil, page: nil)
                 }
             }
         case .failure(.loading):
             VStack {
-                ActivityIndicator(isAnimating: .constant(true), style: .large)
+                ActivityIndicator(isAnimating: .constant(true), style: .medium)
             }.onAppear {
                 if budgetId.wrappedValue != "" {
-                    if !self.requestId.contains(budgetId.wrappedValue) {
+                    if !self.isRequestIdValid {
                         self.requestId = categoryDataStore.getCategories(budgetId: self.budgetId.wrappedValue, expense: self.expense.wrappedValue == TransactionType.expense, count: nil, page: nil)
                     }
                 }
