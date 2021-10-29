@@ -211,11 +211,10 @@ class TwigsApiService {
 
 class RequestHelper {
     let decoder = JSONDecoder()
-    let baseUrl: String
+    var baseUrl: String = "https://twigs.wbrawner.com"
     var token: String?
     
-    init(_ baseUrl: String) {
-        self.baseUrl = baseUrl
+    init() {
         self.decoder.dateDecodingStrategy = .formatted(Date.iso8601DateFormatter)
     }
     
