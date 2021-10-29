@@ -22,8 +22,6 @@
 		2888234723512DBF003D3847 /* Observable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2888234623512DBF003D3847 /* Observable.swift */; };
 		289510242352AAFC00BC862B /* UserDataStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 289510232352AAFC00BC862B /* UserDataStore.swift */; };
 		28A1E95A235006A300CA57FE /* AddTransactionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28A1E959235006A300CA57FE /* AddTransactionView.swift */; };
-		28AC94EE233C373900BFB70A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28AC94ED233C373900BFB70A /* AppDelegate.swift */; };
-		28AC94F0233C373900BFB70A /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28AC94EF233C373900BFB70A /* SceneDelegate.swift */; };
 		28AC94F2233C373900BFB70A /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28AC94F1233C373900BFB70A /* LoginView.swift */; };
 		28AC94F4233C373A00BFB70A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 28AC94F3233C373A00BFB70A /* Assets.xcassets */; };
 		28AC94F7233C373A00BFB70A /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 28AC94F6233C373A00BFB70A /* Preview Assets.xcassets */; };
@@ -49,6 +47,7 @@
 		28FE6B0623444A9800D5543E /* TransactionDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28FE6B0523444A9800D5543E /* TransactionDetailsView.swift */; };
 		543ECE42233E82A40018A9D9 /* AuthenticationDataStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 543ECE41233E82A40018A9D9 /* AuthenticationDataStore.swift */; };
 		8043EB84271F26ED00498E73 /* CategoryDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8043EB83271F26ED00498E73 /* CategoryDetailsView.swift */; };
+		806C7850272B700B00FA1375 /* TwigsApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 806C784F272B700B00FA1375 /* TwigsApp.swift */; };
 		809B942327221EC800B1DAE2 /* CategoryFormSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 809B942227221EC800B1DAE2 /* CategoryFormSheet.swift */; };
 /* End PBXBuildFile section */
 
@@ -87,8 +86,6 @@
 		289510232352AAFC00BC862B /* UserDataStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDataStore.swift; sourceTree = "<group>"; };
 		28A1E959235006A300CA57FE /* AddTransactionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddTransactionView.swift; sourceTree = "<group>"; };
 		28AC94EA233C373900BFB70A /* Twigs.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Twigs.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		28AC94ED233C373900BFB70A /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		28AC94EF233C373900BFB70A /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		28AC94F1233C373900BFB70A /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
 		28AC94F3233C373A00BFB70A /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		28AC94F6233C373A00BFB70A /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
@@ -119,6 +116,7 @@
 		28FE6B0523444A9800D5543E /* TransactionDetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionDetailsView.swift; sourceTree = "<group>"; };
 		543ECE41233E82A40018A9D9 /* AuthenticationDataStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationDataStore.swift; sourceTree = "<group>"; };
 		8043EB83271F26ED00498E73 /* CategoryDetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryDetailsView.swift; sourceTree = "<group>"; };
+		806C784F272B700B00FA1375 /* TwigsApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TwigsApp.swift; sourceTree = "<group>"; };
 		809B942227221EC800B1DAE2 /* CategoryFormSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryFormSheet.swift; sourceTree = "<group>"; };
 		809B94242722597800B1DAE2 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/Localizable.strings; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -215,15 +213,14 @@
 			children = (
 				282126A4235BCB7500072D52 /* Twigs.entitlements */,
 				28AC94FB233C373A00BFB70A /* Info.plist */,
-				28AC94ED233C373900BFB70A /* AppDelegate.swift */,
 				284102242341998300EAFA29 /* ContentView.swift */,
 				28FE6AFD234428BF00D5543E /* DataStoreProvider.swift */,
 				28CE8B9423525F990072BC4C /* Extensions.swift */,
 				28AC94F1233C373900BFB70A /* LoginView.swift */,
 				2888234623512DBF003D3847 /* Observable.swift */,
 				28B9E50D2346BCB2007C3909 /* RegistrationView.swift */,
-				28AC94EF233C373900BFB70A /* SceneDelegate.swift */,
 				2841022623419A2B00EAFA29 /* TabbedBudgetView.swift */,
+				806C784F272B700B00FA1375 /* TwigsApp.swift */,
 				28AC94F3233C373A00BFB70A /* Assets.xcassets */,
 				284102292342D8BB00EAFA29 /* Budget */,
 				2841022A2342D8CB00EAFA29 /* Category */,
@@ -435,10 +432,8 @@
 			files = (
 				28FE6AFE234428BF00D5543E /* DataStoreProvider.swift in Sources */,
 				28A1E95A235006A300CA57FE /* AddTransactionView.swift in Sources */,
-				28AC94EE233C373900BFB70A /* AppDelegate.swift in Sources */,
 				2821266023555FD300072D52 /* EditTransactionForm.swift in Sources */,
 				282126622357E45F00072D52 /* TransactionEditView.swift in Sources */,
-				28AC94F0233C373900BFB70A /* SceneDelegate.swift in Sources */,
 				28FE6AFC23441E4500D5543E /* CategoryRepository.swift in Sources */,
 				2841022C2342D8E400EAFA29 /* Budget.swift in Sources */,
 				2841022723419A2B00EAFA29 /* TabbedBudgetView.swift in Sources */,
@@ -468,6 +463,7 @@
 				543ECE42233E82A40018A9D9 /* AuthenticationDataStore.swift in Sources */,
 				284102302342D97300EAFA29 /* BudgetListsView.swift in Sources */,
 				282126BD235CDE1400072D52 /* ProgressView.swift in Sources */,
+				806C7850272B700B00FA1375 /* TwigsApp.swift in Sources */,
 				28AC952E233C43A300BFB70A /* User.swift in Sources */,
 				28CE8B9523525F990072BC4C /* Extensions.swift in Sources */,
 			);
@@ -659,7 +655,8 @@
 				DEVELOPMENT_TEAM = 9Z6DE6KNJ9;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = Twigs/Info.plist;
-				"IPHONEOS_DEPLOYMENT_TARGET[sdk=macosx*]" = 14.5;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				"IPHONEOS_DEPLOYMENT_TARGET[sdk=macosx*]" = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -668,7 +665,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTS_MACCATALYST = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = "1,2,6";
 			};
 			name = Debug;
 		};
@@ -686,7 +683,8 @@
 				DEVELOPMENT_TEAM = 9Z6DE6KNJ9;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = Twigs/Info.plist;
-				"IPHONEOS_DEPLOYMENT_TARGET[sdk=macosx*]" = 14.5;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				"IPHONEOS_DEPLOYMENT_TARGET[sdk=macosx*]" = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -695,7 +693,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTS_MACCATALYST = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = "1,2,6";
 			};
 			name = Release;
 		};
