@@ -22,7 +22,9 @@ struct EditTransactionForm: View {
     var body: some View {
         Form {
             TextField(LocalizedStringKey("prompt_name"), text: self.$title)
+                .textInputAutocapitalization(.words)
             TextField(LocalizedStringKey("prompt_description"), text: self.$description)
+                .textInputAutocapitalization(.sentences)
             DatePicker(selection: self.$date, label: { Text(LocalizedStringKey("prompt_date")) })
             TextField(LocalizedStringKey("prompt_amount"), text: self.$amount)
                 .keyboardType(.decimalPad)

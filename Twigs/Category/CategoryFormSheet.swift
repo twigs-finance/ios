@@ -30,7 +30,9 @@ struct CategoryFormSheet: View {
         default:
             return AnyView(Form {
                 TextField("prompt_name", text: self.$title)
+                    .textInputAutocapitalization(.words)
                 TextField("prompt_description", text: self.$description)
+                    .textInputAutocapitalization(.sentences      )
                 TextField("prompt_amount", text: self.$amount)
                     .keyboardType(.decimalPad)
                 Picker("prompt_type", selection: self.$type) {
