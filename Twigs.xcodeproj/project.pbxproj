@@ -211,7 +211,6 @@
 			children = (
 				282126A4235BCB7500072D52 /* Twigs.entitlements */,
 				28AC94FB233C373A00BFB70A /* Info.plist */,
-				284102242341998300EAFA29 /* ContentView.swift */,
 				28FE6AFD234428BF00D5543E /* DataStoreProvider.swift */,
 				28CE8B9423525F990072BC4C /* Extensions.swift */,
 				28AC94F1233C373900BFB70A /* LoginView.swift */,
@@ -646,7 +645,7 @@
 				CODE_SIGN_ENTITLEMENTS = Twigs/Twigs.entitlements;
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 8;
+				CURRENT_PROJECT_VERSION = 9;
 				DERIVE_MACCATALYST_PRODUCT_BUNDLE_IDENTIFIER = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"Twigs/Preview Content\"";
 				DEVELOPMENT_TEAM = 9Z6DE6KNJ9;
@@ -674,7 +673,7 @@
 				CODE_SIGN_ENTITLEMENTS = Twigs/Twigs.entitlements;
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 8;
+				CURRENT_PROJECT_VERSION = 9;
 				DERIVE_MACCATALYST_PRODUCT_BUNDLE_IDENTIFIER = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"Twigs/Preview Content\"";
 				DEVELOPMENT_TEAM = 9Z6DE6KNJ9;
