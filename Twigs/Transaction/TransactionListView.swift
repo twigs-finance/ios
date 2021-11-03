@@ -12,6 +12,7 @@ import Combine
 struct TransactionListView: View {
     @EnvironmentObject var transactionDataStore: TransactionDataStore
     @State var requestId: String = ""
+    @State var isAddingTransaction = false
     
     @ViewBuilder
     var body: some View {
@@ -22,6 +23,20 @@ struct TransactionListView: View {
                     TransactionListItemView(transaction)
                 }
             }
+            .sheet(isPresented: $isAddingTransaction, content: {
+                AddTransactionView(showSheet: $isAddingTransaction, budgetId: self.budget.id)
+                    .navigationBarTitle("add_transaction")
+            })
+            .navigationBarItems(
+                trailing: HStack {
+                    Button(action: {
+                        self.isAddingTransaction = true
+                    }) {
+                        Image(systemName: "plus")
+                            .padding()
+                    }
+                }
+            )
         case nil, .failure(.loading):
             VStack {
                 ActivityIndicator(isAnimating: .constant(true), style: .large)

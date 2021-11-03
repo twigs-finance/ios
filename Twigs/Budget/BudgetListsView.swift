@@ -11,12 +11,12 @@ import SwiftUI
 import Combine
 
 struct BudgetListsView: View {
-    @EnvironmentObject var budgetsDataStore: BudgetsDataStore
+    @EnvironmentObject var budgetDataStore: BudgetsDataStore
     
     @ViewBuilder
     var body: some View {
         NavigationView {
-            switch budgetsDataStore.budgets {
+            switch budgetDataStore.budgets {
             case .success(let budgets):
                 Section {
                     List(budgets) { budget in
@@ -31,32 +31,40 @@ struct BudgetListsView: View {
                 // TODO: Handle each network failure type
                 Text("budgets_load_failure").navigationBarTitle("budgets")
                 Button("action_retry", action: {
-                    self.budgetsDataStore.getBudgets()
+                    self.budgetDataStore.getBudgets()
                 })
             }
         }.onAppear {
-            self.budgetsDataStore.getBudgets()
+            self.budgetDataStore.getBudgets()
         }
-        
     }
 }
 
 struct BudgetListItemView: View {
-    @EnvironmentObject var budgetsDataStore: BudgetsDataStore
-    var budget: Budget
-    
+    @EnvironmentObject var budgetDataStore: BudgetsDataStore
+    let budget: Budget
+
     var body: some View {
-        NavigationLink(
-            budget.name,
-            tag: budget,
-            selection: $budgetsDataStore.budget,
-            destination: {
-                TabbedBudgetView(budget)
-                .navigationBarTitle(budget.name)
+        Button(
+            action: {
+                self.budgetDataStore.selectBudget(budget)
+            },
+            label: {
+                VStack(alignment: .leading) {
+                    Text(verbatim: budget.name)
+                        .foregroundColor(.primary)
+                        .lineLimit(1)
+                    if budget.description?.isEmpty == false {
+                        Text(verbatim: budget.description!)
+                            .font(.subheadline)
+                            .foregroundColor(.secondary)
+                            .lineLimit(1)
+                    }
+                }
             }
         )
     }
-    
+
     init (_ budget: Budget) {
         self.budget = budget
     }

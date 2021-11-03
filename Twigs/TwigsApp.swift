@@ -35,7 +35,7 @@ struct TwigsApp: App {
 
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            TabbedBudgetView()
                 .environmentObject(dataStoreProvider.authenticationDataStore())
                 .environmentObject(dataStoreProvider.budgetsDataStore())
                 .environmentObject(dataStoreProvider.categoryDataStore())

@@ -15,19 +15,28 @@ class BudgetsDataStore: ObservableObject {
     private let transactionRepository: TransactionRepository
     private var currentRequest: AnyCancellable? = nil
     @Published var budgets: Result<[Budget], NetworkError> = .failure(.loading)
-    @Published var budget: Budget? = nil {
+    @Published var budget: Result<Budget, NetworkError>? = .failure(.loading) {
         didSet {
-            UserDefaults.standard.set(budget?.id, forKey: LAST_BUDGET)
+            if case let .success(budget) = self.budget {
+                UserDefaults.standard.set(budget.id, forKey: LAST_BUDGET)
+            }
         }
     }
     @Published var overview: Result<BudgetOverview, NetworkError> = .failure(.loading)
+    
+    var showBudgetSelection: Bool {
+        get {
+            return self.budget == nil
+        }
+        set { }
+    }
     
     init(budgetRepository: BudgetRepository, categoryRepository: CategoryRepository, transactionRepository: TransactionRepository) {
         self.budgetRepository = budgetRepository
         self.categoryRepository = categoryRepository
         self.transactionRepository = transactionRepository
     }
-    
+        
     func getBudgets(count: Int? = nil, page: Int? = nil) {
         self.budgets = .failure(.loading)
         
@@ -53,9 +62,15 @@ class BudgetsDataStore: ObservableObject {
                 }
             }, receiveValue: { (budgets) in
                 self.budgets = .success(budgets.sorted(by: { $0.name < $1.name }))
-                if let id = UserDefaults.standard.string(forKey: LAST_BUDGET) {
-                    if let budget = budgets.first(where: { $0.id == id }) {
-                        self.budget = budget
+                if self.budget != nil {
+                    if let id = UserDefaults.standard.string(forKey: LAST_BUDGET) {
+                        if let budget = budgets.first(where: { $0.id == id }) {
+                            self.budget = .success(budget)
+                        } else {
+                            self.budget = nil
+                        }
+                    } else {
+                        self.budget = nil
                     }
                 }
             })
@@ -124,7 +139,7 @@ class BudgetsDataStore: ObservableObject {
                         CategoryBalance(category: category, balance: $0.balance)
                     }.eraseToAnyPublisher())
                 }
-            
+                
                 self.currentRequest = Publishers.MergeMany(categorySums)
                     .collect()
                     .receive(on: DispatchQueue.main)
@@ -156,6 +171,16 @@ class BudgetsDataStore: ObservableObject {
                         self.overview = .success(budgetOverview)
                     })
             })
+    }
+    
+    func selectBudget(_ budget: Budget) {
+        self.objectWillChange.send()
+        self.budget = .success(budget)
+    }
+    
+    func deselectBudget() {
+        self.objectWillChange.send()
+        self.budget = nil
     }
 }
 

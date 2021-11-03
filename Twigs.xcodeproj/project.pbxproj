@@ -13,7 +13,6 @@
 		282126A3235ABC1800072D52 /* TwigsInMemoryCacheService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 282126A2235ABC1800072D52 /* TwigsInMemoryCacheService.swift */; };
 		282126BB235CDD3C00072D52 /* BudgetDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 282126BA235CDD3C00072D52 /* BudgetDetailsView.swift */; };
 		282126BD235CDE1400072D52 /* ProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 282126BC235CDE1400072D52 /* ProgressView.swift */; };
-		284102252341998300EAFA29 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 284102242341998300EAFA29 /* ContentView.swift */; };
 		2841022723419A2B00EAFA29 /* TabbedBudgetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2841022623419A2B00EAFA29 /* TabbedBudgetView.swift */; };
 		2841022C2342D8E400EAFA29 /* Budget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2841022B2342D8E400EAFA29 /* Budget.swift */; };
 		284102302342D97300EAFA29 /* BudgetListsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2841022F2342D97300EAFA29 /* BudgetListsView.swift */; };
@@ -76,7 +75,6 @@
 		282126A4235BCB7500072D52 /* Twigs.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Twigs.entitlements; sourceTree = "<group>"; };
 		282126BA235CDD3C00072D52 /* BudgetDetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BudgetDetailsView.swift; sourceTree = "<group>"; };
 		282126BC235CDE1400072D52 /* ProgressView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressView.swift; sourceTree = "<group>"; };
-		284102242341998300EAFA29 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		2841022623419A2B00EAFA29 /* TabbedBudgetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabbedBudgetView.swift; sourceTree = "<group>"; };
 		2841022B2342D8E400EAFA29 /* Budget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Budget.swift; sourceTree = "<group>"; };
 		2841022F2342D97300EAFA29 /* BudgetListsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BudgetListsView.swift; sourceTree = "<group>"; };
@@ -450,7 +448,6 @@
 				28FE6AFA23441E3700D5543E /* CategoryDataStore.swift in Sources */,
 				28B9E50E2346BCB2007C3909 /* RegistrationView.swift in Sources */,
 				284102322342E12F00EAFA29 /* CategoryListView.swift in Sources */,
-				284102252341998300EAFA29 /* ContentView.swift in Sources */,
 				8043EB84271F26ED00498E73 /* CategoryDetailsView.swift in Sources */,
 				289510242352AAFC00BC862B /* UserDataStore.swift in Sources */,
 				28FE6B002344308600D5543E /* Transaction.swift in Sources */,

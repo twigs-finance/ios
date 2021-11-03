@@ -1,30 +1,35 @@
 import Foundation
 import Combine
+import SwiftUI
 
 class AuthenticationDataStore: ObservableObject {
     private var currentRequest: AnyCancellable? = nil
-    var currentUser: Result<User, UserStatus> = .failure(.unauthenticated) {
-        didSet {
-            self.objectWillChange.send()
+    @Published var currentUser: Result<User, UserStatus> = .failure(.unauthenticated)
+    var showLogin: Bool {
+        get {
+            switch currentUser {
+            case .success(_):
+                print("Authenticated")
+                return false
+            default:
+                print("Unauthenticated")
+                return true
+            }
         }
+        set { }
     }
-    
+
     func login(username: String, password: String) {
-        
         // Changes the status and notifies any observers of the change
         self.currentUser = .failure(.authenticating)
-        print("Logging in")
         // Perform the login
         currentRequest = self.userRepository.login(username: username, password: password)
             .receive(on: DispatchQueue.main)
             .sink(receiveCompletion: { (status) in
                 switch status {
                 case .finished:
-                    print("Login done")
                     return
-                // Do nothing it means the network request just ended
                 case .failure(let error):
-                    print("Login failed")
                     self.currentRequest = nil
                     switch error {
                     case .jsonParsingFailed(let jsonError):
@@ -32,7 +37,6 @@ class AuthenticationDataStore: ObservableObject {
                     default:
                         print(error.localizedDescription)
                     }
-                    // Poulate your status with failed authenticating
                     self.currentUser = .failure(.failedAuthentication)
                 }
             }) { (session) in
@@ -57,9 +61,7 @@ class AuthenticationDataStore: ObservableObject {
                 switch status {
                 case .finished:
                     return
-                // Do nothing it means the network request just ended
                 case .failure( _):
-                    // Poulate your status with failed authenticating
                     self.currentUser = .failure(.failedAuthentication)
                 }
             }) { (user) in
@@ -69,12 +71,10 @@ class AuthenticationDataStore: ObservableObject {
     
     private func loadProfile() {
         guard let userId = UserDefaults.standard.string(forKey: USER_ID) else {
-            print("No saved userId, unable to load profile")
             self.currentUser = .failure(.unauthenticated)
             return
         }
         guard let token = UserDefaults.standard.string(forKey: TOKEN) else {
-            print("No saved token, unable to load profile")
             self.currentUser = .failure(.unauthenticated)
             return
         }
@@ -88,11 +88,9 @@ class AuthenticationDataStore: ObservableObject {
                     self.currentRequest = nil
                     return
                 case .failure(_):
-                    print("Failed to load user")
                     self.currentUser = .failure(.unauthenticated)
                 }
             }) { (user) in
-                print("Got user, loading budgets")
                 self.currentUser = .success(user)
         }
     }
@@ -104,8 +102,6 @@ class AuthenticationDataStore: ObservableObject {
         }
     }
     
-    // Needed since the default implementation is currently broken
-    let objectWillChange = ObservableObjectPublisher()
     private let userRepository: UserRepository
 }
 

@@ -9,77 +9,90 @@
 import SwiftUI
 
 struct TabbedBudgetView: View {
+    @EnvironmentObject var authenticationDataStore: AuthenticationDataStore
     @EnvironmentObject var budgetDataStore: BudgetsDataStore
     @EnvironmentObject var categoryDataStore: CategoryDataStore
-    let budget: Budget
+    @State var isSelectingBudget = true
+    @State var hasSelectedBudget = false
     @State var isAddingTransaction = false
     @State var tabSelection: Int = 0
     
-    var body: some View {
-        TabView(selection: $tabSelection) {
-            BudgetDetailsView(budget: self.budget)
+    @ViewBuilder
+    var mainView: some View {
+        if case let .success(budget) = budgetDataStore.budget {
+            TabView(selection: $tabSelection) {
+                NavigationView {
+                    BudgetDetailsView(budget: budget)
+                        .navigationBarTitle("overview")
+                }
                 .tabItem {
                     Image(systemName: "chart.line.uptrend.xyaxis.circle.fill")
                     Text("overview")
                 }
                 .tag(0)
                 .keyboardShortcut("1")
-            TransactionListView(self.budget)
-                .sheet(isPresented: $isAddingTransaction,
-                       onDismiss: {
-                    isAddingTransaction = false
-                },
-                       content: {
-                    AddTransactionView(showSheet: self.$isAddingTransaction, budgetId: self.budget.id)
-                        .navigationBarTitle("add_transaction")
-                })
+                NavigationView {
+                    TransactionListView(budget)
+                        .sheet(isPresented: $isAddingTransaction,
+                               onDismiss: {
+                            isAddingTransaction = false
+                        },
+                               content: {
+                            AddTransactionView(showSheet: self.$isAddingTransaction, budgetId: budget.id)
+                                .navigationBarTitle("add_transaction")
+                        })
+                        .navigationBarTitle("transactions")
+                }
                 .tabItem {
                     Image(systemName: "dollarsign.circle.fill")
                     Text("transactions")
                 }
                 .tag(1)
                 .keyboardShortcut("2")
-            CategoryListView(self.budget).tabItem {
-                Image(systemName: "chart.pie.fill")
-                Text("categories")
-            }
-            .tag(2)
-            .keyboardShortcut("3")
-            ProfileView().tabItem {
-                Image(systemName: "person.circle.fill")
-                Text("profile")
-            }
-            .tag(3)
-            .keyboardShortcut("4")
-        }.navigationBarItems(
-            trailing: HStack {
-                if tabSelection == 1 {
-                    Button(action: {
-                        self.isAddingTransaction = true
-                    }) {
-                        Image(systemName: "plus")
-                            .padding()
-                    }
-                    .keyboardShortcut("n")
+                NavigationView {
+                    CategoryListView(budget)
+                        .navigationBarTitle("categories")
                 }
-            }
-        )
-            .onReceive(NotificationCenter.default.publisher(for: Notification.Name("switchTabs"))) { notification in
-                if let tabTag = notification.object as? Int {
-                    if 0...3 ~= tabTag {
-                        self.tabSelection = tabTag
-                        print("Updating tabSelection to \(tabTag)")
-                    } else {
-                        print("Ignoring value \(tabTag)")
-                    }
+                .tabItem {
+                    Image(systemName: "chart.pie.fill")
+                    Text("categories")
                 }
+                .tag(2)
+                .keyboardShortcut("3")
+                NavigationView {
+                    ProfileView()
+                        .navigationBarTitle("profile")
+                }
+                .tabItem {
+                    Image(systemName: "person.circle.fill")
+                    Text("profile")
+                }
+                .tag(3)
+                .keyboardShortcut("4")
             }
+        } else {
+            Text("Loading…")
+        }
     }
     
-    init (_ budget: Budget) {
-        self.budget = budget
+    var body: some View {
+        mainView.sheet(isPresented: $authenticationDataStore.showLogin,
+                       onDismiss: {
+            self.budgetDataStore.getBudgets()
+        },
+                       content: {
+            LoginView()
+                .environmentObject(authenticationDataStore)
+        }).sheet(isPresented: $budgetDataStore.showBudgetSelection,
+                 content: {
+            BudgetListsView()
+                .environmentObject(budgetDataStore)
+        })
+            .interactiveDismissDisabled(!hasSelectedBudget)
     }
 }
+
+
 //
 //struct TabbedBudgetView_Previews: PreviewProvider {
 //    static var previews: some View {

@@ -44,6 +44,11 @@ struct BudgetDetailsView: View {
                 }
             }
         }
+        .navigationBarItems(trailing: HStack {
+            Button("budgets", action: {
+                self.budgetDataStore.deselectBudget()
+            }).padding()
+        })
     }
 }
 

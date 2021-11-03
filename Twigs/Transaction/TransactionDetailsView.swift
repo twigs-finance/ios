@@ -101,9 +101,18 @@ struct CategoryLineItem: View {
 
 struct BudgetLineItem: View {
     @EnvironmentObject var budgetDataStore: BudgetsDataStore
+    var budgetName: String {
+        get {
+            if case let .success(budget) = budgetDataStore.budget {
+                return budget.name
+            } else {
+                return ""
+            }
+        }
+    }
     
     var body: some View {
-        LabeledField(label: "budget", value: budgetDataStore.budget?.name ?? "", showDivider: true)
+        LabeledField(label: "budget", value: budgetName, showDivider: true)
     }
 }
 
