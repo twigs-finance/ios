@@ -32,6 +32,7 @@
 
 // MARK: Login
 "info_login" = "Login to start managing your budget";
+"prompt_server" = "Server";
 "prompt_username" = "Username";
 "prompt_password" = "Password";
 "action_login" = "Login";

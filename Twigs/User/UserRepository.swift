@@ -13,6 +13,7 @@ protocol UserRepository {
     func setToken(_ token: String)
     func getUser(_ id: String) -> AnyPublisher<User, NetworkError>
     func searchUsers(_ withUsername: String) -> AnyPublisher<[User], NetworkError>
+    func setServer(_ server: String)
     func login(username: String, password: String) -> AnyPublisher<LoginResponse, NetworkError>
     func register(username: String, email: String, password: String) -> AnyPublisher<User, NetworkError>
 }
@@ -34,6 +35,14 @@ class NetworkUserRepository: UserRepository {
     
     func searchUsers(_ withUsername: String) -> AnyPublisher<[User], NetworkError> {
         return apiService.searchUsers(query: withUsername)
+    }
+    
+    func setServer(_ server: String) {
+        var correctServer = server
+        if !server.starts(with: "http://") &&    !server.starts(with: "https://") {
+            correctServer = "http://\(correctServer)"
+        }
+        apiService.requestHelper.baseUrl = correctServer
     }
     
     func login(username: String, password: String) -> AnyPublisher<LoginResponse, NetworkError> {
@@ -64,6 +73,9 @@ class MockUserRepository: UserRepository {
     func searchUsers(_ withUsername: String) -> AnyPublisher<[User], NetworkError> {
         return Result<[User], NetworkError>.Publisher([MockUserRepository.user])
             .eraseToAnyPublisher()
+    }
+    
+    func setServer(_ server: String) {
     }
     
     func login(username: String, password: String) -> AnyPublisher<LoginResponse, NetworkError> {

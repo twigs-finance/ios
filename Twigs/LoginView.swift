@@ -10,6 +10,7 @@ import SwiftUI
 import Combine
 
 struct LoginView: View {
+    @State var server: String = ""
     @State var username: String = ""
     @State var password: String = ""
     @EnvironmentObject var userData: AuthenticationDataStore
@@ -31,14 +32,16 @@ struct LoginView: View {
             NavigationView {
                 VStack {
                     Text("info_login")
-                    TextField("prompt_username", text: self.$username)
+                    TextField(LocalizedStringKey("prompt_server"), text: self.$server)
+                        .textFieldStyle(RoundedBorderTextFieldStyle())
+                    TextField(LocalizedStringKey("prompt_username"), text: self.$username)
                         .autocapitalization(UITextAutocapitalizationType.none)
                         .textFieldStyle(RoundedBorderTextFieldStyle())
-                    SecureField("prompt_password", text: self.$password)
+                    SecureField(LocalizedStringKey("prompt_password"), text: self.$password, prompt: nil)
                         .textFieldStyle(RoundedBorderTextFieldStyle())
                         .textContentType(UITextContentType.password)
                     Button("action_login", action: {
-                        self.userData.login(username: self.username, password: self.password)
+                        self.userData.login(server: self.server, username: self.username, password: self.password)
                     }).buttonStyle(DefaultButtonStyle())
                     Spacer()
                     Text("info_register")

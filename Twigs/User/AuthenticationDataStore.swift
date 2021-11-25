@@ -19,10 +19,11 @@ class AuthenticationDataStore: ObservableObject {
         set { }
     }
 
-    func login(username: String, password: String) {
+    func login(server: String, username: String, password: String) {
         // Changes the status and notifies any observers of the change
         self.currentUser = .failure(.authenticating)
         // Perform the login
+        self.userRepository.setServer(server)
         currentRequest = self.userRepository.login(username: username, password: password)
             .receive(on: DispatchQueue.main)
             .sink(receiveCompletion: { (status) in

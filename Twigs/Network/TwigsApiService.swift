@@ -209,9 +209,15 @@ class TwigsApiService {
     }
 }
 
+private let BASE_URL = "BASE_URL"
+
 class RequestHelper {
     let decoder = JSONDecoder()
-    var baseUrl: String = "https://twigs.wbrawner.com"
+    var baseUrl: String = UserDefaults.standard.string(forKey: BASE_URL) ?? "" {
+        didSet {
+            UserDefaults.standard.set(baseUrl, forKey: BASE_URL)
+        }
+    }
     var token: String?
     
     init() {
@@ -293,8 +299,11 @@ class RequestHelper {
     ) -> AnyPublisher<ResultType, NetworkError> {
         
         guard let url = URL(string: self.baseUrl + endPoint) else {
+            print("Unable to build url from base: \(self.baseUrl)")
             return Result.Publisher(.failure(.invalidUrl)).eraseToAnyPublisher()
         }
+        
+        print("\(method) - \(url)")
         
         var request = URLRequest(url: url)
         request.httpBody = data?.toJSONData()
