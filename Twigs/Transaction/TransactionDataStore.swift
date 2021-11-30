@@ -71,9 +71,6 @@ class TransactionDataStore: ObservableObject {
     
     func saveTransaction(_ transaction: Transaction) {
         self.transaction = .failure(.loading)
-//        if transaction.categoryId == "" {
-//            transaction.categoryId = nil
-//        }
         var transactionSavePublisher: AnyPublisher<Transaction, NetworkError>
         if (transaction.id != "") {
             transactionSavePublisher = self.transactionRepository.updateTransaction(transaction)

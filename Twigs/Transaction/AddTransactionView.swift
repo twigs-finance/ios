@@ -62,7 +62,7 @@ struct AddTransactionView: View {
                             description: self.description,
                             date: self.date,
                             amount: Int(amount * 100.0),
-                            categoryId: self.categoryId,
+                            categoryId: self.categoryId != "" ? self.categoryId : nil,
                             expense: self.type == TransactionType.expense,
                             createdBy: self.createdBy,
                             budgetId: self.budgetId
