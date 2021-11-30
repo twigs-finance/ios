@@ -18,9 +18,15 @@ struct TransactionListView: View {
     var body: some View {
         switch transactionDataStore.transactions[requestId] {
         case .success(let transactions):
-            Section {
-                List(transactions) { transaction in
-                    TransactionListItemView(transaction)
+            List {
+                ForEach(transactions.keys, id: \.self) { (key: String) in
+                    Group {
+                        Section(header: Text(key)) {
+                            ForEach(transactions[key]!) { transaction in
+                                TransactionListItemView(transaction)
+                            }
+                        }
+                    }
                 }
             }
             .sheet(isPresented: $isAddingTransaction, content: {
@@ -75,11 +81,13 @@ struct TransactionListItemView: View {
                     Text(verbatim: transaction.title)
                         .lineLimit(1)
                         .font(.headline)
-                    Text(verbatim: transaction.date.toLocaleString())
-                        .lineLimit(1)
-                        .font(.subheadline)
-                        .foregroundColor(.secondary)
-                        .multilineTextAlignment(.trailing)
+                    if let description = transaction.description?.trimmingCharacters(in: CharacterSet([" "])), !description.isEmpty {
+                        Text(verbatim: description)
+                            .lineLimit(1)
+                            .font(.subheadline)
+                            .foregroundColor(.secondary)
+                            .multilineTextAlignment(.trailing)
+                    }
                 }
                 Spacer()
                 VStack(alignment: .trailing) {

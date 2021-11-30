@@ -8,11 +8,12 @@
 
 import Foundation
 import Combine
+import Collections
 
 class TransactionDataStore: ObservableObject {
     private var currentRequest: AnyCancellable? = nil
     private var sumRequests: [String:AnyCancellable] = [:]
-    @Published var transactions: [String:Result<[Transaction], NetworkError>] = ["": .failure(.loading)]
+    @Published var transactions: [String:Result<OrderedDictionary<String, [Transaction]>, NetworkError>] = ["": .failure(.loading)]
     
     @Published var transaction: Result<Transaction, NetworkError> = .failure(.unknown)
     
@@ -45,7 +46,8 @@ class TransactionDataStore: ObservableObject {
                     self.transactions[requestId] = .failure(error)
                 }
             }, receiveValue: { (transactions) in
-                self.transactions[requestId] = .success(transactions)
+                let groupedTransactions = OrderedDictionary<String,[Transaction]>(grouping: transactions, by: { $0.date.toLocaleString() })
+                self.transactions[requestId] = .success(groupedTransactions)
             })
         
         return requestId

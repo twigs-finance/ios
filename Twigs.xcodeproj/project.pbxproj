@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 52;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -47,6 +47,7 @@
 		543ECE42233E82A40018A9D9 /* AuthenticationDataStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 543ECE41233E82A40018A9D9 /* AuthenticationDataStore.swift */; };
 		8043EB84271F26ED00498E73 /* CategoryDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8043EB83271F26ED00498E73 /* CategoryDetailsView.swift */; };
 		806C7850272B700B00FA1375 /* TwigsApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 806C784F272B700B00FA1375 /* TwigsApp.swift */; };
+		8094A9C327567CAC006C6C62 /* Collections in Frameworks */ = {isa = PBXBuildFile; productRef = 8094A9C227567CAC006C6C62 /* Collections */; };
 		809B942327221EC800B1DAE2 /* CategoryFormSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 809B942227221EC800B1DAE2 /* CategoryFormSheet.swift */; };
 /* End PBXBuildFile section */
 
@@ -124,6 +125,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8094A9C327567CAC006C6C62 /* Collections in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -310,6 +312,9 @@
 			dependencies = (
 			);
 			name = Twigs;
+			packageProductDependencies = (
+				8094A9C227567CAC006C6C62 /* Collections */,
+			);
 			productName = Budget;
 			productReference = 28AC94EA233C373900BFB70A /* Twigs.app */;
 			productType = "com.apple.product-type.application";
@@ -383,6 +388,9 @@
 				es,
 			);
 			mainGroup = 28AC94E1233C373900BFB70A;
+			packageReferences = (
+				8094A9C127567CAC006C6C62 /* XCRemoteSwiftPackageReference "swift-collections" */,
+			);
 			productRefGroup = 28AC94EB233C373900BFB70A /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -817,6 +825,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		8094A9C127567CAC006C6C62 /* XCRemoteSwiftPackageReference "swift-collections" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/apple/swift-collections.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		8094A9C227567CAC006C6C62 /* Collections */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 8094A9C127567CAC006C6C62 /* XCRemoteSwiftPackageReference "swift-collections" */;
+			productName = Collections;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 28AC94E2233C373900BFB70A /* Project object */;
 }
