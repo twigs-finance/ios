@@ -10,45 +10,66 @@ import SwiftUI
 
 struct BudgetDetailsView: View {
     @EnvironmentObject var budgetDataStore: BudgetsDataStore
-    @State var requestedOverview = ""
     let budget: Budget
 
     @ViewBuilder
     var body: some View {
-        ScrollView {
-            VStack {
-                switch budgetDataStore.overview {
-                case .failure(.loading):
-                    ActivityIndicator(isAnimating: .constant(true), style: .large)
-                case .success(let overview):
-                    Text("current_balance")
-                    Text(verbatim: overview.balance.toCurrencyString())
-                        .foregroundColor(overview.balance < 0 ? .red : .green)
-                    Text("expected_income")
-                    Text(verbatim: overview.expectedIncome.toCurrencyString())
-                    Text("actual_income")
-                    Text(verbatim: overview.actualIncome.toCurrencyString())
-                        .foregroundColor(.green)
-                    Text("expected_expenses")
-                    Text(verbatim: overview.expectedExpenses.toCurrencyString())
-                    Text("actual_expenses")
-                    Text(verbatim: overview.actualExpenses.toCurrencyString())
-                        .foregroundColor(.red)
-                default:
-                    Text("An error has ocurred")
+        switch budgetDataStore.overview {
+        case .failure(.loading):
+            ActivityIndicator(isAnimating: .constant(true), style: .large)
+        case .success(let overview):
+            List {
+                Section(overview.budget.name) {
+                    VStack(alignment: .leading) {
+                        if let description = overview.budget.description {
+                            Text(description)
+                        }
+                        HStack {
+                            Text("current_balance")
+                            Text(verbatim: overview.balance.toCurrencyString())
+                                .foregroundColor(overview.balance < 0 ? .red : .green)
+                        }
+                    }
                 }
-            }.onAppear {
-                if requestedOverview != budget.id {
-                    requestedOverview = budget.id
-                    budgetDataStore.loadOverview(budget)
+                Section("income") {
+                    VStack(alignment: .leading) {
+                        HStack {
+                            Text("expected")
+                            Text(verbatim: overview.expectedIncome.toCurrencyString())
+                        }
+                        ProgressView(value: Float(overview.expectedIncome), maxValue: Float(max(overview.expectedIncome, overview.actualIncome)), progressTintColor: .gray, progressBarHeight: 10.0, progressBarCornerRadius: 4.0)
+                        HStack {
+                            Text("actual")
+                            Text(verbatim: overview.actualIncome.toCurrencyString())
+                                .foregroundColor(.green)
+                        }
+                        ProgressView(value: Float(overview.actualIncome), maxValue: Float(max(overview.expectedIncome, overview.actualIncome)), progressTintColor: .green, progressBarHeight: 10.0, progressBarCornerRadius: 4.0)
+                    }
                 }
-            }
+                Section("expenses") {
+                    VStack(alignment: .leading) {
+                        HStack {
+                            Text("expected")
+                            Text(verbatim: overview.expectedExpenses.toCurrencyString())
+                        }
+                        ProgressView(value: Float(overview.expectedExpenses), maxValue: Float(max(overview.expectedExpenses, overview.actualExpenses)), progressTintColor: .gray, progressBarHeight: 10.0, progressBarCornerRadius: 4.0)
+                        HStack {
+                            Text("actual")
+                            Text(verbatim: overview.actualExpenses.toCurrencyString())
+                                .foregroundColor(.red)
+                        }
+                        ProgressView(value: Float(overview.actualExpenses), maxValue: Float(max(overview.expectedExpenses, overview.actualExpenses)), progressTintColor: .red, progressBarHeight: 10.0, progressBarCornerRadius: 4.0)
+                    }
+                }
+            }.listStyle(.insetGrouped)
+            .navigationBarItems(leading: HStack {
+                Button("budgets", action: {
+                    self.budgetDataStore.showBudgetSelection = true
+                }).padding()
+            })
+        default:
+            Text("An error has ocurred")
         }
-        .navigationBarItems(trailing: HStack {
-            Button("budgets", action: {
-                self.budgetDataStore.deselectBudget()
-            }).padding()
-        })
     }
 }
 

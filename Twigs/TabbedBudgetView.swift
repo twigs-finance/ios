@@ -71,7 +71,7 @@ struct TabbedBudgetView: View {
                 .keyboardShortcut("4")
             }
         } else {
-            Text("Loading…")
+            ActivityIndicator(isAnimating: .constant(true), style: .large)
         }
     }
     
@@ -83,12 +83,15 @@ struct TabbedBudgetView: View {
                        content: {
             LoginView()
                 .environmentObject(authenticationDataStore)
+                .onDisappear {
+                    self.budgetDataStore.getBudgets()
+                }
         }).sheet(isPresented: $budgetDataStore.showBudgetSelection,
                  content: {
             BudgetListsView()
                 .environmentObject(budgetDataStore)
         })
-            .interactiveDismissDisabled(!hasSelectedBudget)
+            .interactiveDismissDisabled(true)
     }
 }
 

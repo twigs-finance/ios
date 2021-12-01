@@ -19,17 +19,13 @@ class BudgetsDataStore: ObservableObject {
         didSet {
             if case let .success(budget) = self.budget {
                 UserDefaults.standard.set(budget.id, forKey: LAST_BUDGET)
+                self.showBudgetSelection = false
+                loadOverview(budget)
             }
         }
     }
     @Published var overview: Result<BudgetOverview, NetworkError> = .failure(.loading)
-    
-    var showBudgetSelection: Bool {
-        get {
-            return self.budget == nil
-        }
-        set { }
-    }
+    @Published var showBudgetSelection: Bool = true
     
     init(budgetRepository: BudgetRepository, categoryRepository: CategoryRepository, transactionRepository: TransactionRepository) {
         self.budgetRepository = budgetRepository
@@ -62,7 +58,9 @@ class BudgetsDataStore: ObservableObject {
                 }
             }, receiveValue: { (budgets) in
                 self.budgets = .success(budgets.sorted(by: { $0.name < $1.name }))
-                if self.budget != nil {
+                if case .success(_) = self.budget {
+                    // Don't do anything here
+                } else {
                     if let id = UserDefaults.standard.string(forKey: LAST_BUDGET) {
                         if let budget = budgets.first(where: { $0.id == id }) {
                             self.budget = .success(budget)
@@ -70,7 +68,11 @@ class BudgetsDataStore: ObservableObject {
                             self.budget = nil
                         }
                     } else {
-                        self.budget = nil
+                        if let budget = budgets.first {
+                            self.budget = .success(budget)
+                        } else {
+                            self.budget = nil
+                        }
                     }
                 }
             })
@@ -174,13 +176,7 @@ class BudgetsDataStore: ObservableObject {
     }
     
     func selectBudget(_ budget: Budget) {
-        self.objectWillChange.send()
         self.budget = .success(budget)
-    }
-    
-    func deselectBudget() {
-        self.objectWillChange.send()
-        self.budget = nil
     }
 }
 

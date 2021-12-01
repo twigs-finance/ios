@@ -34,8 +34,6 @@ struct BudgetListsView: View {
                     self.budgetDataStore.getBudgets()
                 })
             }
-        }.onAppear {
-            self.budgetDataStore.getBudgets()
         }
     }
 }

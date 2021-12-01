@@ -62,10 +62,10 @@
 "budget" = "Budget";
 "budgets" = "Budgets";
 "current_balance" = "Current Balance:";
-"expected_income" = "Expected Income:";
-"actual_income" = "Actual Income:";
-"expected_expenses" = "Expected Expenses:";
-"actual_expenses" = "Actual Expenses:";
+"expected" = "Expected:";
+"actual" = "Actual:";
+"income" = "Income:";
+"expenses" = "Expenses:";
 
 // MARK: Profile
 "profile" = "Profile";
