@@ -30,7 +30,7 @@ class TransactionDataStore: ObservableObject {
         self.currentRequest = self.transactionRepository.getTransactions(
             budgetIds: [budgetId],
             categoryIds: categoryIds,
-            from: Date(timeIntervalSince1970: 0),
+            from: from ?? Date.firstOfMonth,
             count: count,
             page: page
         )

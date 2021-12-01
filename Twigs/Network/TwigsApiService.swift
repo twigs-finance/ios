@@ -415,6 +415,12 @@ extension Date {
         return dateFormatter
     }()
     
+    static var firstOfMonth: Date {
+        get {
+            return Calendar.current.dateComponents([.calendar, .year,.month], from: Date()).date!
+        }
+    }
+    
     func toISO8601String() -> String {
         return Date.iso8601DateFormatter.string(from: self)
     }
