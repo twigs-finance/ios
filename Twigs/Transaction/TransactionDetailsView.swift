@@ -58,17 +58,20 @@ struct LabeledField: View {
     let value: String?
     let showDivider: Bool
     
+    @ViewBuilder
     var body: some View {
-        VStack {
-            HStack {
-                Text(self.label)
-                    .foregroundColor(.secondary)
-                Spacer()
-                Text(verbatim: value ?? "")
-                    .multilineTextAlignment(.trailing)
-            }
-            if showDivider {
-                Divider()
+        if let val = value, !val.isEmpty {
+            VStack {
+                HStack {
+                    Text(self.label)
+                        .foregroundColor(.secondary)
+                    Spacer()
+                    Text(verbatim: value ?? "")
+                        .multilineTextAlignment(.trailing)
+                }
+                if showDivider {
+                    Divider()
+                }
             }
         }
     }
