@@ -39,7 +39,7 @@ struct CategoryDetailsView: View {
     }
     
     var body: some View {
-        VStack {
+        TransactionListView(self.budget, category: category, header: VStack {
             Text(verbatim: category.description ?? "")
                 .padding()
             HStack {
@@ -47,8 +47,8 @@ struct CategoryDetailsView: View {
                 LabeledCounter(title: middleLabel, amount: spent)
                 LabeledCounter(title: LocalizedStringKey("amount_remaining"), amount: remaining)
             }
-            TransactionListView(self.budget, category: category)
-        }.frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
+        }.frame(maxWidth: .infinity, alignment: .center).eraseToAnyView())
+
         .onAppear {
             if sumRequest == "" || !sumRequest.contains(category.id) {
                 sumRequest = transactionDataStore.sum(budgetId: nil, categoryId: category.id, from: nil, to: nil)

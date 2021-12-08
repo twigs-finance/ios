@@ -13,17 +13,29 @@ struct TransactionListView: View {
     @EnvironmentObject var transactionDataStore: TransactionDataStore
     @State var requestId: String = ""
     @State var isAddingTransaction = false
+    let header: AnyView?
     
     @ViewBuilder
     var body: some View {
         switch transactionDataStore.transactions[requestId] {
         case .success(let transactions):
-            List {
-                ForEach(transactions.keys, id: \.self) { (key: String) in
-                    Group {
-                        Section(header: Text(key)) {
-                            ForEach(transactions[key]!) { transaction in
-                                TransactionListItemView(transaction)
+            Group {
+                if transactions.isEmpty {
+                    Text("no_transactions")
+                } else {
+                    List {
+                        if let header = header {
+                            Section {
+                                header
+                            }
+                        }
+                        ForEach(transactions.keys, id: \.self) { (key: String) in
+                            Group {
+                                Section(header: Text(key)) {
+                                    ForEach(transactions[key]!) { transaction in
+                                        TransactionListItemView(transaction)
+                                    }
+                                }
                             }
                         }
                     }
@@ -62,9 +74,10 @@ struct TransactionListView: View {
     
     let budget: Budget
     let category: Category?
-    init(_ budget: Budget, category: Category? = nil) {
+    init(_ budget: Budget, category: Category? = nil, header: AnyView? = nil) {
         self.budget = budget
         self.category = category
+        self.header = header
     }
 }
 

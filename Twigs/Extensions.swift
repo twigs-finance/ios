@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import SwiftUI
 
 extension Int {
     func toDecimalString() -> String {
@@ -22,3 +23,8 @@ extension Int {
     }
 }
 
+extension View {
+    func eraseToAnyView() -> AnyView {
+        return AnyView(self)
+    }
+}
