@@ -33,9 +33,18 @@ struct TwigsApp: App {
         )
     }
 
+    @ViewBuilder
+    var mainView: some View {
+        if UIDevice.current.userInterfaceIdiom == .mac || UIDevice.current.userInterfaceIdiom == .pad {
+            SidebarBudgetView(apiService: apiService)
+        } else {
+            TabbedBudgetView(apiService: apiService)
+        }
+    }
+    
     var body: some Scene {
         WindowGroup {
-            TabbedBudgetView()
+            mainView
                 .environmentObject(dataStoreProvider.authenticationDataStore())
                 .environmentObject(dataStoreProvider.budgetsDataStore())
                 .environmentObject(dataStoreProvider.categoryDataStore())

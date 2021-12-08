@@ -15,25 +15,21 @@ struct BudgetListsView: View {
     
     @ViewBuilder
     var body: some View {
-        NavigationView {
-            switch budgetDataStore.budgets {
-            case .success(let budgets):
-                Section {
-                    List(budgets) { budget in
-                        BudgetListItemView(budget)
-                    }
-                }.navigationBarTitle("budgets")
-            case .failure(.loading):
-                VStack {
-                    ActivityIndicator(isAnimating: .constant(true), style: .large)
-                }.navigationBarTitle("budgets")
-            default:
-                // TODO: Handle each network failure type
-                Text("budgets_load_failure").navigationBarTitle("budgets")
-                Button("action_retry", action: {
-                    self.budgetDataStore.getBudgets()
-                })
+        switch budgetDataStore.budgets {
+        case .success(let budgets):
+            Section("budgets") {
+                ForEach(budgets) { budget in
+                    BudgetListItemView(budget)
+                }
             }
+        case .failure(.loading):
+            ActivityIndicator(isAnimating: .constant(true), style: .large)
+        default:
+            // TODO: Handle each network failure type
+            Text("budgets_load_failure").navigationBarTitle("budgets")
+            Button("action_retry", action: {
+                self.budgetDataStore.getBudgets()
+            })
         }
     }
 }

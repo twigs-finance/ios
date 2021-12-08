@@ -24,6 +24,11 @@ struct TabbedBudgetView: View {
                 NavigationView {
                     BudgetDetailsView(budget: budget)
                         .navigationBarTitle("overview")
+                        .navigationBarItems(leading: HStack {
+                            Button("budgets", action: {
+                                self.budgetDataStore.showBudgetSelection = true
+                            }).padding()
+                        })
                 }
                 .tabItem {
                     Image(systemName: "chart.line.uptrend.xyaxis.circle.fill")
@@ -88,8 +93,9 @@ struct TabbedBudgetView: View {
                 }
         }).sheet(isPresented: $budgetDataStore.showBudgetSelection,
                  content: {
-            BudgetListsView()
-                .environmentObject(budgetDataStore)
+            List {
+                BudgetListsView()
+            }
         })
             .interactiveDismissDisabled(true)
     }

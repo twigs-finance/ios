@@ -8,6 +8,7 @@
 
 import SwiftUI
 import Combine
+import Collections
 
 struct TransactionListView: View {
     @EnvironmentObject var transactionDataStore: TransactionDataStore
@@ -16,60 +17,63 @@ struct TransactionListView: View {
     let header: AnyView?
     
     @ViewBuilder
-    var body: some View {
-        switch transactionDataStore.transactions[requestId] {
-        case .success(let transactions):
-            Group {
-                if transactions.isEmpty {
-                    Text("no_transactions")
-                } else {
-                    List {
-                        if let header = header {
-                            Section {
-                                header
-                            }
-                        }
-                        ForEach(transactions.keys, id: \.self) { (key: String) in
-                            Group {
-                                Section(header: Text(key)) {
-                                    ForEach(transactions[key]!) { transaction in
-                                        TransactionListItemView(transaction)
-                                    }
-                                }
-                            }
+    private func TransactionList(_ transactions: OrderedDictionary<String, [Transaction]>) -> some View {
+        if transactions.isEmpty {
+            Text("no_transactions")
+        } else {
+            if let header = header {
+                Section {
+                    header
+                }
+            }
+            ForEach(transactions.keys, id: \.self) { (key: String) in
+                Group {
+                    Section(header: Text(key)) {
+                        ForEach(transactions[key]!) { transaction in
+                            TransactionListItemView(transaction)
                         }
                     }
                 }
             }
-            .sheet(isPresented: $isAddingTransaction, content: {
-                AddTransactionView(showSheet: $isAddingTransaction, budgetId: self.budget.id)
-                    .navigationBarTitle("add_transaction")
-            })
-            .navigationBarItems(
-                trailing: HStack {
-                    Button(action: {
-                        self.isAddingTransaction = true
-                    }) {
-                        Image(systemName: "plus")
-                            .padding()
-                    }
-                }
-            )
-        case nil, .failure(.loading):
-            VStack {
-                ActivityIndicator(isAnimating: .constant(true), style: .large)
-            }.onAppear {
-                if transactionDataStore.transactions[requestId] == nil || self.requestId == "" {
-                    self.requestId = transactionDataStore.getTransactions(self.budget.id, categoryId: self.category?.id)
-                }
-            }
-        default:
-            // TODO: Handle each network failure type
-            Text("budgets_load_failure")
-            Button("action_retry", action: {
-                self.requestId = transactionDataStore.getTransactions(self.budget.id, categoryId: self.category?.id)
-            })
         }
+    }
+    
+    @ViewBuilder
+    var body: some View {
+            switch transactionDataStore.transactions[requestId] {
+            case .success(let transactions):
+                List {
+                    TransactionList(transactions)
+                }
+                .sheet(isPresented: $isAddingTransaction, content: {
+                    AddTransactionView(showSheet: $isAddingTransaction, budgetId: self.budget.id)
+                        .navigationBarTitle("add_transaction")
+                })
+                .navigationBarItems(
+                    trailing: HStack {
+                        Button(action: {
+                            self.isAddingTransaction = true
+                        }) {
+                            Image(systemName: "plus")
+                                .padding()
+                        }
+                    }
+                )
+            case nil, .failure(.loading):
+                ActivityIndicator(isAnimating: .constant(true), style: .large).onAppear {
+                    if transactionDataStore.transactions[requestId] == nil || self.requestId == "" {
+                        self.requestId = transactionDataStore.getTransactions(self.budget.id, categoryId: self.category?.id)
+                    }
+                }
+            default:
+                // TODO: Handle each network failure type
+                List {
+                    Text("budgets_load_failure")
+                    Button("action_retry", action: {
+                        self.requestId = transactionDataStore.getTransactions(self.budget.id, categoryId: self.category?.id)
+                    })
+                }
+            }
     }
     
     let budget: Budget

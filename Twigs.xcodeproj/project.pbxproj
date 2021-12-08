@@ -47,6 +47,7 @@
 		543ECE42233E82A40018A9D9 /* AuthenticationDataStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 543ECE41233E82A40018A9D9 /* AuthenticationDataStore.swift */; };
 		8043EB84271F26ED00498E73 /* CategoryDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8043EB83271F26ED00498E73 /* CategoryDetailsView.swift */; };
 		806C7850272B700B00FA1375 /* TwigsApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 806C784F272B700B00FA1375 /* TwigsApp.swift */; };
+		80820145275FFD380040996E /* SidebarBudgetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80820144275FFD380040996E /* SidebarBudgetView.swift */; };
 		8094A9C327567CAC006C6C62 /* Collections in Frameworks */ = {isa = PBXBuildFile; productRef = 8094A9C227567CAC006C6C62 /* Collections */; };
 		809B942327221EC800B1DAE2 /* CategoryFormSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 809B942227221EC800B1DAE2 /* CategoryFormSheet.swift */; };
 /* End PBXBuildFile section */
@@ -116,6 +117,7 @@
 		543ECE41233E82A40018A9D9 /* AuthenticationDataStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationDataStore.swift; sourceTree = "<group>"; };
 		8043EB83271F26ED00498E73 /* CategoryDetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryDetailsView.swift; sourceTree = "<group>"; };
 		806C784F272B700B00FA1375 /* TwigsApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TwigsApp.swift; sourceTree = "<group>"; };
+		80820144275FFD380040996E /* SidebarBudgetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SidebarBudgetView.swift; sourceTree = "<group>"; };
 		809B942227221EC800B1DAE2 /* CategoryFormSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryFormSheet.swift; sourceTree = "<group>"; };
 		809B94242722597800B1DAE2 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/Localizable.strings; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -191,10 +193,10 @@
 		28AC94E1233C373900BFB70A = {
 			isa = PBXGroup;
 			children = (
+				28AC94EB233C373900BFB70A /* Products */,
 				28AC94EC233C373900BFB70A /* Twigs */,
 				28AC9503233C373A00BFB70A /* TwigsTests */,
 				28AC950E233C373A00BFB70A /* TwigsUITests */,
-				28AC94EB233C373900BFB70A /* Products */,
 			);
 			sourceTree = "<group>";
 		};
@@ -218,6 +220,7 @@
 				28AC94F1233C373900BFB70A /* LoginView.swift */,
 				2888234623512DBF003D3847 /* Observable.swift */,
 				28B9E50D2346BCB2007C3909 /* RegistrationView.swift */,
+				80820144275FFD380040996E /* SidebarBudgetView.swift */,
 				2841022623419A2B00EAFA29 /* TabbedBudgetView.swift */,
 				806C784F272B700B00FA1375 /* TwigsApp.swift */,
 				28AC94F3233C373A00BFB70A /* Assets.xcassets */,
@@ -465,6 +468,7 @@
 				28FE6AF62342E4CC00D5543E /* BudgetRepository.swift in Sources */,
 				28FE6B022344331B00D5543E /* TransactionDataStore.swift in Sources */,
 				543ECE42233E82A40018A9D9 /* AuthenticationDataStore.swift in Sources */,
+				80820145275FFD380040996E /* SidebarBudgetView.swift in Sources */,
 				284102302342D97300EAFA29 /* BudgetListsView.swift in Sources */,
 				282126BD235CDE1400072D52 /* ProgressView.swift in Sources */,
 				806C7850272B700B00FA1375 /* TwigsApp.swift in Sources */,
