@@ -49,6 +49,7 @@
 "add_transaction" = "Agregar Transacción";
 "notes" = "Notas";
 "registered_by" = "Registrado por";
+"no_transactions" = "No se encontraron transacciones con el criterio dado";
 
 // MARK: Categories
 "category" = "Categoría";
