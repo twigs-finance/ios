@@ -73,3 +73,7 @@
 "change_password" = "Change Password";
 "change_email" = "Change Email";
 "delete_account" = "Delete Account";
+
+// MARK: Recurring Transactions
+"recurring" = "Recurring";
+"recurring_transactions" = "Recurring Transactions";

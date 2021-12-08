@@ -12,6 +12,7 @@ struct TabbedBudgetView: View {
     @EnvironmentObject var authenticationDataStore: AuthenticationDataStore
     @EnvironmentObject var budgetDataStore: BudgetsDataStore
     @EnvironmentObject var categoryDataStore: CategoryDataStore
+    let apiService: TwigsApiService
     @State var isSelectingBudget = true
     @State var hasSelectedBudget = false
     @State var isAddingTransaction = false
@@ -65,12 +66,12 @@ struct TabbedBudgetView: View {
                 .tag(2)
                 .keyboardShortcut("3")
                 NavigationView {
-                    ProfileView()
-                        .navigationBarTitle("profile")
+                    RecurringTransactionsListView(dataStore: RecurringTransactionDataStore(apiService, budgetId: budget.id))
+                        .navigationBarTitle("recurring_transactions")
                 }
                 .tabItem {
-                    Image(systemName: "person.circle.fill")
-                    Text("profile")
+                    Image(systemName: "arrow.triangle.2.circlepath.circle.fill")
+                    Text("recurring")
                 }
                 .tag(3)
                 .keyboardShortcut("4")

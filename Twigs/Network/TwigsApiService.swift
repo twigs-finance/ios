@@ -9,7 +9,7 @@
 import Foundation
 import Combine
 
-class TwigsApiService {
+class TwigsApiService: RecurringTransactionsRepository {
     let requestHelper: RequestHelper
     
     init(_ requestHelper: RequestHelper) {
@@ -206,6 +206,27 @@ class TwigsApiService {
     
     func deleteUser(_ user: User) -> AnyPublisher<Empty, NetworkError> {
         return requestHelper.delete("/api/users/\(user.id)")
+    }
+    
+    // MARK: Recurring Transactions
+    func getRecurringTransactions(budgetId: String) -> AnyPublisher<[RecurringTransaction], NetworkError> {
+        return requestHelper.get("/api/recurringtransactions", queries: ["budgetId": [budgetId]])
+    }
+    
+    func getRecurringTransaction(_ id: String) -> AnyPublisher<RecurringTransaction, NetworkError> {
+        return requestHelper.get("/api/recurringtransactions/\(id)")
+    }
+    
+    func createRecurringTransaction(_ transaction: RecurringTransaction) -> AnyPublisher<RecurringTransaction, NetworkError> {
+        return requestHelper.post("/api/recurringtransactions", data: transaction, type: RecurringTransaction.self)
+    }
+    
+    func updateRecurringTransaction(_ transaction: RecurringTransaction) -> AnyPublisher<RecurringTransaction, NetworkError> {
+        return requestHelper.put("/api/recurringtransactions/\(transaction.id)", data: transaction)
+    }
+    
+    func deleteRecurringTransaction(_ id: String) -> AnyPublisher<Empty, NetworkError> {
+        return requestHelper.delete("/api/recurringtransactions/\(id)")
     }
 }
 

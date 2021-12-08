@@ -62,11 +62,6 @@ struct BudgetDetailsView: View {
                     }
                 }
             }.listStyle(.insetGrouped)
-            .navigationBarItems(leading: HStack {
-                Button("budgets", action: {
-                    self.budgetDataStore.showBudgetSelection = true
-                }).padding()
-            })
         default:
             Text("An error has ocurred")
         }

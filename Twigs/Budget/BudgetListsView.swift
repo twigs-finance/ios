@@ -37,7 +37,7 @@ struct BudgetListsView: View {
 struct BudgetListItemView: View {
     @EnvironmentObject var budgetDataStore: BudgetsDataStore
     let budget: Budget
-
+    
     var body: some View {
         Button(
             action: {
@@ -58,7 +58,7 @@ struct BudgetListItemView: View {
             }
         )
     }
-
+    
     init (_ budget: Budget) {
         self.budget = budget
     }
