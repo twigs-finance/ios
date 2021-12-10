@@ -9,31 +9,33 @@
 import Foundation
 import Combine
 
-class TwigsInMemoryCacheService {
+class TwigsInMemoryCacheService: TwigsApiService {
     var budgets = Set<Budget>()
     var categories = Set<Category>()
     var transactions = Set<Transaction>()
     
     // MARK: Budgets
-    func getBudgets(count: Int? = nil, page: Int? = nil) -> AnyPublisher<[Budget], NetworkError>? {
+    override func getBudgets(count: Int? = nil, page: Int? = nil) -> AnyPublisher<[Budget], NetworkError> {
         let results = budgets.sorted { (first, second) -> Bool in
             return first.name < second.name
         }
         if results.isEmpty {
-            return nil
+            return super.getBudgets(count: count, page: page).map { (budgets: [Budget]) in
+                self.addBudgets(budgets)
+                return budgets
+            }.eraseToAnyPublisher()
         }
         return Result.Publisher(.success(results.slice(count: count, page: page))).eraseToAnyPublisher()
     }
     
-    func getBudget(_ id: String) -> AnyPublisher<Budget, NetworkError>? {
+    override func getBudget(_ id: String) -> AnyPublisher<Budget, NetworkError> {
         guard let budget = budgets.first(where: { $0.id == id }) else {
-            return nil
+            return super.getBudget(id).map { budget in
+                self.addBudget(budget)
+                return budget
+            }.eraseToAnyPublisher()
         }
         return Result.Publisher(.success(budget)).eraseToAnyPublisher()
-    }
-    
-    func getBudgetBalance(_ id: String) -> AnyPublisher<Int, NetworkError>? {
-        return nil
     }
     
     func addBudgets(_ budgets: [Budget]) {
@@ -44,24 +46,8 @@ class TwigsInMemoryCacheService {
         self.budgets.insert(budget)
     }
     
-    // MARK: Transactions
-    func getTransactions(
-        budgetIds: [Int]? = nil,
-        categoryIds: [Int]? = nil,
-        from: Date? = nil,
-        to: Date? = nil,
-        count: Int? = nil,
-        page: Int? = nil
-    ) -> AnyPublisher<[Transaction], NetworkError>? {
-        return nil
-    }
-    
-    func getTransaction(_ id: String) -> AnyPublisher<Transaction, NetworkError>? {
-        return nil
-    }
-    
     // MARK: Categories
-    func getCategories(budgetId: String? = nil, expense: Bool? = nil, archived: Bool? = nil, count: Int? = nil, page: Int? = nil) -> AnyPublisher<[Category], NetworkError>? {
+    override func getCategories(budgetId: String? = nil, expense: Bool? = nil, archived: Bool? = nil, count: Int? = nil, page: Int? = nil) -> AnyPublisher<[Category], NetworkError> {
         var results = categories
         if budgetId != nil {
             results = categories.filter { $0.budgetId == budgetId }
@@ -73,21 +59,23 @@ class TwigsInMemoryCacheService {
             results = results.filter { $0.archived == archived }
         }
         if results.isEmpty {
-            return nil
+            return super.getCategories(budgetId: budgetId, expense: expense, archived: archived, count: count, page: page).map { (categories: [Category]) in
+                self.addCategories(categories)
+                return categories
+            }.eraseToAnyPublisher()
         }
         let sortedResults = results.sorted { $0.title < $1.title }
         return Result.Publisher(.success(sortedResults.slice(count: count, page: page))).eraseToAnyPublisher()
     }
     
-    func getCategory(_ id: String) -> AnyPublisher<Category, NetworkError>? {
+    override func getCategory(_ id: String) -> AnyPublisher<Category, NetworkError> {
         guard let category = categories.first(where: { $0.id == id }) else {
-            return nil
+            return super.getCategory(id).map { category in
+                self.addCategory(category)
+                return category
+            }.eraseToAnyPublisher()
         }
         return Result.Publisher(.success(category)).eraseToAnyPublisher()
-    }
-    
-    func getCategoryBalance(_ id: String) -> AnyPublisher<Int, NetworkError>? {
-        return nil
     }
     
     func addCategories(_ categories: [Category]) {
@@ -98,26 +86,32 @@ class TwigsInMemoryCacheService {
         self.categories.insert(category)
     }
     
-    func updateCategory(_ category: Category) {
-        if let index = self.categories.firstIndex(where: { $0.id == category.id }) {
-            self.categories.remove(at: index)
-        }
-        self.categories.insert(category)
+    override func createCategory(_ category: Category) -> AnyPublisher<Category, NetworkError> {
+        return super.createCategory(category).map {
+            self.categories.insert(category)
+            return $0
+        }.eraseToAnyPublisher()
+    }
+    
+    override func updateCategory(_ category: Category) -> AnyPublisher<Category, NetworkError> {
+        return super.updateCategory(category).map {
+            self.removeCategory(category.id)
+            self.categories.insert(category)
+            return $0
+        }.eraseToAnyPublisher()
+    }
+    
+    override func deleteCategory(_ id: String) -> AnyPublisher<Empty, NetworkError> {
+        return super.deleteCategory(id).map {
+            self.removeCategory(id)
+            return $0
+        }.eraseToAnyPublisher()
     }
 
     func removeCategory(_ id: String) {
         if let index = self.categories.firstIndex(where: { $0.id == id }) {
             self.categories.remove(at: index)
         }
-    }
-    
-    // MARK: Users
-    func getUser(id: String) -> AnyPublisher<User, NetworkError>? {
-        return nil
-    }
-    
-    func getUsers(count: Int? = nil, page: Int? = nil) -> AnyPublisher<[User], NetworkError>? {
-        return nil
     }
 }
 

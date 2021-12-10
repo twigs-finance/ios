@@ -31,6 +31,7 @@ class BudgetsDataStore: ObservableObject {
         self.budgetRepository = budgetRepository
         self.categoryRepository = categoryRepository
         self.transactionRepository = transactionRepository
+        self.getBudgets(count: nil, page: nil)
     }
         
     func getBudgets(count: Int? = nil, page: Int? = nil) {

@@ -10,46 +10,28 @@ import SwiftUI
 
 @main
 struct TwigsApp: App {
-    let requestHelper = RequestHelper()
-    let cacheService = TwigsInMemoryCacheService()
-    let apiService: TwigsApiService
-    let budgetRepository: BudgetRepository
-    let categoryRepository: CategoryRepository
-    let transactionRepository:TransactionRepository
-    let userRepository: UserRepository
-    let dataStoreProvider: DataStoreProvider
+    @StateObject var authDataStore: AuthenticationDataStore
+    let apiService: TwigsApiService = TwigsInMemoryCacheService()
 
     init() {
-        self.apiService = TwigsApiService(requestHelper)
-        self.budgetRepository = NetworkBudgetRepository(apiService, cacheService: cacheService)
-        self.categoryRepository = NetworkCategoryRepository(apiService, cacheService: cacheService)
-        self.transactionRepository = NetworkTransactionRepository(apiService)
-        self.userRepository = NetworkUserRepository(apiService)
-        self.dataStoreProvider = DataStoreProvider(
-            budgetRepository: budgetRepository,
-            categoryRepository: categoryRepository,
-            transactionRepository: transactionRepository,
-            userRepository: userRepository
-        )
+        let authDataStore = AuthenticationDataStore(self.apiService)
+        self._authDataStore = StateObject(wrappedValue: authDataStore)
     }
-
+    
     @ViewBuilder
     var mainView: some View {
         if UIDevice.current.userInterfaceIdiom == .mac || UIDevice.current.userInterfaceIdiom == .pad {
-            SidebarBudgetView(apiService: apiService)
+            SidebarBudgetView(apiService)
+                .environmentObject(authDataStore)
         } else {
-            TabbedBudgetView(apiService: apiService)
+            TabbedBudgetView(apiService)
+                .environmentObject(authDataStore)
         }
     }
     
     var body: some Scene {
         WindowGroup {
             mainView
-                .environmentObject(dataStoreProvider.authenticationDataStore())
-                .environmentObject(dataStoreProvider.budgetsDataStore())
-                .environmentObject(dataStoreProvider.categoryDataStore())
-                .environmentObject(dataStoreProvider.transactionDataStore())
-                .environmentObject(dataStoreProvider.userDataStore())
         }
     }
 }

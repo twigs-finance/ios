@@ -10,13 +10,17 @@ import SwiftUI
 
 struct TabbedBudgetView: View {
     @EnvironmentObject var authenticationDataStore: AuthenticationDataStore
-    @EnvironmentObject var budgetDataStore: BudgetsDataStore
-    @EnvironmentObject var categoryDataStore: CategoryDataStore
+    @StateObject var budgetDataStore: BudgetsDataStore
     let apiService: TwigsApiService
     @State var isSelectingBudget = true
     @State var hasSelectedBudget = false
     @State var isAddingTransaction = false
     @State var tabSelection: Int = 0
+    
+    init(_ apiService: TwigsApiService) {
+        self.apiService = apiService
+        self._budgetDataStore = StateObject(wrappedValue: BudgetsDataStore(budgetRepository: apiService, categoryRepository: apiService, transactionRepository: apiService))
+    }
     
     @ViewBuilder
     var mainView: some View {
@@ -75,7 +79,10 @@ struct TabbedBudgetView: View {
                 }
                 .tag(3)
                 .keyboardShortcut("4")
-            }
+            }.environmentObject(TransactionDataStore(apiService))
+                .environmentObject(CategoryDataStore(apiService))
+                .environmentObject(budgetDataStore)
+                .environmentObject(UserDataStore(apiService))
         } else {
             ActivityIndicator(isAnimating: .constant(true), style: .large)
         }

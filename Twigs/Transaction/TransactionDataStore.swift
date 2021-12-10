@@ -14,9 +14,7 @@ class TransactionDataStore: ObservableObject {
     private var currentRequest: AnyCancellable? = nil
     private var sumRequests: [String:AnyCancellable] = [:]
     @Published var transactions: [String:Result<OrderedDictionary<String, [Transaction]>, NetworkError>] = ["": .failure(.loading)]
-    
     @Published var transaction: Result<Transaction, NetworkError> = .failure(.unknown)
-    
     @Published var sums: [String:Result<BalanceResponse, NetworkError>] = ["": .failure(.loading)]
 
     func getTransactions(_ budgetId: String, categoryId: String? = nil, from: Date? = nil, count: Int? = nil, page: Int? = nil) -> String {
@@ -31,6 +29,7 @@ class TransactionDataStore: ObservableObject {
             budgetIds: [budgetId],
             categoryIds: categoryIds,
             from: from ?? Date.firstOfMonth,
+            to: nil,
             count: count,
             page: page
         )

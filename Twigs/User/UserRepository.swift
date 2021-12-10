@@ -18,42 +18,6 @@ protocol UserRepository {
     func register(username: String, email: String, password: String) -> AnyPublisher<User, NetworkError>
 }
 
-class NetworkUserRepository: UserRepository {
-    let apiService: TwigsApiService
-    
-    init(_ apiService: TwigsApiService) {
-        self.apiService = apiService
-    }
-    
-    func setToken(_ token: String) {
-        self.apiService.requestHelper.token = token
-    }
-
-    func getUser(_ id: String) -> AnyPublisher<User, NetworkError> {
-        return apiService.getUser(id: id)
-    }
-    
-    func searchUsers(_ withUsername: String) -> AnyPublisher<[User], NetworkError> {
-        return apiService.searchUsers(query: withUsername)
-    }
-    
-    func setServer(_ server: String) {
-        var correctServer = server
-        if !server.starts(with: "http://") &&    !server.starts(with: "https://") {
-            correctServer = "http://\(correctServer)"
-        }
-        apiService.requestHelper.baseUrl = correctServer
-    }
-    
-    func login(username: String, password: String) -> AnyPublisher<LoginResponse, NetworkError> {
-        return apiService.login(username: username, password: password)
-    }
-    
-    func register(username: String, email: String, password: String) -> AnyPublisher<User, NetworkError> {
-        return apiService.register(username: username, email: email, password: password)
-    }
-}
-
 #if DEBUG
 
 class MockUserRepository: UserRepository {

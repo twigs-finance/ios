@@ -51,7 +51,7 @@ struct CategoryListItemView: View {
     let budget: Budget
     @State var sumId: String = ""
     @EnvironmentObject var transactionDataStore: TransactionDataStore
-    
+
     var progressTintColor: Color {
         get {
             if category.expense {

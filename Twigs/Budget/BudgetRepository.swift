@@ -17,51 +17,7 @@ protocol BudgetRepository {
     func deleteBudget(_ id: String) -> AnyPublisher<Empty, NetworkError>
 }
 
-class NetworkBudgetRepository: BudgetRepository {
-    let apiService: TwigsApiService
-    let cacheService: TwigsInMemoryCacheService?
-    
-    init(_ apiService: TwigsApiService, cacheService: TwigsInMemoryCacheService? = nil) {
-        self.apiService = apiService
-        self.cacheService = cacheService
-    }
-    
-    func getBudgets(count: Int?, page: Int?) -> AnyPublisher<[Budget], NetworkError> {
-        if let budgets = cacheService?.getBudgets(count: count, page: page) {
-            return budgets
-        }
-        
-        return apiService.getBudgets(count: count, page: page).map { (budgets: [Budget]) in
-            self.cacheService?.addBudgets(budgets)
-            return budgets
-        }.eraseToAnyPublisher()
-    }
-    
-    func getBudget(_ id: String) -> AnyPublisher<Budget, NetworkError> {
-        if let budget = cacheService?.getBudget(id) {
-            return budget
-        }
-        return apiService.getBudget(id).map { budget in
-            self.cacheService?.addBudget(budget)
-            return budget
-        }.eraseToAnyPublisher()
-    }
-    
-    func newBudget(_ budget: Budget) -> AnyPublisher<Budget, NetworkError> {
-        return apiService.newBudget(budget)
-    }
-    
-    func updateBudget(_ budget: Budget) -> AnyPublisher<Budget, NetworkError> {
-        return apiService.updateBudget(budget)
-    }
-    
-    func deleteBudget(_ id: String) -> AnyPublisher<Empty, NetworkError> {
-        return apiService.deleteBudget(id)
-    }
-}
-
 #if DEBUG
-
 class MockBudgetRepository: BudgetRepository {
     static let budget = Budget(
         id: "1",
@@ -95,5 +51,4 @@ class MockBudgetRepository: BudgetRepository {
         return Result.Publisher(Empty()).eraseToAnyPublisher()
     }
 }
-
 #endif

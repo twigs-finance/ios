@@ -9,13 +9,29 @@
 import Foundation
 import Combine
 
-class TwigsApiService: RecurringTransactionsRepository {
+class TwigsApiService: BudgetRepository, CategoryRepository, RecurringTransactionsRepository, TransactionRepository, UserRepository {
     let requestHelper: RequestHelper
+    
+    convenience init() {
+        self.init(RequestHelper())
+    }
     
     init(_ requestHelper: RequestHelper) {
         self.requestHelper = requestHelper
     }
     
+    func setToken(_ token: String) {
+        requestHelper.token = token
+    }
+    
+    func setServer(_ server: String) {
+        var correctServer = server
+        if !server.starts(with: "http://") &&    !server.starts(with: "https://") {
+            correctServer = "http://\(correctServer)"
+        }
+        requestHelper.baseUrl = correctServer
+    }
+
     // MARK: Budgets
     
     func getBudgets(count: Int? = nil, page: Int? = nil) -> AnyPublisher<[Budget], NetworkError> {
@@ -47,8 +63,8 @@ class TwigsApiService: RecurringTransactionsRepository {
     
     // MARK: Transactions
     
-    func getTransactions(
-        budgetIds: [String]? = nil,
+  func getTransactions(
+        budgetIds: [String],
         categoryIds: [String]? = nil,
         from: Date? = nil,
         to: Date? = nil,
@@ -56,9 +72,7 @@ class TwigsApiService: RecurringTransactionsRepository {
         page: Int? = nil
     ) -> AnyPublisher<[Transaction], NetworkError> {
         var queries = [String: Array<String>]()
-        if budgetIds != nil {
-            queries["budgetIds"] = budgetIds!
-        }
+        queries["budgetIds"] = budgetIds
         if categoryIds != nil {
             queries["categoryIds"] = categoryIds!
         }
@@ -81,7 +95,7 @@ class TwigsApiService: RecurringTransactionsRepository {
         return requestHelper.get("/api/transactions/\(id)")
     }
     
-    func newTransaction(_ transaction: Transaction) -> AnyPublisher<Transaction, NetworkError> {
+    func createTransaction(_ transaction: Transaction) -> AnyPublisher<Transaction, NetworkError> {
         return requestHelper.post("/api/transactions", data: transaction, type: Transaction.self)
     }
     
@@ -140,7 +154,7 @@ class TwigsApiService: RecurringTransactionsRepository {
         return requestHelper.get("/api/categories/\(id)/balance")
     }
     
-    func newCategory(_ category: Category) -> AnyPublisher<Category, NetworkError> {
+    func createCategory(_ category: Category) -> AnyPublisher<Category, NetworkError> {
         return requestHelper.post("/api/categories", data: category, type: Category.self)
     }
     
@@ -174,11 +188,11 @@ class TwigsApiService: RecurringTransactionsRepository {
         }.eraseToAnyPublisher()
     }
     
-    func getUser(id: String) -> AnyPublisher<User, NetworkError> {
+    func getUser(_ id: String) -> AnyPublisher<User, NetworkError> {
         return requestHelper.get("/api/users/\(id)")
     }
     
-    func searchUsers(query: String) -> AnyPublisher<[User], NetworkError> {
+    func searchUsers(_ query: String) -> AnyPublisher<[User], NetworkError> {
         return requestHelper.get(
             "/api/users/search",
             queries: ["query": [query]]
