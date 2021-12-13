@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import SwiftUI
 
 struct RecurringTransaction: Identifiable, Hashable, Codable {
     let id: String
@@ -96,6 +97,9 @@ struct Frequency: Hashable, Codable, CustomStringConvertible {
         }
     }
 
+    var naturalDescription: String {
+        return unit.format(count: count, time: time)
+    }
 }
 
 enum FrequencyUnit: Hashable, CustomStringConvertible {
@@ -114,6 +118,19 @@ enum FrequencyUnit: Hashable, CustomStringConvertible {
             return String(format: "M;%s", dayOfMonth.description)
         case .yearly(let dayOfYear):
             return String(format: "Y;%s", dayOfYear.description)
+        }
+    }
+    
+    func format(count: Int, time: Time) -> String {
+        switch self {
+        case .daily:
+            return String(localized: "Every \(count) day(s) at \(time.description)")
+        case .weekly(let daysOfWeek):
+            return String(localized: "Every \(count) week(s) on \(daysOfWeek.description) at \(time.description)")
+        case .monthly(let dayOfMonth):
+            return String(localized: "Every \(count) month(s) on the \(dayOfMonth.description) at \(time.description)")
+        case .yearly(let dayOfYear):
+            return String(localized: "Every \(count) year(s) on \(dayOfYear.description) at \(time.description)")
         }
     }
 }

@@ -23,6 +23,7 @@ struct RecurringTransactionDetailsView: View {
                 if let description = transaction.description {
                     Text(description)
                 }
+                Text(transaction.frequency.naturalDescription)
                 Spacer().frame(height: 10)
                 LabeledField(label: "start", value: transaction.start.toLocaleString(), showDivider: true)
                 LabeledField(label: "end", value: transaction.end?.toLocaleString(), showDivider: true)
