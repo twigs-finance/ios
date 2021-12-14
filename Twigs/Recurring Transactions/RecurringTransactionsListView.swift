@@ -25,11 +25,13 @@ struct RecurringTransactionsListView: View {
     }
 }
 
+#if DEBUG
 struct RecurringTransactionView_Previews: PreviewProvider {
     static var previews: some View {
         RecurringTransactionsListView(dataStore: RecurringTransactionDataStore(MockRecurringTransactionRepository(), budgetId: ""))
     }
 }
+#endif
 
 struct RecurringTransactionsListItemView: View {
     let transaction: RecurringTransaction
@@ -68,8 +70,10 @@ struct RecurringTransactionsListItemView: View {
     }
 }
 
+#if DEBUG
 struct RecurringTransactionsListItemView_Previews: PreviewProvider {
     static var previews: some View {
         RecurringTransactionsListItemView(MockRecurringTransactionRepository.transaction)
     }
 }
+#endif

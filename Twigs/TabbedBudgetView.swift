@@ -102,7 +102,7 @@ struct TabbedBudgetView: View {
         }).sheet(isPresented: $budgetDataStore.showBudgetSelection,
                  content: {
             List {
-                BudgetListsView()
+                BudgetListsView().environmentObject(budgetDataStore)
             }
         })
             .interactiveDismissDisabled(true)
