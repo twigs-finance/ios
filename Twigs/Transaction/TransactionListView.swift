@@ -14,6 +14,7 @@ struct TransactionListView: View {
     @EnvironmentObject var transactionDataStore: TransactionDataStore
     @State var requestId: String = ""
     @State var isAddingTransaction = false
+    @State var search: String = ""
     let header: AnyView?
     
     @ViewBuilder
@@ -28,9 +29,15 @@ struct TransactionListView: View {
             }
             ForEach(transactions.keys, id: \.self) { (key: String) in
                 Group {
-                    Section(header: Text(key)) {
-                        ForEach(transactions[key]!) { transaction in
-                            TransactionListItemView(transaction)
+                    let filtered = search.isEmpty ? transactions[key]! : transactions[key]!.filter { $0.title.lowercased().contains(search.lowercased())
+                        || $0.description?.lowercased().contains(search.lowercased()) ?? false
+                        || $0.amount.toCurrencyString().contains(search)
+                    }
+                    if !filtered.isEmpty {
+                        Section(header: Text(key)) {
+                            ForEach(filtered) { transaction in
+                                TransactionListItemView(transaction)
+                            }
                         }
                     }
                 }
@@ -45,6 +52,7 @@ struct TransactionListView: View {
                 List {
                     TransactionList(transactions)
                 }
+                .searchable(text: $search)
                 .sheet(isPresented: $isAddingTransaction, content: {
                     AddTransactionView(showSheet: $isAddingTransaction, budgetId: self.budget.id)
                         .navigationBarTitle("add_transaction")
