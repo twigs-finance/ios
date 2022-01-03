@@ -1,111 +1,100 @@
 import Foundation
 import Combine
 import SwiftUI
+import TwigsCore
 
 class AuthenticationDataStore: ObservableObject {
-    private var currentRequest: AnyCancellable? = nil
-    @Published var currentUser: Result<User, UserStatus> = .failure(.unauthenticated)
-    var showLogin: Bool {
-        get {
-            switch currentUser {
-            case .success(_):
-                print("Authenticated")
-                return false
-            default:
-                print("Unauthenticated")
-                return true
-            }
+    @Published var loading: Bool = false {
+        didSet {
+            print("authDataStore loading: \(self.loading)")
         }
-        set { }
     }
-
-    func login(server: String, username: String, password: String) {
-        // Changes the status and notifies any observers of the change
-        self.currentUser = .failure(.authenticating)
-        // Perform the login
-        self.userRepository.setServer(server)
-        currentRequest = self.userRepository.login(username: username, password: password)
-            .receive(on: DispatchQueue.main)
-            .sink(receiveCompletion: { (status) in
-                switch status {
-                case .finished:
-                    return
-                case .failure(let error):
-                    self.currentRequest = nil
-                    switch error {
-                    case .jsonParsingFailed(let jsonError):
-                        print(jsonError.localizedDescription)
-                    default:
-                        print(error.localizedDescription)
-                    }
-                    self.currentUser = .failure(.failedAuthentication)
-                }
-            }) { (session) in
-                UserDefaults.standard.set(session.token, forKey: TOKEN)
-                UserDefaults.standard.set(session.userId, forKey: USER_ID)
-                self.loadProfile()
+    @Published var currentUser: User? = nil {
+        didSet {
+            self.showLogin = self.currentUser == nil
         }
+    }
+    @Binding private var baseUrl: String
+    @Binding private var token: String
+    @Binding private var userId: String
+    @Published var showLogin: Bool = true
+    let apiService: TwigsApiService
+    
+    init(_ apiService: TwigsApiService, baseUrl: Binding<String>, token: Binding<String>, userId: Binding<String>) {
+        self.apiService = apiService
+        self._baseUrl = baseUrl
+        self._token = token
+        self._userId = userId
     }
     
-    func register(username: String, email: String, password: String, confirmPassword: String) {
-        self.currentUser = .failure(.authenticating)
-        
+    func login(server: String, username: String, password: String) async throws {
+        self.loading = true
+        defer {
+            self.loading = false
+        }
+        self.apiService.baseUrl = server
+        // The API Service applies some validation and correcting of the server before returning it so we use that
+        // value instead of the original one
+        self.baseUrl = self.apiService.baseUrl ?? ""
+        var response: LoginResponse
+        do {
+            response = try await self.apiService.login(username: username, password: password)
+        } catch {
+            switch error {
+            case NetworkError.jsonParsingFailed(let jsonError):
+                print(jsonError.localizedDescription)
+            default:
+                print(error.localizedDescription)
+            }
+            return
+        }
+        self.token = response.token
+        self.userId = response.userId
+        try await self.loadProfile()
+    }
+    
+    func register(server: String, username: String, email: String, password: String, confirmPassword: String) async throws {
+        self.loading = true
+        defer {
+            self.loading = false
+        }
         // TODO: Validate other fields as well
         if !password.elementsEqual(confirmPassword) {
-            self.currentUser = .failure(.passwordMismatch)
+            // TODO: Show error message to user
             return
         }
         
-        currentRequest = self.userRepository.register(username: username, email: email, password: password)
-            .receive(on: DispatchQueue.main)
-            .sink(receiveCompletion: { (status) in
-                switch status {
-                case .finished:
-                    return
-                case .failure( _):
-                    self.currentUser = .failure(.failedAuthentication)
-                }
-            }) { (user) in
-                self.currentUser = .success(user)
-        }
-    }
-    
-    private func loadProfile() {
-        guard let userId = UserDefaults.standard.string(forKey: USER_ID) else {
-            self.currentUser = .failure(.unauthenticated)
+        self.apiService.baseUrl = server
+        // The API Service applies some validation and correcting of the server before returning it so we use that
+        // value instead of the original one
+        self.baseUrl = self.apiService.baseUrl ?? ""
+        do {
+            _ = try await apiService.register(username: username, email: email, password: password)
+        } catch {
+            switch error {
+            case NetworkError.jsonParsingFailed(let jsonError):
+                print(jsonError.localizedDescription)
+            default:
+                print(error.localizedDescription)
+            }
             return
         }
-        guard let token = UserDefaults.standard.string(forKey: TOKEN) else {
-            self.currentUser = .failure(.unauthenticated)
-            return
-        }
-        self.currentUser = .failure(.authenticating)
-        self.userRepository.setToken(token)
-        currentRequest = self.userRepository.getUser(userId)
-            .receive(on: DispatchQueue.main)
-            .sink(receiveCompletion: { (status) in
-                switch status {
-                case .finished:
-                    self.currentRequest = nil
-                    return
-                case .failure(_):
-                    self.currentUser = .failure(.unauthenticated)
-                }
-            }) { (user) in
-                self.currentUser = .success(user)
-        }
+        try await self.login(server: server, username: username, password: password)
     }
     
-    init(_ userRepository: UserRepository) {
-        self.userRepository = userRepository
-        if UserDefaults.standard.string(forKey: TOKEN) != nil {
-            loadProfile()
+    func loadProfile() async throws {
+        self.loading = true
+        defer {
+            self.loading = false
         }
+        if userId == "" {
+            throw UserStatus.unauthenticated
+        }
+        self.currentUser = try await self.apiService.getUser(userId)
     }
-    
-    private let userRepository: UserRepository
 }
 
+private let BASE_URL = "BASE_URL"
 private let TOKEN = "TOKEN"
 private let USER_ID = "USER_ID"
 
@@ -114,14 +103,5 @@ enum UserStatus: Error, Equatable {
     case authenticating
     case failedAuthentication
     case authenticated
-    case passwordMismatch // Passwords don't match
+    case passwordMismatch
 }
-
-#if DEBUG
-class MockAuthenticationDataStore: AuthenticationDataStore {
-    override init(_ userRepository: UserRepository) {
-        super.init(userRepository)
-        self.currentUser = .success(User(id: "1", username: "test_user", email: "test@localhost.loc", avatar: nil))
-    }
-}
-#endif

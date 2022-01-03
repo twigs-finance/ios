@@ -8,11 +8,13 @@
 
 import SwiftUI
 import Combine
+import TwigsCore
 
 struct AddTransactionView: View {
     @Binding var showSheet: Bool
     @EnvironmentObject var authDataStore: AuthenticationDataStore
     @EnvironmentObject var transactionDataStore: TransactionDataStore
+    @State var loading: Bool = false
     @State var title: String = ""
     @State var description: String = ""
     @State var date: Date = Date()
@@ -22,28 +24,29 @@ struct AddTransactionView: View {
     @State var categoryId: String = ""
     var createdBy: String {
         get {
-            return try! authDataStore.currentUser.get().id
+            return authDataStore.currentUser!.id
         }
     }
     
-    var stateContent: AnyView {
-        switch transactionDataStore.transaction {
-        case .success(_):
-            self.showSheet = false
-            return AnyView(EmptyView())
-        case .failure(.loading):
-            return AnyView(EmbeddedLoadingView())
-        default:
-                return AnyView(EditTransactionForm(
-                    title: self.$title,
-                    description: self.$description,
-                    date: self.$date,
-                    amount: self.$amount,
-                    type: self.$type,
-                    budgetId: self.$budgetId,
-                    categoryId: self.$categoryId,
-                    deleteAction: nil
-                ))
+    @ViewBuilder
+    var stateContent: some View {
+        if let _ = transactionDataStore.transaction {
+            EmptyView().onAppear {
+                self.showSheet = false
+            }
+        } else if loading {
+            EmbeddedLoadingView()
+        } else {
+            EditTransactionForm(
+                title: self.$title,
+                description: self.$description,
+                date: self.$date,
+                amount: self.$amount,
+                type: self.$type,
+                budgetId: self.$budgetId,
+                categoryId: self.$categoryId,
+                deleteAction: nil
+            )
         }
     }
     
@@ -56,21 +59,25 @@ struct AddTransactionView: View {
                     },
                     trailing: Button("save") {
                         let amount = Double(self.amount) ?? 0.0
-                        self.transactionDataStore.saveTransaction(Transaction(
-                            id: "",
-                            title: self.title,
-                            description: self.description,
-                            date: self.date,
-                            amount: Int(amount * 100.0),
-                            categoryId: self.categoryId != "" ? self.categoryId : nil,
-                            expense: self.type == TransactionType.expense,
-                            createdBy: self.createdBy,
-                            budgetId: self.budgetId
-                        ))
+                        Task {
+                            try await self.transactionDataStore.saveTransaction(TwigsCore.Transaction(
+                                id: "",
+                                title: self.title,
+                                description: self.description,
+                                date: self.date,
+                                amount: Int(amount * 100.0),
+                                categoryId: self.categoryId != "" ? self.categoryId : nil,
+                                expense: self.type == TransactionType.expense,
+                                createdBy: self.createdBy,
+                                budgetId: self.budgetId
+                            ))
+                        }
                 })
         }
         .onDisappear {
-            _ = self.transactionDataStore.getTransactions(self.budgetId, categoryId: self.categoryId)
+            Task {
+                try await self.transactionDataStore.getTransactions(self.budgetId, categoryId: self.categoryId)
+            }
             self.transactionDataStore.clearSelectedTransaction()
             self.title = ""
             self.description = ""

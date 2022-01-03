@@ -7,17 +7,18 @@
 //
 
 import SwiftUI
+import TwigsCore
 
 struct CategoryDetailsView: View {
     @EnvironmentObject var transactionDataStore: TransactionDataStore
     let budget: Budget
-    let category: Category
-    @State var sumRequest: String = ""
+    let category: TwigsCore.Category
+    @State var sum: Int? = 0
     @State var editingCategory: Bool = false
     var spent: Int {
         get {
-            if case let .success(res) = transactionDataStore.sums[sumRequest] {
-                return abs(res.balance)
+            if let sum = self.sum {
+                return abs(sum)
             } else {
                 return 0
             }
@@ -39,19 +40,21 @@ struct CategoryDetailsView: View {
     }
     
     var body: some View {
-        TransactionListView(self.budget, category: category, header: VStack {
-            Text(verbatim: category.description ?? "")
-                .padding()
-            HStack {
-                LabeledCounter(title: LocalizedStringKey("amount_budgeted"), amount: category.amount)
-                LabeledCounter(title: middleLabel, amount: spent)
-                LabeledCounter(title: LocalizedStringKey("amount_remaining"), amount: remaining)
-            }
-        }.frame(maxWidth: .infinity, alignment: .center).eraseToAnyView())
+        TransactionListView(self.budget, category: category) {
+            VStack {
+                Text(verbatim: category.description ?? "")
+                    .padding()
+                HStack {
+                    LabeledCounter(title: LocalizedStringKey("amount_budgeted"), amount: category.amount)
+                    LabeledCounter(title: middleLabel, amount: spent)
+                    LabeledCounter(title: LocalizedStringKey("amount_remaining"), amount: remaining)
+                }
+            }.frame(maxWidth: .infinity, alignment: .center)
+        }
 
         .onAppear {
-            if sumRequest == "" || !sumRequest.contains(category.id) {
-                sumRequest = transactionDataStore.sum(budgetId: nil, categoryId: category.id, from: nil, to: nil)
+            Task {
+                try await self.sum = transactionDataStore.sum(budgetId: nil, categoryId: category.id, from: nil, to: nil)
             }
         }
         .navigationBarItems(trailing: Button(action: {
@@ -67,7 +70,7 @@ struct CategoryDetailsView: View {
         })
     }
     
-    init (_ category: Category, budget: Budget) {
+    init (_ category: TwigsCore.Category, budget: Budget) {
         self.category = category
         self.budget = budget
     }

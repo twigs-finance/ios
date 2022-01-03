@@ -7,9 +7,11 @@
 //
 
 import SwiftUI
+import TwigsCore
 
 struct CategoryFormSheet: View {
-    @EnvironmentObject var categoryDataStore: CategoryDataStore
+    @EnvironmentObject var categoryDataStore: CategoryListDataStore
+    @State var loading: Bool = false
     @Binding var showSheet: Bool
     @State var title: String
     @State var description: String
@@ -20,15 +22,16 @@ struct CategoryFormSheet: View {
     let budgetId: String
     @State private var showingAlert = false
     
-    var stateContent: AnyView {
-        switch categoryDataStore.category {
-        case .success(_):
-            self.showSheet = false
-            return AnyView(EmptyView())
-        case .failure(.loading):
-            return AnyView(EmbeddedLoadingView())
-        default:
-            return AnyView(Form {
+    @ViewBuilder
+    var stateContent: some View {
+        if let _ = self.categoryDataStore.category {
+            EmbeddedLoadingView().onAppear {
+                self.showSheet = false
+            }
+        } else if self.loading {
+            EmbeddedLoadingView()
+        } else {
+            Form {
                 TextField("prompt_name", text: self.$title)
                     .textInputAutocapitalization(.words)
                 TextField("prompt_description", text: self.$description)
@@ -50,13 +53,17 @@ struct CategoryFormSheet: View {
                     }
                     .alert(isPresented:$showingAlert) {
                         Alert(title: Text("confirm_delete"), message: Text("cannot_undo"), primaryButton: .destructive(Text("delete"), action: {
-                            self.categoryDataStore.delete(categoryId)
+                            Task {
+                                self.loading = true
+                                try await self.categoryDataStore.delete(categoryId)
+                                self.showSheet = false
+                            }
                         }), secondaryButton: .cancel())
                     }
                 } else {
                     EmptyView()
                 }
-            })
+            }
         }
     }
     
@@ -70,23 +77,28 @@ struct CategoryFormSheet: View {
                     },
                     trailing: Button("save") {
                         let amount = Double(self.amount) ?? 0.0
-                        self.categoryDataStore.save(Category(
-                            budgetId: self.budgetId,
-                            id: self.categoryId,
-                            title: self.title,
-                            description: self.description,
-                            amount: Int(amount * 100.0),
-                            expense: self.type == TransactionType.expense,
-                            archived: false
-                        ))
+                        Task {
+                            try await self.categoryDataStore.save(Category(
+                                budgetId: self.budgetId,
+                                id: self.categoryId,
+                                title: self.title,
+                                description: self.description,
+                                amount: Int(amount * 100.0),
+                                expense: self.type == TransactionType.expense,
+                                archived: false
+                            ))
+                        }
                     })
         }.onDisappear {
-            self.categoryDataStore.clearSelectedCategory()
+            if categoryId.isEmpty {
+                self.categoryDataStore.clearSelectedCategory()
+            }
+            self.loading = false
         }
     }
     
-    init(showSheet: Binding<Bool>, category: Category?, budgetId: String) {
-        let initialCategory = category ?? Category(budgetId: budgetId, id: "", title: "", description: "", amount: 0, expense: true, archived: false)
+    init(showSheet: Binding<Bool>, category: TwigsCore.Category?, budgetId: String) {
+        let initialCategory = category ?? TwigsCore.Category(budgetId: budgetId, id: "", title: "", description: "", amount: 0, expense: true, archived: false)
         self._showSheet = showSheet
         self._title = State(initialValue: initialCategory.title)
         self._description = State(initialValue: initialCategory.description ?? "")
@@ -108,7 +120,7 @@ struct CategoryFormSheet: View {
 struct CategoryFormSheet_Previews: PreviewProvider {
     static var previews: some View {
         CategoryFormSheet(showSheet: .constant(true), category: nil, budgetId: "")
-            .environmentObject(CategoryDataStore(MockCategoryRepository()))
+            .environmentObject(CategoryListDataStore(MockCategoryRepository()))
     }
 }
 #endif

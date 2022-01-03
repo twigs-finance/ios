@@ -9,103 +9,61 @@
 import Foundation
 import Combine
 import Collections
+import TwigsCore
 
-class RecurringTransactionDataStore: ObservableObject {
+class RecurringTransactionDataStore: AsyncObservableObject {
     private let repository: RecurringTransactionsRepository
-    private var currentRequest: AnyCancellable? = nil
-    @Published var transactions: Result<[RecurringTransaction], NetworkError>? = nil
-    @Published var transaction: Result<RecurringTransaction, NetworkError>? = nil
+    @Published var transactions: AsyncData<[RecurringTransaction]> = .empty
+    @Published var transaction: AsyncData<RecurringTransaction> = .empty
     
-    init(_ repository: RecurringTransactionsRepository, budgetId: String) {
+    init(_ repository: RecurringTransactionsRepository) {
         self.repository = repository
-        getRecurringTransactions(budgetId)
     }
     
-    func getRecurringTransactions(_ budgetId: String) {
-        self.transactions = .failure(.loading)
-        self.currentRequest = self.repository.getRecurringTransactions(budgetId: budgetId)
-            .receive(on: DispatchQueue.main)
-            .sink(receiveCompletion: { (completion) in
-                switch completion {
-                case .finished:
-                    self.currentRequest = nil
-                    return
-                case .failure(let error):
-                    print("Error loading recurring transactions: \(error.name)")
-                    self.transactions = .failure(error)
-                }
-            }, receiveValue: { (transactions) in
-                self.transactions = .success(transactions.sorted(by: { $0.title < $1.title }))
-            })
-    }
-    
-    func getRecurringTransaction(_ id: String) {
-        self.transaction = .failure(.loading)
-        
-        self.currentRequest = self.repository.getRecurringTransaction(id)
-            .receive(on: DispatchQueue.main)
-            .sink(receiveCompletion: { (completion) in
-                switch completion {
-                case .finished:
-                    self.currentRequest = nil
-                    return
-                case .failure(let error):
-                    self.transaction = .failure(error)
-                }
-            }, receiveValue: { (transaction) in
-                self.transaction = .success(transaction)
-            })
-    }
-    
-    func saveRecurringTransaction(_ transaction: RecurringTransaction) {
-        self.transaction = .failure(.loading)
-        var transactionSavePublisher: AnyPublisher<RecurringTransaction, NetworkError>
-        if (transaction.id != "") {
-            transactionSavePublisher = self.repository.updateRecurringTransaction(transaction)
-        } else {
-            transactionSavePublisher = self.repository.createRecurringTransaction(transaction)
+    func getRecurringTransactions(_ budgetId: String) async {
+        self.transactions = .loading
+        do {
+            let transactions = try await self.repository.getRecurringTransactions(budgetId)
+            self.transactions = .success(transactions.sorted(by: { $0.title < $1.title }))
+        } catch {
+            self.transactions = .error(error)
         }
-        self.currentRequest = transactionSavePublisher
-            .receive(on: DispatchQueue.main)
-            .sink(receiveCompletion: { (completion) in
-                switch completion {
-                case .finished:
-                    self.currentRequest = nil
-                    return
-                case .failure(let error):
-                    self.transaction = .failure(error)
-                }
-            }, receiveValue: { (transaction) in
-                self.transaction = .success(transaction)
-                if case var .success(transactions) = self.transactions {
-                    transactions.insert(transaction, at: 0)
-                    self.transactions = .success(transactions)
-                }
-            })
     }
     
-    func deleteRecurringTransaction(_ id: String) {
-        self.transaction = .failure(.loading)
-        
-        self.currentRequest = self.repository.deleteRecurringTransaction(id)
-            .receive(on: DispatchQueue.main)
-            .sink(receiveCompletion: { completion in
-                switch completion {
-                case .finished:
-                    self.currentRequest = nil
-                    return
-                case .failure(let error):
-                    self.transaction = .failure(error)
-                }
-            }, receiveValue: { (empty) in
-                self.transaction = .failure(.deleted)
-                if case let .success(transactions) = self.transactions {
-                    self.transactions = .success(transactions.filter { $0.id != id })
-                }
-            })
+    func saveRecurringTransaction(_ transaction: RecurringTransaction) async {
+        self.transaction = .loading
+        do {
+            var savedTransaction: RecurringTransaction
+            if (transaction.id != "") {
+                savedTransaction = try await self.repository.updateRecurringTransaction(transaction)
+            } else {
+                savedTransaction = try await self.repository.createRecurringTransaction(transaction)
+            }
+            self.transaction = .success(savedTransaction)
+            if case var .success(transactions) = self.transactions {
+                transactions = transactions.filter(withoutId: savedTransaction.id)
+                transactions.append(savedTransaction)
+                self.transactions = .success(transactions.sorted(by: { $0.title < $1.title }))
+            }
+        } catch {
+            self.transactions = .error(error)
+        }
+    }
+    
+    func deleteRecurringTransaction(_ transaction: RecurringTransaction) async {
+        self.transactions = .loading
+        do {
+            try await self.repository.deleteRecurringTransaction(transaction.id)
+            self.transaction = .empty
+            if case let .success(transactions) = self.transactions {
+                self.transactions = .success(transactions.filter(withoutId: transaction.id))
+            }
+        } catch {
+            self.transaction = .error(error, transaction)
+        }
     }
     
     func clearSelectedRecurringTransaction() {
-        self.transaction = nil
+        self.transaction = .empty
     }
 }

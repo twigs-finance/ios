@@ -8,177 +8,92 @@
 
 import Foundation
 import Combine
+import TwigsCore
 
+private let LAST_BUDGET = "LAST_BUDGET"
+
+@MainActor
 class BudgetsDataStore: ObservableObject {
     private let budgetRepository: BudgetRepository
     private let categoryRepository: CategoryRepository
     private let transactionRepository: TransactionRepository
-    private var currentRequest: AnyCancellable? = nil
-    @Published var budgets: Result<[Budget], NetworkError> = .failure(.loading)
-    @Published var budget: Result<Budget, NetworkError>? = .failure(.loading) {
+    @Published var budgets: AsyncData<[Budget]> = .empty
+    @Published var budget: AsyncData<Budget> = .empty {
         didSet {
+            self.overview = .empty
             if case let .success(budget) = self.budget {
                 UserDefaults.standard.set(budget.id, forKey: LAST_BUDGET)
                 self.showBudgetSelection = false
-                loadOverview(budget)
+                Task {
+                    await loadOverview(budget)
+                }
             }
         }
     }
-    @Published var overview: Result<BudgetOverview, NetworkError> = .failure(.loading)
+    @Published var overview: AsyncData<BudgetOverview> = .empty
     @Published var showBudgetSelection: Bool = true
     
     init(budgetRepository: BudgetRepository, categoryRepository: CategoryRepository, transactionRepository: TransactionRepository) {
         self.budgetRepository = budgetRepository
         self.categoryRepository = categoryRepository
         self.transactionRepository = transactionRepository
-        self.getBudgets(count: nil, page: nil)
     }
         
-    func getBudgets(count: Int? = nil, page: Int? = nil) {
-        self.budgets = .failure(.loading)
-        
-        self.currentRequest = self.budgetRepository.getBudgets(count: count, page: page)
-            .receive(on: DispatchQueue.main)
-            .sink(receiveCompletion: { (status) in
-                switch status {
-                case .finished:
-                    self.currentRequest = nil
-                    return
-                case .failure(let error):
-                    switch error {
-                    case .jsonParsingFailed(let wrappedError):
-                        if let networkError = wrappedError as? NetworkError {
-                            print("failed to load budgets: \(networkError.name)")
-                        }
-                    default:
-                        print("failed to load budgets: \(error.name)")
-                    }
-                    
-                    self.budgets = .failure(error)
-                    return
+    func getBudgets(count: Int? = nil, page: Int? = nil) async {
+        // TODO: Find some way to extract this to a generic function
+        self.budgets = .loading
+        do {
+            let budgets = try await self.budgetRepository.getBudgets(count: count, page: page).sorted(by: { $0.name < $1.name })
+            self.budgets = .success(budgets)
+            if self.budget != .empty {
+                return
+            }
+            if let id = UserDefaults.standard.string(forKey: LAST_BUDGET), let lastBudget = budgets.first(where: { $0.id == id }) {
+                self.budget = .success(lastBudget)
+            } else {
+                if let budget = budgets.first {
+                    self.budget = .success(budget)
                 }
-            }, receiveValue: { (budgets) in
-                self.budgets = .success(budgets.sorted(by: { $0.name < $1.name }))
-                if case .success(_) = self.budget {
-                    // Don't do anything here
-                } else {
-                    if let id = UserDefaults.standard.string(forKey: LAST_BUDGET) {
-                        if let budget = budgets.first(where: { $0.id == id }) {
-                            self.budget = .success(budget)
-                        } else {
-                            self.budget = nil
-                        }
-                    } else {
-                        if let budget = budgets.first {
-                            self.budget = .success(budget)
-                        } else {
-                            self.budget = nil
-                        }
-                    }
-                }
-            })
+            }
+        } catch {
+            self.budgets = .error(error)
+        }
     }
     
-    func loadOverview(_ budget: Budget) {
-        self.overview = .failure(.loading)
-        self.currentRequest = self.transactionRepository.sumTransactions(budgetId: budget.id, categoryId: nil, from: nil, to: nil)
-            .receive(on: DispatchQueue.main)
-            .sink(receiveCompletion: { (status) in
-                switch status {
-                case .finished:
-                    return
-                case .failure(let error):
-                    switch error {
-                    case .jsonParsingFailed(let wrappedError):
-                        if let networkError = wrappedError as? NetworkError {
-                            print("failed to load budget overview: \(networkError.name)")
-                        }
-                    default:
-                        print("failed to load budget overview: \(error.name)")
+    func loadOverview(_ budget: Budget) async {
+        self.overview = .loading
+        do {
+            let budgetBalance = try await self.transactionRepository.sumTransactions(budgetId: budget.id, categoryId: nil, from: nil, to: nil)
+            let categories = try await self.categoryRepository.getCategories(budgetId: budget.id, expense: nil, archived: false, count: nil, page: nil)
+            var budgetOverview = BudgetOverview(budget: budget, balance: budgetBalance.balance)
+            try await withThrowingTaskGroup(of: (TwigsCore.Category, BalanceResponse).self) { group in
+                for category in categories {
+                    group.addTask {
+                        return (category, try await self.transactionRepository.sumTransactions(budgetId: nil, categoryId: category.id, from: nil, to: nil))
                     }
-                    self.budgets = .failure(error)
-                    self.currentRequest = nil
-                    return
                 }
-            }, receiveValue: { (response) in
-                self.sumCategories(budget: budget, balance: response.balance)
-            })
-    }
-    
-    private func sumCategories(budget: Budget, balance: Int) {
-        self.currentRequest = self.categoryRepository.getCategories(budgetId: budget.id, expense: nil, archived: false, count: nil, page: nil)
-            .receive(on: DispatchQueue.main)
-            .sink(receiveCompletion: { (status) in
-                switch status {
-                case .finished:
-                    self.currentRequest = nil
-                    return
-                case .failure(let error):
-                    switch error {
-                    case .jsonParsingFailed(let wrappedError):
-                        if let networkError = wrappedError as? NetworkError {
-                            print("failed to load budget overview: \(networkError.name)")
-                        }
-                    default:
-                        print("failed to load budget overview: \(error.name)")
-                    }
-                    self.budgets = .failure(error)
-                    return
-                }
-            }, receiveValue: { (categories) in
-                var budgetOverview = BudgetOverview(budget: budget, balance: balance)
-                budgetOverview.expectedIncome = 0
-                budgetOverview.expectedIncome = 0
-                budgetOverview.actualIncome = 0
-                budgetOverview.actualIncome = 0
-                var categorySums: [AnyPublisher<CategoryBalance, NetworkError>] = []
-                categories.forEach { category in
+
+                for try await (category, response) in group {
                     if category.expense {
                         budgetOverview.expectedExpenses += category.amount
                     } else {
                         budgetOverview.expectedIncome += category.amount
                     }
-                    categorySums.append(self.transactionRepository.sumTransactions(budgetId: nil, categoryId: category.id, from: nil, to: nil).map {
-                        CategoryBalance(category: category, balance: $0.balance)
-                    }.eraseToAnyPublisher())
+                    
+                    if category.expense {
+                        budgetOverview.actualExpenses += abs(response.balance)
+                    } else {
+                        budgetOverview.actualIncome += response.balance
+                    }
                 }
-                
-                self.currentRequest = Publishers.MergeMany(categorySums)
-                    .collect()
-                    .receive(on: DispatchQueue.main)
-                    .sink(receiveCompletion: { status in
-                        switch status {
-                        case .finished:
-                            self.currentRequest = nil
-                            return
-                        case .failure(let error):
-                            switch error {
-                            case .jsonParsingFailed(let wrappedError):
-                                if let networkError = wrappedError as? NetworkError {
-                                    print("failed to load budget overview: \(networkError.name)")
-                                }
-                            default:
-                                print("failed to load budget overview: \(error.name)")
-                            }
-                            self.overview = .failure(error)
-                            return
-                        }
-                    }, receiveValue: {
-                        $0.forEach { categoryBalance in
-                            if categoryBalance.category.expense {
-                                budgetOverview.actualExpenses += abs(categoryBalance.balance)
-                            } else {
-                                budgetOverview.actualIncome += categoryBalance.balance
-                            }
-                        }
-                        self.overview = .success(budgetOverview)
-                    })
-            })
+            }
+            self.overview = .success(budgetOverview)
+        } catch {
+            self.overview = .error(error)
+        }
     }
     
     func selectBudget(_ budget: Budget) {
         self.budget = .success(budget)
     }
 }
-
-private let LAST_BUDGET = "LAST_BUDGET"

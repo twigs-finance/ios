@@ -7,24 +7,20 @@
 //
 
 import SwiftUI
+import TwigsCore
 
 struct SidebarBudgetView: View {
     @EnvironmentObject var authenticationDataStore: AuthenticationDataStore
-    @StateObject var budgetDataStore: BudgetsDataStore
+    @EnvironmentObject var budgetDataStore: BudgetsDataStore
     let apiService: TwigsApiService
     @State var isSelectingBudget = true
     @State var hasSelectedBudget = false
     @State var isAddingTransaction = false
     @State var tabSelection: Int? = 0
     
-    init(_ apiService: TwigsApiService) {
-        self.apiService = apiService
-        self._budgetDataStore = StateObject(wrappedValue: BudgetsDataStore(budgetRepository: apiService, categoryRepository: apiService, transactionRepository: apiService))
-    }
-    
     @ViewBuilder
     var mainView: some View {
-        if case let .success(budget) = budgetDataStore.budget {
+        if case let .success(budget) = self.budgetDataStore.budget {
             NavigationView {
                 List {
                     NavigationLink(
@@ -38,7 +34,7 @@ struct SidebarBudgetView: View {
                     NavigationLink(
                         tag: 1,
                         selection: $tabSelection,
-                        destination: { TransactionListView(budget).navigationBarTitle("transactions") },
+                        destination: { TransactionListView<EmptyView>(budget).navigationBarTitle("transactions") },
                         label: { Label("transactions", systemImage: "dollarsign.circle") })
                         .keyboardShortcut("2")
                     NavigationLink(
@@ -50,14 +46,15 @@ struct SidebarBudgetView: View {
                     NavigationLink(
                         tag: 3,
                         selection: $tabSelection,
-                        destination: { RecurringTransactionsListView(dataStore: RecurringTransactionDataStore(apiService, budgetId: budget.id)).navigationBarTitle("recurring_transactions") },
+                        destination: { RecurringTransactionsListView(dataStore: RecurringTransactionDataStore(apiService), budget: budget).navigationBarTitle("recurring_transactions") },
                         label: { Label("recurring_transactions", systemImage: "arrow.triangle.2.circlepath") })
                         .keyboardShortcut("4")
                     BudgetListsView()
                 }
                 .navigationTitle(budget.name)
-            }.environmentObject(TransactionDataStore(apiService))
-                .environmentObject(CategoryDataStore(apiService))
+            }.navigationViewStyle(.columns)
+                .environmentObject(TransactionDataStore(apiService))
+                .environmentObject(CategoryListDataStore(apiService))
                 .environmentObject(budgetDataStore)
                 .environmentObject(UserDataStore(apiService))
         } else {
@@ -70,13 +67,17 @@ struct SidebarBudgetView: View {
         mainView
             .sheet(isPresented: $authenticationDataStore.showLogin,
                    onDismiss: {
-                self.budgetDataStore.getBudgets()
+                Task {
+                    await self.budgetDataStore.getBudgets()
+                }
             },
                    content: {
                 LoginView()
                     .environmentObject(authenticationDataStore)
                     .onDisappear {
-                        self.budgetDataStore.getBudgets()
+                        Task {
+                            await self.budgetDataStore.getBudgets()
+                        }
                     }
             })
             .interactiveDismissDisabled(true)

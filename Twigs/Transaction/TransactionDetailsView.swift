@@ -7,49 +7,47 @@
 //
 
 import SwiftUI
+import TwigsCore
 
 struct TransactionDetailsView: View {
     @Environment(\.presentationMode) var presentationMode
+    @EnvironmentObject var dataStore: TransactionDataStore
     @State var shouldNavigateUp: Bool = false
-    let transaction: Transaction
-    
+        
     var body: some View {
-        ScrollView {
-            VStack(alignment: .leading) {
-                Text(transaction.title)
-                    .font(.title)
-                Text(transaction.amount.toCurrencyString())
-                    .font(.headline)
-                    .foregroundColor(transaction.expense ? .red : .green)
-                    .multilineTextAlignment(.trailing)
-                Spacer().frame(height: 10)
-                Text(transaction.date.toLocaleString())
-                    .font(.subheadline)
-                    .foregroundColor(.secondary)
-                Spacer().frame(height: 20.0)
-                LabeledField(label: "notes", value: transaction.description, showDivider: true)
-                CategoryLineItem(transaction.categoryId)
-                BudgetLineItem()
-                UserLineItem(transaction.createdBy)
-            }.padding()
+        if let transaction = self.dataStore.transaction {
+            ScrollView {
+                VStack(alignment: .leading) {
+                    Text(transaction.title)
+                        .font(.title)
+                    Text(transaction.amount.toCurrencyString())
+                        .font(.headline)
+                        .foregroundColor(transaction.expense ? .red : .green)
+                        .multilineTextAlignment(.trailing)
+                    Spacer().frame(height: 10)
+                    Text(transaction.date.toLocaleString())
+                        .font(.subheadline)
+                        .foregroundColor(.secondary)
+                    Spacer().frame(height: 20.0)
+                    LabeledField(label: "notes", value: transaction.description, showDivider: true)
+                    CategoryLineItem(transaction.categoryId)
+                    BudgetLineItem()
+                    UserLineItem(transaction.createdBy)
+                }.padding()
+            }
+            .navigationBarItems(trailing: NavigationLink(
+                destination: TransactionEditView(
+                    transaction,
+                    shouldNavigateUp: self.$shouldNavigateUp
+                ).navigationBarTitle("edit")
+            ) {
+                Text("edit")
+            })
+        } else {
+            EmbeddedLoadingView().onAppear {
+                self.presentationMode.wrappedValue.dismiss()
+            }
         }
-        .navigationBarItems(trailing: NavigationLink(
-            destination: TransactionEditView(
-                transaction,
-                shouldNavigateUp: self.$shouldNavigateUp
-            ).navigationBarTitle("edit")
-        ) {
-            Text("edit")
-        })
-            .onAppear {
-                if self.shouldNavigateUp {
-                    self.presentationMode.wrappedValue.dismiss()
-                }
-        }
-    }
-    
-    init(_ transaction: Transaction) {
-        self.transaction = transaction
     }
 }
 
@@ -81,21 +79,23 @@ struct CategoryLineItem: View {
     var body: some View {
         stateContent.onAppear {
             if let id = self.categoryId {
-                categoryDataStore.getCategory(id)
+                Task {
+                    try await categoryDataStore.getCategory(id)
+                }
             }
         }
     }
     
-    var stateContent: AnyView {
-        switch categoryDataStore.category {
-        case .success(let category):
-            return AnyView(LabeledField(label: "category", value: category.title, showDivider: true))
-        default:
-            return AnyView(LabeledField(label: "category", value: "", showDivider: true))
+    @ViewBuilder
+    var stateContent: some View {
+        if let category = self.categoryDataStore.category {
+            LabeledField(label: "category", value: category.title, showDivider: true)
+        } else {
+            LabeledField(label: "category", value: "", showDivider: true)
         }
     }
     
-    @EnvironmentObject var categoryDataStore: CategoryDataStore
+    @EnvironmentObject var categoryDataStore: CategoryListDataStore
     let categoryId: String?
     init(_ categoryId: String?) {
         self.categoryId = categoryId
@@ -104,38 +104,22 @@ struct CategoryLineItem: View {
 
 struct BudgetLineItem: View {
     @EnvironmentObject var budgetDataStore: BudgetsDataStore
-    var budgetName: String {
-        get {
-            if case let .success(budget) = budgetDataStore.budget {
-                return budget.name
-            } else {
-                return ""
-            }
-        }
-    }
     
     var body: some View {
-        LabeledField(label: "budget", value: budgetName, showDivider: true)
+        LabeledField(label: "budget", value: self.budgetDataStore.budget?.name, showDivider: true)
     }
 }
 
 struct UserLineItem: View {
     
     var body: some View {
-        stateContent.onAppear {
-            userDataStore.getUser(userId)
+        LabeledField(label: "registered_by", value: userDataStore.user?.username, showDivider: false).onAppear {
+            Task {
+                try await userDataStore.getUser(userId)
+            }
         }
     }
-    
-    var stateContent: AnyView {
-        switch userDataStore.user {
-        case .success(let user):
-            return AnyView(LabeledField(label: "registered_by", value: user.username, showDivider: false))
-        default:
-            return AnyView(LabeledField(label: "registered_by", value: "", showDivider: false))
-        }
-    }
-    
+        
     @EnvironmentObject var userDataStore: UserDataStore
     let userId: String
     init(_ userId: String) {
@@ -146,7 +130,7 @@ struct UserLineItem: View {
 #if DEBUG
 struct TransactionDetailsView_Previews: PreviewProvider {
     static var previews: some View {
-        TransactionDetailsView(MockTransactionRepository.transaction)
+        TransactionDetailsView()
     }
 }
 #endif

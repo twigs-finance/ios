@@ -7,8 +7,10 @@
 //
 
 import SwiftUI
+import TwigsCore
 
 struct EditTransactionForm: View {
+    @EnvironmentObject var authDataStore: AuthenticationDataStore
     @Binding var title: String
     @Binding var description: String
     @Binding var date: Date
@@ -34,7 +36,7 @@ struct EditTransactionForm: View {
                 }
             }
             BudgetPicker(self.$budgetId)
-            CategoryPicker(self.$budgetId, categoryId: self.$categoryId, expense: self.$type)
+            CategoryPicker(self.$budgetId, categoryId: self.$categoryId, expense: self.$type, apiService: self.authDataStore.apiService)
             if deleteAction != nil {
                 Button(action: {
                     self.showingAlert = true
@@ -57,14 +59,13 @@ struct BudgetPicker: View {
     
     @ViewBuilder
     var body: some View {
-        switch self.budgetsDataStore.budgets {
-        case .success(let budgets):
+        if let budgets = self.budgetsDataStore.budgets {
             Picker(LocalizedStringKey("prompt_budget"), selection: self.budgetId) {
                 ForEach(budgets) { budget in
                     Text(budget.name)
                 }
             }
-        default:
+        } else {
             Picker(LocalizedStringKey("prompt_budget"), selection: self.budgetId) {
                 Text("")
             }
@@ -81,48 +82,32 @@ struct CategoryPicker: View {
     let budgetId: Binding<String>
     var categoryId: Binding<String>
     let expense: Binding<TransactionType>
-    @State var requestId: String = ""
-    var isRequestIdValid: Bool {
-        get {
-            return self.requestId != ""
-            && self.requestId.contains(budgetId.wrappedValue)
-            && self.requestId.split(separator: "-")[1].contains(String(describing: self.expense.wrappedValue == TransactionType.expense))
-        }
-    }
     
     @ViewBuilder
     var body: some View {
-        switch self.categoryDataStore.categories[requestId] {
-        case .success(let categories):
+        if let categories = self.categoryDataStore.categories {
             Picker(LocalizedStringKey("prompt_category"), selection: self.categoryId) {
                 ForEach(categories) { category in
                     Text(category.title)
                 }
-            }.onAppear {
-                if !self.isRequestIdValid {
-                    self.requestId = categoryDataStore.getCategories(budgetId: self.budgetId.wrappedValue, expense: self.expense.wrappedValue == TransactionType.expense, count: nil, page: nil)
-                }
             }
-        case .failure(.loading):
+        } else {
             VStack {
                 ActivityIndicator(isAnimating: .constant(true), style: .medium)
             }.onAppear {
-                if budgetId.wrappedValue != "" {
-                    if !self.isRequestIdValid {
-                        self.requestId = categoryDataStore.getCategories(budgetId: self.budgetId.wrappedValue, expense: self.expense.wrappedValue == TransactionType.expense, count: nil, page: nil)
-                    }
+                Task {
+                    try await self.categoryDataStore.getCategories(budgetId: self.budgetId.wrappedValue, expense: self.expense.wrappedValue == TransactionType.expense, archived: false)
                 }
             }
-        default:
-            EmptyView()
         }
     }
     
-    @EnvironmentObject var categoryDataStore: CategoryDataStore
-    init(_ budgetId: Binding<String>, categoryId: Binding<String>, expense: Binding<TransactionType>) {
+    @StateObject var categoryDataStore: CategoryListDataStore
+    init(_ budgetId: Binding<String>, categoryId: Binding<String>, expense: Binding<TransactionType>, apiService: TwigsApiService) {
         self.budgetId = budgetId
         self.categoryId = categoryId
         self.expense = expense
+        self._categoryDataStore = StateObject(wrappedValue: CategoryListDataStore(apiService))
     }
 }
 

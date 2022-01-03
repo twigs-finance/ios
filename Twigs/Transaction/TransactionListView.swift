@@ -9,22 +9,24 @@
 import SwiftUI
 import Combine
 import Collections
+import TwigsCore
 
-struct TransactionListView: View {
+struct TransactionListView<Content>: View where Content: View {
     @EnvironmentObject var transactionDataStore: TransactionDataStore
     @State var requestId: String = ""
     @State var isAddingTransaction = false
     @State var search: String = ""
-    let header: AnyView?
+    @ViewBuilder
+    let header: (() -> Content)?
     
     @ViewBuilder
-    private func TransactionList(_ transactions: OrderedDictionary<String, [Transaction]>) -> some View {
+    private func TransactionList(_ transactions: OrderedDictionary<String, [TwigsCore.Transaction]>) -> some View {
         if transactions.isEmpty {
             Text("no_transactions")
         } else {
             if let header = header {
                 Section {
-                    header
+                    header()
                 }
             }
             ForEach(transactions.keys, id: \.self) { (key: String) in
@@ -47,8 +49,11 @@ struct TransactionListView: View {
     
     @ViewBuilder
     var body: some View {
-            switch transactionDataStore.transactions[requestId] {
-            case .success(let transactions):
+        InlineLoadingView(
+            action: { try await transactionDataStore.getTransactions(self.budget.id, categoryId: self.category?.id) },
+            errorTextLocalizedStringKey: "Failed to load transactions"
+        ) {
+            if let transactions = self.transactionDataStore.transactions {
                 List {
                     TransactionList(transactions)
                 }
@@ -67,26 +72,13 @@ struct TransactionListView: View {
                         }
                     }
                 )
-            case nil, .failure(.loading):
-                ActivityIndicator(isAnimating: .constant(true), style: .large).onAppear {
-                    if transactionDataStore.transactions[requestId] == nil || self.requestId == "" {
-                        self.requestId = transactionDataStore.getTransactions(self.budget.id, categoryId: self.category?.id)
-                    }
-                }
-            default:
-                // TODO: Handle each network failure type
-                List {
-                    Text("budgets_load_failure")
-                    Button("action_retry", action: {
-                        self.requestId = transactionDataStore.getTransactions(self.budget.id, categoryId: self.category?.id)
-                    })
-                }
             }
+        }
     }
     
     let budget: Budget
-    let category: Category?
-    init(_ budget: Budget, category: Category? = nil, header: AnyView? = nil) {
+    let category: TwigsCore.Category?
+    init(_ budget: Budget, category: TwigsCore.Category? = nil, header: (() -> Content)? = nil) {
         self.budget = budget
         self.category = category
         self.header = header
@@ -94,38 +86,44 @@ struct TransactionListView: View {
 }
 
 struct TransactionListItemView: View {
-    var transaction: Transaction
+    @EnvironmentObject var dataStore: TransactionDataStore
+    var transaction: TwigsCore.Transaction
     
     var body: some View {
         NavigationLink(
-            destination: TransactionDetailsView(transaction)
-                .navigationBarTitle("details", displayMode: .inline)
-        ) {
-            HStack {
-                VStack(alignment: .leading) {
-                    Text(verbatim: transaction.title)
-                        .lineLimit(1)
-                        .font(.headline)
-                    if let description = transaction.description?.trimmingCharacters(in: CharacterSet([" "])), !description.isEmpty {
-                        Text(verbatim: description)
+            tag: self.transaction,
+            selection: self.$dataStore.transaction,
+            destination: {
+                TransactionDetailsView().navigationBarTitle("details", displayMode: .inline)
+            },
+            label: {
+                HStack {
+                    VStack(alignment: .leading) {
+                        Text(verbatim: transaction.title)
                             .lineLimit(1)
-                            .font(.subheadline)
-                            .foregroundColor(.secondary)
+                            .font(.headline)
+                        if let description = transaction.description?.trimmingCharacters(in: CharacterSet([" "])), !description.isEmpty {
+                            Text(verbatim: description)
+                                .lineLimit(1)
+                                .font(.subheadline)
+                                .foregroundColor(.secondary)
+                                .multilineTextAlignment(.trailing)
+                        }
+                    }
+                    Spacer()
+                    VStack(alignment: .trailing) {
+                        Text(verbatim: transaction.amount.toCurrencyString())
+                            .foregroundColor(transaction.expense ? .red : .green)
                             .multilineTextAlignment(.trailing)
                     }
-                }
-                Spacer()
-                VStack(alignment: .trailing) {
-                    Text(verbatim: transaction.amount.toCurrencyString())
-                        .foregroundColor(transaction.expense ? .red : .green)
-                        .multilineTextAlignment(.trailing)
-                }
-                .padding(.leading)
-            }.padding(5.0)
-        }
+                    .padding(.leading)
+                }.padding(5.0)
+
+            }
+        )
     }
     
-    init (_ transaction: Transaction) {
+    init (_ transaction: TwigsCore.Transaction) {
         self.transaction = transaction
     }
 }

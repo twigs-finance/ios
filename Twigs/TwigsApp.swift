@@ -7,31 +7,24 @@
 //
 
 import SwiftUI
+import TwigsCore
 
 @main
 struct TwigsApp: App {
-    @StateObject var authDataStore: AuthenticationDataStore
-    let apiService: TwigsApiService = TwigsInMemoryCacheService()
-
-    init() {
-        let authDataStore = AuthenticationDataStore(self.apiService)
-        self._authDataStore = StateObject(wrappedValue: authDataStore)
-    }
-    
-    @ViewBuilder
-    var mainView: some View {
-        if UIDevice.current.userInterfaceIdiom == .mac || UIDevice.current.userInterfaceIdiom == .pad {
-            SidebarBudgetView(apiService)
-                .environmentObject(authDataStore)
-        } else {
-            TabbedBudgetView(apiService)
-                .environmentObject(authDataStore)
-        }
-    }
-    
+    @AppStorage("BASE_URL") var baseUrl: String = ""
+    @AppStorage("TOKEN") var token: String = ""
+    @AppStorage("USER_ID") var userId: String = ""
+    let apiService: TwigsInMemoryCacheService = TwigsInMemoryCacheService()
+        
     var body: some Scene {
         WindowGroup {
-            mainView
+            MainView(self.apiService, baseUrl: self.$baseUrl, token: self.$token, userId: self.$userId).onAppear {
+                print("TwigsApp.onAppear")
+                if self.baseUrl != "", self.token != "" {
+                    self.apiService.baseUrl = self.baseUrl
+                    self.apiService.token = self.token
+                }
+            }
         }
     }
 }

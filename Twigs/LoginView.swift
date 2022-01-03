@@ -13,20 +13,11 @@ struct LoginView: View {
     @State var server: String = ""
     @State var username: String = ""
     @State var password: String = ""
-    @EnvironmentObject var userData: AuthenticationDataStore
-    var showLoader: Bool {
-        get {
-            if case self.userData.currentUser = Result<User, UserStatus>.failure(UserStatus.authenticating) {
-                return true
-            } else {
-                return false
-            }
-        }
-    }
+    @EnvironmentObject var dataStore: AuthenticationDataStore
     
     var body: some View {
         LoadingView(
-            isShowing: .constant(showLoader),
+            isShowing: $dataStore.loading,
             loadingText: "loading_login"
         ) {
             NavigationView {
@@ -44,11 +35,13 @@ struct LoginView: View {
                         .textContentType(UITextContentType.password)
                         .textContentType(.password)
                     Button("action_login", action: {
-                        self.userData.login(server: self.server, username: self.username, password: self.password)
+                        Task {
+                            try await self.dataStore.login(server: self.server, username: self.username, password: self.password)
+                        }
                     }).buttonStyle(DefaultButtonStyle())
                     Spacer()
                     Text("info_register")
-                    NavigationLink(destination: RegistrationView(self.userData)) {
+                    NavigationLink(destination: RegistrationView(server: self.$server)) {
                         Text("action_register")
                             .buttonStyle(DefaultButtonStyle())
                     }

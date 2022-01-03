@@ -8,27 +8,9 @@
 
 import Foundation
 import SwiftUI
+import TwigsCore
 
-struct Transaction: Identifiable, Hashable, Codable {
-    let id: String
-    let title: String
-    let description: String?
-    let date: Date
-    let amount: Int
-    let categoryId: String?
-    let expense: Bool
-    let createdBy: String
-    let budgetId: String
-}
-
-struct BalanceResponse: Codable {
-    let balance: Int
-}
-
-enum TransactionType: Int, CaseIterable, Identifiable, Hashable {
-    case expense
-    case income
-    
+extension TransactionType {
     var localizedKey: LocalizedStringKey {
         var key: String
         switch self {
@@ -39,11 +21,9 @@ enum TransactionType: Int, CaseIterable, Identifiable, Hashable {
         }
         return LocalizedStringKey(key)
     }
-    
-    var id: TransactionType { self }
 }
 
-extension Transaction {
+extension TwigsCore.Transaction {
     var type: TransactionType {
         if (self.expense) {
             return .expense

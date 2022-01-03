@@ -8,18 +8,11 @@
 
 import Foundation
 import Combine
-
-protocol CategoryRepository {
-    func getCategories(budgetId: String?, expense: Bool?, archived: Bool?, count: Int?, page: Int?) -> AnyPublisher<[Category], NetworkError>
-    func getCategory(_ categoryId: String) -> AnyPublisher<Category, NetworkError>
-    func createCategory(_ category: Category) -> AnyPublisher<Category, NetworkError>
-    func updateCategory(_ category: Category) -> AnyPublisher<Category, NetworkError>
-    func deleteCategory(_ id: String) -> AnyPublisher<Empty, NetworkError>
-}
+import TwigsCore
 
 #if DEBUG
 class MockCategoryRepository: CategoryRepository {
-    static let category = Category(
+    static let category = TwigsCore.Category(
         budgetId: MockBudgetRepository.budget.id,
         id: "3",
         title: "Test Category",
@@ -29,24 +22,24 @@ class MockCategoryRepository: CategoryRepository {
         archived: false
     )
     
-    func getCategories(budgetId: String?, expense: Bool?, archived: Bool?, count: Int?, page: Int?) -> AnyPublisher<[Category], NetworkError> {
-        return Result.Publisher([MockCategoryRepository.category]).eraseToAnyPublisher()
+    func getCategories(budgetId: String?, expense: Bool?, archived: Bool?, count: Int?, page: Int?) async throws -> [TwigsCore.Category] {
+        return [MockCategoryRepository.category]
     }
     
-    func getCategory(_ categoryId: String) -> AnyPublisher<Category, NetworkError> {
-        return Result.Publisher(MockCategoryRepository.category).eraseToAnyPublisher()
+    func getCategory(_ categoryId: String) async throws -> TwigsCore.Category {
+        return MockCategoryRepository.category
     }
     
-    func createCategory(_ category: Category) -> AnyPublisher<Category, NetworkError> {
-        return Result.Publisher(MockCategoryRepository.category).eraseToAnyPublisher()
+    func createCategory(_ category: TwigsCore.Category) async throws -> TwigsCore.Category {
+        return MockCategoryRepository.category
     }
 
-    func updateCategory(_ category: Category) -> AnyPublisher<Category, NetworkError> {
-        return Result.Publisher(MockCategoryRepository.category).eraseToAnyPublisher()
+    func updateCategory(_ category: TwigsCore.Category) async throws -> TwigsCore.Category {
+        return MockCategoryRepository.category
     }
     
-    func deleteCategory(_ id: String) -> AnyPublisher<Empty, NetworkError> {
-        return Result.Publisher(.success(Empty())).eraseToAnyPublisher()
+    func deleteCategory(_ id: String) async throws {
+        
     }
 }
 

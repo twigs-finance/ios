@@ -8,14 +8,7 @@
 
 import Foundation
 import Combine
-
-protocol RecurringTransactionsRepository {
-    func getRecurringTransactions(budgetId: String) -> AnyPublisher<[RecurringTransaction], NetworkError>
-    func getRecurringTransaction(_ id: String) -> AnyPublisher<RecurringTransaction, NetworkError>
-    func createRecurringTransaction(_ transaction: RecurringTransaction) -> AnyPublisher<RecurringTransaction, NetworkError>
-    func updateRecurringTransaction(_ transaction: RecurringTransaction) -> AnyPublisher<RecurringTransaction, NetworkError>
-    func deleteRecurringTransaction(_ id: String) -> AnyPublisher<Empty, NetworkError>
-}
+import TwigsCore
 
 #if DEBUG
 class MockRecurringTransactionRepository: RecurringTransactionsRepository {
@@ -33,24 +26,23 @@ class MockRecurringTransactionRepository: RecurringTransactionsRepository {
         budgetId: MockBudgetRepository.budget.id
     )
 
-    func getRecurringTransactions(budgetId: String) -> AnyPublisher<[RecurringTransaction], NetworkError> {
-        return Result.Publisher([MockRecurringTransactionRepository.transaction]).eraseToAnyPublisher()
+    func getRecurringTransactions(_ budgetId: String) async throws -> [RecurringTransaction] {
+        return [MockRecurringTransactionRepository.transaction]
     }
     
-    func getRecurringTransaction(_ id: String) -> AnyPublisher<RecurringTransaction, NetworkError> {
-        return Result.Publisher(MockRecurringTransactionRepository.transaction).eraseToAnyPublisher()
+    func getRecurringTransaction(_ id: String) async throws -> RecurringTransaction {
+        return MockRecurringTransactionRepository.transaction
     }
     
-    func createRecurringTransaction(_ transaction: RecurringTransaction) -> AnyPublisher<RecurringTransaction, NetworkError> {
-        return Result.Publisher(MockRecurringTransactionRepository.transaction).eraseToAnyPublisher()
+    func createRecurringTransaction(_ transaction: RecurringTransaction) async throws -> RecurringTransaction {
+        return MockRecurringTransactionRepository.transaction
     }
 
-    func updateRecurringTransaction(_ transaction: RecurringTransaction) -> AnyPublisher<RecurringTransaction, NetworkError> {
-        return Result.Publisher(MockRecurringTransactionRepository.transaction).eraseToAnyPublisher()
+    func updateRecurringTransaction(_ transaction: RecurringTransaction) async throws -> RecurringTransaction {
+        return MockRecurringTransactionRepository.transaction
     }
     
-    func deleteRecurringTransaction(_ id: String) -> AnyPublisher<Empty, NetworkError> {
-        return Result.Publisher(.success(Empty())).eraseToAnyPublisher()
+    func deleteRecurringTransaction(_ id: String) async throws {
     }
 }
 #endif

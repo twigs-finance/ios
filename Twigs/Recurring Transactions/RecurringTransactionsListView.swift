@@ -7,20 +7,24 @@
 //
 
 import SwiftUI
+import TwigsCore
 
 struct RecurringTransactionsListView: View {
     @ObservedObject var dataStore: RecurringTransactionDataStore
+    let budget: Budget
     
     var body: some View {
-        switch dataStore.transactions {
-        case .success(let transactions):
+        InlineLoadingView(
+            action: {
+                return try await self.dataStore.getRecurringTransactions(self.budget.id)
+        },
+            errorTextLocalizedStringKey: "Failed to load recurring transactions"
+        ) { (transactions: [RecurringTransaction]) in
             List {
                 ForEach(transactions) { transaction in
                     RecurringTransactionsListItemView(transaction)
                 }
             }
-        default:
-            ActivityIndicator(isAnimating: .constant(true), style: .medium)
         }
     }
 }
@@ -28,7 +32,7 @@ struct RecurringTransactionsListView: View {
 #if DEBUG
 struct RecurringTransactionView_Previews: PreviewProvider {
     static var previews: some View {
-        RecurringTransactionsListView(dataStore: RecurringTransactionDataStore(MockRecurringTransactionRepository(), budgetId: ""))
+        RecurringTransactionsListView(dataStore: RecurringTransactionDataStore(MockRecurringTransactionRepository()), budget: MockBudgetRepository.budget)
     }
 }
 #endif

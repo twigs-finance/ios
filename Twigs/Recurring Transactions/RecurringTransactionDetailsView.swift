@@ -7,6 +7,7 @@
 //
 
 import SwiftUI
+import TwigsCore
 
 struct RecurringTransactionDetailsView: View {
     let transaction: RecurringTransaction

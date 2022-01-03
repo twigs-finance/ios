@@ -7,47 +7,71 @@
 //
 
 import Foundation
-import Combine
+import TwigsCore
 
 class TwigsInMemoryCacheService: TwigsApiService {
-    var budgets = Set<Budget>()
-    var categories = Set<Category>()
-    var transactions = Set<Transaction>()
+    private var budgets = Set<Budget>()
+    private var categories = Set<TwigsCore.Category>()
+    private var transactions = Set<Transaction>()
     
+    public init() {
+        super.init(RequestHelper())
+    }
+
     // MARK: Budgets
-    override func getBudgets(count: Int? = nil, page: Int? = nil) -> AnyPublisher<[Budget], NetworkError> {
+    override func getBudgets(count: Int? = nil, page: Int? = nil) async throws -> [Budget] {
         let results = budgets.sorted { (first, second) -> Bool in
             return first.name < second.name
         }
         if results.isEmpty {
-            return super.getBudgets(count: count, page: page).map { (budgets: [Budget]) in
-                self.addBudgets(budgets)
-                return budgets
-            }.eraseToAnyPublisher()
+            let budgets = try await super.getBudgets(count: count, page: page)
+            self.addBudgets(budgets)
+            return budgets
         }
-        return Result.Publisher(.success(results.slice(count: count, page: page))).eraseToAnyPublisher()
+        return results.slice(count: count, page: page)
     }
     
-    override func getBudget(_ id: String) -> AnyPublisher<Budget, NetworkError> {
+    override func getBudget(_ id: String) async throws -> Budget {
         guard let budget = budgets.first(where: { $0.id == id }) else {
-            return super.getBudget(id).map { budget in
-                self.addBudget(budget)
-                return budget
-            }.eraseToAnyPublisher()
+            let budget = try await super.getBudget(id)
+            self.addBudget(budget)
+            return budget
         }
-        return Result.Publisher(.success(budget)).eraseToAnyPublisher()
+        return budget
     }
     
-    func addBudgets(_ budgets: [Budget]) {
+    override func newBudget(_ budget: Budget) async throws -> Budget {
+        let newBudget = try await super.newBudget(budget)
+        self.addBudget(newBudget)
+        return newBudget
+    }
+    
+    override func updateBudget(_ budget: Budget) async throws -> Budget {
+        let newBudget = try await super.updateBudget(budget)
+        if let index = self.budgets.firstIndex(where: {$0.id == budget.id}) {
+            self.budgets.remove(at: index)
+        }
+        self.addBudget(newBudget)
+        return newBudget
+    }
+    
+    override func deleteBudget(_ id: String) async throws {
+        try await super.deleteBudget(id)
+        if let index = self.budgets.firstIndex(where: {$0.id == id}) {
+            self.budgets.remove(at: index)
+        }
+    }
+    
+    private func addBudgets(_ budgets: [Budget]) {
         budgets.forEach { addBudget($0) }
     }
     
-    func addBudget(_ budget: Budget) {
+    private func addBudget(_ budget: Budget) {
         self.budgets.insert(budget)
     }
     
     // MARK: Categories
-    override func getCategories(budgetId: String? = nil, expense: Bool? = nil, archived: Bool? = nil, count: Int? = nil, page: Int? = nil) -> AnyPublisher<[Category], NetworkError> {
+    override func getCategories(budgetId: String? = nil, expense: Bool? = nil, archived: Bool? = nil, count: Int? = nil, page: Int? = nil) async throws -> [TwigsCore.Category] {
         var results = categories
         if budgetId != nil {
             results = categories.filter { $0.budgetId == budgetId }
@@ -59,56 +83,50 @@ class TwigsInMemoryCacheService: TwigsApiService {
             results = results.filter { $0.archived == archived }
         }
         if results.isEmpty {
-            return super.getCategories(budgetId: budgetId, expense: expense, archived: archived, count: count, page: page).map { (categories: [Category]) in
-                self.addCategories(categories)
-                return categories
-            }.eraseToAnyPublisher()
+            let categories = try await super.getCategories(budgetId: budgetId, expense: expense, archived: archived, count: count, page: page)
+            self.addCategories(categories)
+            return categories
         }
         let sortedResults = results.sorted { $0.title < $1.title }
-        return Result.Publisher(.success(sortedResults.slice(count: count, page: page))).eraseToAnyPublisher()
+        return sortedResults.slice(count: count, page: page)
     }
     
-    override func getCategory(_ id: String) -> AnyPublisher<Category, NetworkError> {
+    override func getCategory(_ id: String) async throws -> TwigsCore.Category {
         guard let category = categories.first(where: { $0.id == id }) else {
-            return super.getCategory(id).map { category in
-                self.addCategory(category)
-                return category
-            }.eraseToAnyPublisher()
+            let category = try await super.getCategory(id)
+            self.addCategory(category)
+            return category
         }
-        return Result.Publisher(.success(category)).eraseToAnyPublisher()
+        return category
     }
     
-    func addCategories(_ categories: [Category]) {
+    private func addCategories(_ categories: [TwigsCore.Category]) {
         categories.forEach { addCategory($0) }
     }
     
-    func addCategory(_ category: Category) {
+    private func addCategory(_ category: TwigsCore.Category) {
         self.categories.insert(category)
     }
     
-    override func createCategory(_ category: Category) -> AnyPublisher<Category, NetworkError> {
-        return super.createCategory(category).map {
-            self.categories.insert(category)
-            return $0
-        }.eraseToAnyPublisher()
+    override func createCategory(_ category: TwigsCore.Category) async throws -> TwigsCore.Category {
+        let newCategory = try await super.createCategory(category)
+        self.categories.insert(newCategory)
+        return newCategory
     }
     
-    override func updateCategory(_ category: Category) -> AnyPublisher<Category, NetworkError> {
-        return super.updateCategory(category).map {
-            self.removeCategory(category.id)
-            self.categories.insert(category)
-            return $0
-        }.eraseToAnyPublisher()
+    override func updateCategory(_ category: TwigsCore.Category) async throws -> TwigsCore.Category {
+        let newCategory = try await super.updateCategory(category)
+        self.removeCategory(newCategory.id)
+        self.categories.insert(newCategory)
+        return newCategory
     }
     
-    override func deleteCategory(_ id: String) -> AnyPublisher<Empty, NetworkError> {
-        return super.deleteCategory(id).map {
-            self.removeCategory(id)
-            return $0
-        }.eraseToAnyPublisher()
+    override func deleteCategory(_ id: String) async throws {
+        try await super.deleteCategory(id)
+        self.removeCategory(id)
     }
-
-    func removeCategory(_ id: String) {
+    
+    private func removeCategory(_ id: String) {
         if let index = self.categories.firstIndex(where: { $0.id == id }) {
             self.categories.remove(at: index)
         }

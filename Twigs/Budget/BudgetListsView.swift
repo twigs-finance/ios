@@ -9,27 +9,21 @@
 
 import SwiftUI
 import Combine
+import TwigsCore
 
 struct BudgetListsView: View {
     @EnvironmentObject var budgetDataStore: BudgetsDataStore
     
-    @ViewBuilder
     var body: some View {
-        switch budgetDataStore.budgets {
-        case .success(let budgets):
+        InlineLoadingView(
+            action: { return try await self.budgetDataStore.getBudgets(count: nil, page: nil) },
+            errorTextLocalizedStringKey: "budgets_load_failure"
+        ) { (budgets: [Budget]) in
             Section("budgets") {
                 ForEach(budgets) { budget in
                     BudgetListItemView(budget)
                 }
             }
-        case .failure(.loading):
-            ActivityIndicator(isAnimating: .constant(true), style: .large)
-        default:
-            // TODO: Handle each network failure type
-            Text("budgets_load_failure").navigationBarTitle("budgets")
-            Button("action_retry", action: {
-                self.budgetDataStore.getBudgets()
-            })
         }
     }
 }

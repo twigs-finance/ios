@@ -7,20 +7,17 @@
 //
 
 import SwiftUI
+import TwigsCore
 
 struct TabbedBudgetView: View {
+    @EnvironmentObject var authDataStore: AuthenticationDataStore
     @EnvironmentObject var authenticationDataStore: AuthenticationDataStore
-    @StateObject var budgetDataStore: BudgetsDataStore
+    @EnvironmentObject var budgetDataStore: BudgetsDataStore
     let apiService: TwigsApiService
     @State var isSelectingBudget = true
     @State var hasSelectedBudget = false
     @State var isAddingTransaction = false
     @State var tabSelection: Int = 0
-    
-    init(_ apiService: TwigsApiService) {
-        self.apiService = apiService
-        self._budgetDataStore = StateObject(wrappedValue: BudgetsDataStore(budgetRepository: apiService, categoryRepository: apiService, transactionRepository: apiService))
-    }
     
     @ViewBuilder
     var mainView: some View {
@@ -42,7 +39,7 @@ struct TabbedBudgetView: View {
                 .tag(0)
                 .keyboardShortcut("1")
                 NavigationView {
-                    TransactionListView(budget)
+                    TransactionListView<EmptyView>(budget)
                         .sheet(isPresented: $isAddingTransaction,
                                onDismiss: {
                             isAddingTransaction = false
@@ -70,7 +67,7 @@ struct TabbedBudgetView: View {
                 .tag(2)
                 .keyboardShortcut("3")
                 NavigationView {
-                    RecurringTransactionsListView(dataStore: RecurringTransactionDataStore(apiService, budgetId: budget.id))
+                    RecurringTransactionsListView(dataStore: RecurringTransactionDataStore(apiService), budget: budget)
                         .navigationBarTitle("recurring_transactions")
                 }
                 .tabItem {
@@ -80,7 +77,7 @@ struct TabbedBudgetView: View {
                 .tag(3)
                 .keyboardShortcut("4")
             }.environmentObject(TransactionDataStore(apiService))
-                .environmentObject(CategoryDataStore(apiService))
+                .environmentObject(CategoryListDataStore(apiService))
                 .environmentObject(budgetDataStore)
                 .environmentObject(UserDataStore(apiService))
         } else {
@@ -91,13 +88,17 @@ struct TabbedBudgetView: View {
     var body: some View {
         mainView.sheet(isPresented: $authenticationDataStore.showLogin,
                        onDismiss: {
-            self.budgetDataStore.getBudgets()
+            Task {
+                await self.budgetDataStore.getBudgets()
+            }
         },
                        content: {
             LoginView()
                 .environmentObject(authenticationDataStore)
                 .onDisappear {
-                    self.budgetDataStore.getBudgets()
+                    Task {
+                        await self.budgetDataStore.getBudgets()
+                    }
                 }
         }).sheet(isPresented: $budgetDataStore.showBudgetSelection,
                  content: {

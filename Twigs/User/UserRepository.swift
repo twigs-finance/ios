@@ -8,18 +8,9 @@
 
 import Foundation
 import Combine
-
-protocol UserRepository {
-    func setToken(_ token: String)
-    func getUser(_ id: String) -> AnyPublisher<User, NetworkError>
-    func searchUsers(_ withUsername: String) -> AnyPublisher<[User], NetworkError>
-    func setServer(_ server: String)
-    func login(username: String, password: String) -> AnyPublisher<LoginResponse, NetworkError>
-    func register(username: String, email: String, password: String) -> AnyPublisher<User, NetworkError>
-}
+import TwigsCore
 
 #if DEBUG
-
 class MockUserRepository: UserRepository {
     static let loginResponse = LoginResponse(token: "token", expiration: "2020-01-01T12:00:00Z", userId: "0")
     static let user = User(id: "0", username: "root", email: "root@localhost", avatar: nil)
@@ -29,27 +20,23 @@ class MockUserRepository: UserRepository {
         MockUserRepository.token = token
     }
     
-    func getUser(_ id: String) -> AnyPublisher<User, NetworkError> {
-        return Result<User, NetworkError>.Publisher(MockUserRepository.user)
-            .eraseToAnyPublisher()
+    func getUser(_ id: String) async throws -> User {
+        return MockUserRepository.user
     }
     
-    func searchUsers(_ withUsername: String) -> AnyPublisher<[User], NetworkError> {
-        return Result<[User], NetworkError>.Publisher([MockUserRepository.user])
-            .eraseToAnyPublisher()
+    func searchUsers(_ withUsername: String) async throws -> [User] {
+        return [MockUserRepository.user]
     }
     
     func setServer(_ server: String) {
     }
     
-    func login(username: String, password: String) -> AnyPublisher<LoginResponse, NetworkError> {
-        return Result<LoginResponse, NetworkError>.Publisher(MockUserRepository.loginResponse)
-            .eraseToAnyPublisher()
+    func login(username: String, password: String) async throws -> LoginResponse {
+        return MockUserRepository.loginResponse
     }
     
-    func register(username: String, email: String, password: String) -> AnyPublisher<User, NetworkError> {
-        return Result<User, NetworkError>.Publisher(MockUserRepository.user)
-            .eraseToAnyPublisher()
+    func register(username: String, email: String, password: String) async throws -> User {
+        return MockUserRepository.user
     }
 }
 

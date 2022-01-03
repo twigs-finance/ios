@@ -9,6 +9,25 @@
 import Foundation
 import SwiftUI
 
+extension Date {
+    static var firstOfMonth: Date {
+        get {
+            return Calendar.current.dateComponents([.calendar, .year,.month], from: Date()).date!
+        }
+    }
+    
+    static let localeDateFormatter: DateFormatter = {
+        let dateFormatter = DateFormatter()
+        dateFormatter.locale = Locale.current
+        dateFormatter.dateFormat = DateFormatter.dateFormat(fromTemplate: "yyyyMMdd", options: 0, locale: Locale.current)
+        return dateFormatter
+    }()
+    
+    func toLocaleString() -> String {
+        return Date.localeDateFormatter.string(from: self)
+    }
+}
+
 extension Int {
     func toDecimalString() -> String {
         return String(format: "%.2f", Double(self) / 100.0)
@@ -26,5 +45,20 @@ extension Int {
 extension View {
     func eraseToAnyView() -> AnyView {
         return AnyView(self)
+    }
+}
+
+extension Array where Element: Identifiable {
+    mutating func remove(byId id: Element.ID) -> Element? {
+        if let index = firstIndex(where: { $0.id == id} ) {
+            return remove(at: index)
+        }
+        return nil
+    }
+    
+    func filter(withoutId id: Element.ID) -> [Element] {
+        var updated = self
+        _ = updated.remove(byId: id)
+        return updated
     }
 }

@@ -8,35 +8,32 @@
 
 import SwiftUI
 import Combine
+import TwigsCore
 
 struct CategoryListView: View {
-    @EnvironmentObject var categoryDataStore: CategoryDataStore
+    @EnvironmentObject var categoryDataStore: CategoryListDataStore
     @State var requestId: String = ""
 
     @ViewBuilder
     var body: some View {
-        switch self.categoryDataStore.categories[requestId] {
-        case .success(let categories):
-                Section {
-                    List(categories) { category in
-                        CategoryListItemView(budget, category: category)
-                    }
-                }
-        case .failure(.loading):
-            VStack {
-                ActivityIndicator(isAnimating: .constant(true), style: .large)
-                    .onAppear {
-                        if requestId == "" {
-                            requestId = categoryDataStore.getCategories(budgetId: budget.id, archived: false)
+        InlineLoadingView(
+            action: { try await self.categoryDataStore.getCategories(budgetId: budget.id, expense: nil, archived: nil, count: nil, page: nil) },
+            errorTextLocalizedStringKey: "Failed to load categories"
+        ) {
+            if let categories = self.categoryDataStore.categories {
+                List {
+                    Section {
+                        ForEach(categories.filter { !$0.archived }) { category in
+                            CategoryListItemView(budget, category: category)
                         }
                     }
+                    Section("Archived") {
+                        ForEach(categories.filter { $0.archived }) { category in
+                            CategoryListItemView(budget, category: category)
+                        }
+                    }
+                }
             }
-        default:
-            // TODO: Handle each network failure type
-            Text("budgets_load_failure")
-            Button("action_retry", action: {
-                requestId = categoryDataStore.getCategories(budgetId: budget.id, archived: false)
-            })
         }
     }
     
@@ -47,9 +44,9 @@ struct CategoryListView: View {
 }
 
 struct CategoryListItemView: View {
-    var category: Category
+    let category: TwigsCore.Category
     let budget: Budget
-    @State var sumId: String = ""
+    @State var sum: Int? = nil
     @EnvironmentObject var transactionDataStore: TransactionDataStore
 
     var progressTintColor: Color {
@@ -67,31 +64,36 @@ struct CategoryListItemView: View {
             destination: CategoryDetailsView(category, budget: self.budget)
                 .navigationBarTitle(category.title)
         ) {
-            VStack(alignment: .leading) {
-                HStack {
-                    Text(verbatim: category.title)
-                    Spacer()
-                    remaining
+            InlineLoadingView(action: {
+                self.sum = try await transactionDataStore.sum(categoryId: category.id)
+            }, errorTextLocalizedStringKey: "Failed to load category balance") {
+                VStack(alignment: .leading) {
+                    HStack {
+                        Text(verbatim: category.title)
+                        Spacer()
+                        remaining
+                    }
+                    if category.description?.isEmpty == false {
+                        Text(verbatim: category.description!)
+                            .font(.subheadline)
+                            .foregroundColor(.secondary)
+                            .lineLimit(1)
+                    }
+                    progressView
                 }
-                if category.description?.isEmpty == false {
-                    Text(verbatim: category.description!)
-                        .font(.subheadline)
-                        .foregroundColor(.secondary)
-                        .lineLimit(1)
-                }
-                progressView
+
             }
         }.onAppear {
-            if self.sumId == "" {
-                self.sumId = transactionDataStore.sum(categoryId: category.id)
+            Task {
+                self.sum = try await transactionDataStore.sum(categoryId: category.id)
             }
         }
     }
     
     var progressView: ProgressView {
         var balance: Float = 0.0
-        if case .success(let sum) = transactionDataStore.sums[sumId] {
-            balance = Float(abs(sum.balance))
+        if let sum = self.sum {
+            balance = Float(abs(sum))
         }
         return ProgressView(value: balance, maxValue: Float(category.amount), progressTintColor: progressTintColor, progressBarHeight: 4.0)
     }
@@ -99,8 +101,8 @@ struct CategoryListItemView: View {
     var remaining: Text {
         var remaining = ""
         var color = Color.primary
-        if case .success(let sum) = transactionDataStore.sums[sumId] {
-            let amount = category.amount - abs(sum.balance)
+        if let sum = self.sum {
+            let amount = category.amount - abs(sum)
             if amount < 0 {
                 remaining = abs(amount).toCurrencyString() + " over budget"
                 if category.expense {
@@ -115,7 +117,7 @@ struct CategoryListItemView: View {
         return Text(verbatim: remaining).foregroundColor(color)
     }
     
-    init (_ budget: Budget, category: Category) {
+    init (_ budget: Budget, category: TwigsCore.Category) {
         self.budget = budget
         self.category = category
     }

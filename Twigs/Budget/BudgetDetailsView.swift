@@ -7,6 +7,7 @@
 //
 
 import SwiftUI
+import TwigsCore
 
 struct BudgetDetailsView: View {
     @EnvironmentObject var budgetDataStore: BudgetsDataStore
@@ -14,56 +15,81 @@ struct BudgetDetailsView: View {
 
     @ViewBuilder
     var body: some View {
-        switch budgetDataStore.overview {
-        case .failure(.loading):
-            ActivityIndicator(isAnimating: .constant(true), style: .large)
-        case .success(let overview):
-            List {
-                Section(overview.budget.name) {
-                    VStack(alignment: .leading) {
-                        if let description = overview.budget.description {
-                            Text(description)
-                        }
-                        HStack {
-                            Text("current_balance")
-                            Text(verbatim: overview.balance.toCurrencyString())
-                                .foregroundColor(overview.balance < 0 ? .red : .green)
-                        }
+        InlineLoadingView(
+            data: self.$budgetDataStore.overview,
+            action: { await self.budgetDataStore.loadOverview(self.budget) },
+            errorTextLocalizedStringKey: "budgets_load_failure"
+        ) {
+            if let overview = self.budgetDataStore.overview {
+                List {
+                    Section(overview.budget.name) {
+                        DescriptionOverview(overview: overview)
                     }
-                }
-                Section("income") {
-                    VStack(alignment: .leading) {
-                        HStack {
-                            Text("expected")
-                            Text(verbatim: overview.expectedIncome.toCurrencyString())
-                        }
-                        ProgressView(value: Float(overview.expectedIncome), maxValue: Float(max(overview.expectedIncome, overview.actualIncome)), progressTintColor: .gray, progressBarHeight: 10.0, progressBarCornerRadius: 4.0)
-                        HStack {
-                            Text("actual")
-                            Text(verbatim: overview.actualIncome.toCurrencyString())
-                                .foregroundColor(.green)
-                        }
-                        ProgressView(value: Float(overview.actualIncome), maxValue: Float(max(overview.expectedIncome, overview.actualIncome)), progressTintColor: .green, progressBarHeight: 10.0, progressBarCornerRadius: 4.0)
+                    Section("income") {
+                        IncomeOverview(overview: overview)
                     }
-                }
-                Section("expenses") {
-                    VStack(alignment: .leading) {
-                        HStack {
-                            Text("expected")
-                            Text(verbatim: overview.expectedExpenses.toCurrencyString())
-                        }
-                        ProgressView(value: Float(overview.expectedExpenses), maxValue: Float(max(overview.expectedExpenses, overview.actualExpenses)), progressTintColor: .gray, progressBarHeight: 10.0, progressBarCornerRadius: 4.0)
-                        HStack {
-                            Text("actual")
-                            Text(verbatim: overview.actualExpenses.toCurrencyString())
-                                .foregroundColor(.red)
-                        }
-                        ProgressView(value: Float(overview.actualExpenses), maxValue: Float(max(overview.expectedExpenses, overview.actualExpenses)), progressTintColor: .red, progressBarHeight: 10.0, progressBarCornerRadius: 4.0)
+                    Section("expenses") {
+                        ExpensesOverview(overview: overview)
                     }
-                }
-            }.listStyle(.insetGrouped)
-        default:
-            Text("An error has ocurred")
+                }.listStyle(.insetGrouped)
+            }
+        }
+    }
+}
+
+struct DescriptionOverview: View {
+    let overview: BudgetOverview
+    
+    var body: some View {
+        VStack(alignment: .leading) {
+            if let description = overview.budget.description {
+                Text(description)
+            }
+            HStack {
+                Text("current_balance")
+                Text(verbatim: overview.balance.toCurrencyString())
+                    .foregroundColor(overview.balance < 0 ? .red : .green)
+            }
+        }
+    }
+}
+
+struct IncomeOverview: View {
+    let overview: BudgetOverview
+    
+    var body: some View {
+        VStack(alignment: .leading) {
+            HStack {
+                Text("expected")
+                Text(verbatim: overview.expectedIncome.toCurrencyString())
+            }
+            ProgressView(value: Float(overview.expectedIncome), maxValue: Float(max(overview.expectedIncome, overview.actualIncome)), progressTintColor: .gray, progressBarHeight: 10.0, progressBarCornerRadius: 4.0)
+            HStack {
+                Text("actual")
+                Text(verbatim: overview.actualIncome.toCurrencyString())
+                    .foregroundColor(.green)
+            }
+            ProgressView(value: Float(overview.actualIncome), maxValue: Float(max(overview.expectedIncome, overview.actualIncome)), progressTintColor: .green, progressBarHeight: 10.0, progressBarCornerRadius: 4.0)
+        }
+    }
+}
+
+struct ExpensesOverview: View {
+    let overview: BudgetOverview
+    
+    var body: some View {
+        VStack(alignment: .leading) {
+            HStack {
+                Text("expected")
+                Text(verbatim: overview.expectedExpenses.toCurrencyString())
+            }
+            ProgressView(value: Float(overview.expectedExpenses), maxValue: Float(max(overview.expectedExpenses, overview.actualExpenses)), progressTintColor: .gray, progressBarHeight: 10.0, progressBarCornerRadius: 4.0)
+            HStack {
+                Text("actual")
+                Text(verbatim: overview.actualExpenses.toCurrencyString())
+                    .foregroundColor(.red)
+            }
+            ProgressView(value: Float(overview.actualExpenses), maxValue: Float(max(overview.expectedExpenses, overview.actualExpenses)), progressTintColor: .red, progressBarHeight: 10.0, progressBarCornerRadius: 4.0)
         }
     }
 }

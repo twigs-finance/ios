@@ -9,14 +9,18 @@
 import SwiftUI
 
 struct RegistrationView: View {
+    @Binding var server: String
     @State var username: String = ""
     @State var email: String = ""
     @State var password: String = ""
     @State var confirmedPassword: String = ""
-    @ObservedObject var userData: AuthenticationDataStore
+    @EnvironmentObject var dataStore: AuthenticationDataStore
     
     var body: some View {
         VStack {
+            TextField(LocalizedStringKey("prompt_server"), text: self.$server)
+                .textFieldStyle(RoundedBorderTextFieldStyle())
+                .textContentType(.URL)
             TextField("prompt_username", text: self.$username)
                 .autocapitalization(UITextAutocapitalizationType.none)
                 .textFieldStyle(RoundedBorderTextFieldStyle())
@@ -32,18 +36,17 @@ struct RegistrationView: View {
                 .textFieldStyle(RoundedBorderTextFieldStyle())
                 .textContentType(UITextContentType.newPassword)
             Button("action_register", action: {
-                self.userData.register(
-                    username: self.username,
-                    email: self.email,
-                    password: self.password,
-                    confirmPassword: self.confirmedPassword
-                )
+                Task {
+                    try await self.dataStore.register(
+                        server: self.server,
+                        username: self.username,
+                        email: self.email,
+                        password: self.password,
+                        confirmPassword: self.confirmedPassword
+                    )
+                }
             }).buttonStyle(DefaultButtonStyle())
         }.padding()
-    }
-    
-    init(_ userData: AuthenticationDataStore) {
-        self.userData = userData
     }
 }
 

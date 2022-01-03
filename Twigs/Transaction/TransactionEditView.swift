@@ -7,8 +7,10 @@
 //
 
 import SwiftUI
+import TwigsCore
 
 struct TransactionEditView: View {
+    @State var loading: Bool = false
     @Environment(\.presentationMode) var presentationMode
     @State var title: String
     @State var description: String
@@ -19,22 +21,16 @@ struct TransactionEditView: View {
     @State var categoryId: String
     var createdBy: String {
         get {
-            try! authDataStore.currentUser.get().id
+            return authDataStore.currentUser!.id
         }
     }
     let id: String?
     var shouldNavigateUp: Binding<Bool>
     
-    var stateContent: AnyView {
-        switch transactionDataStore.transaction {
-        case .success(_), .failure(.deleted):
-            self.shouldNavigateUp.wrappedValue = true
-            self.presentationMode.wrappedValue.dismiss()
-            return AnyView(EmptyView())
-        case .failure(.loading):
-            return AnyView(EmbeddedLoadingView())
-        default:
-            return AnyView(EditTransactionForm(
+    @ViewBuilder
+    var stateContent: some View {
+        if let _ = self.transactionDataStore.transaction {
+            EditTransactionForm(
                 title: self.$title,
                 description: self.$description,
                 date: self.$date,
@@ -43,9 +39,16 @@ struct TransactionEditView: View {
                 budgetId: self.$budgetId,
                 categoryId: self.$categoryId,
                 deleteAction: {
-                    self.transactionDataStore.deleteTransaction(self.id!)
+                    Task {
+                        self.loading = true
+                        try await self.transactionDataStore.deleteTransaction(self.id!)
+                    }
+                })
+        } else {
+            EmbeddedLoadingView().onAppear {
+                self.shouldNavigateUp.wrappedValue = true
+                self.presentationMode.wrappedValue.dismiss()
             }
-            ))
         }
     }
     
@@ -53,23 +56,25 @@ struct TransactionEditView: View {
         stateContent
             .navigationBarItems(trailing: Button("save") {
                 let amount = Double(self.amount) ?? 0.0
-                self.transactionDataStore.saveTransaction(Transaction(
-                    id: self.id ?? "",
-                    title: self.title,
-                    description: self.description,
-                    date: self.date,
-                    amount: Int(amount * 100.0),
-                    categoryId: self.categoryId,
-                    expense: self.type == TransactionType.expense,
-                    createdBy: self.createdBy,
-                    budgetId: self.budgetId
-                ))
+                Task {
+                    try await self.transactionDataStore.saveTransaction(TwigsCore.Transaction(
+                        id: self.id ?? "",
+                        title: self.title,
+                        description: self.description,
+                        date: self.date,
+                        amount: Int(amount * 100.0),
+                        categoryId: self.categoryId,
+                        expense: self.type == TransactionType.expense,
+                        createdBy: self.createdBy,
+                        budgetId: self.budgetId
+                    ))
+                }
             })
     }
     
     @EnvironmentObject var transactionDataStore: TransactionDataStore
     @EnvironmentObject var authDataStore: AuthenticationDataStore
-    init(_ transaction: Transaction, shouldNavigateUp: Binding<Bool>) {
+    init(_ transaction: TwigsCore.Transaction, shouldNavigateUp: Binding<Bool>) {
         self.id = transaction.id
         self._title = State<String>(initialValue: transaction.title)
         self._description = State<String>(initialValue: transaction.description ?? "")

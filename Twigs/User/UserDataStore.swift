@@ -8,29 +8,18 @@
 
 import Foundation
 import Combine
+import TwigsCore
 
-class UserDataStore: ObservableObject {
-    private var currentRequest: AnyCancellable? = nil
-    @Published var user: Result<User, NetworkError> = .failure(.loading)
+class UserDataStore: AsyncObservableObject {
+    @Published var user: AsyncData<User> = .empty
 
-    func getUser(_ id: String) {
-        self.user = .failure(.loading)
-        
-        self.currentRequest = userRepository.getUser(id)
-        .receive(on: DispatchQueue.main)
-        .sink(receiveCompletion: { (status) in
-            switch status {
-            case .finished:
-                self.currentRequest = nil
-                return
-            case .failure(let error):
-                self.user = .failure(error)
-                return
-            }
-        }, receiveValue: { (user) in
+    func getUser(_ id: String) async {
+        do {
+            let user = try await self.userRepository.getUser(id)
             self.user = .success(user)
-        })
-
+        } catch {
+            self.user = .error(error)
+        }
     }
     
     private let userRepository: UserRepository
