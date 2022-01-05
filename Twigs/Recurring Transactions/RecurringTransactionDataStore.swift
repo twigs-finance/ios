@@ -11,10 +11,20 @@ import Combine
 import Collections
 import TwigsCore
 
+@MainActor
 class RecurringTransactionDataStore: AsyncObservableObject {
     private let repository: RecurringTransactionsRepository
     @Published var transactions: AsyncData<[RecurringTransaction]> = .empty
-    @Published var transaction: AsyncData<RecurringTransaction> = .empty
+    @Published var transaction: AsyncData<RecurringTransaction> = .empty {
+        didSet {
+            if case let .success(transaction) = self.transaction {
+                self.selectedTransaction = transaction
+            } else if case .empty = transaction {
+                self.selectedTransaction = nil
+            }
+        }
+    }
+    @Published var selectedTransaction: RecurringTransaction? = nil
     
     init(_ repository: RecurringTransactionsRepository) {
         self.repository = repository

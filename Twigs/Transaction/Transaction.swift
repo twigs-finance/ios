@@ -21,18 +21,8 @@ extension TransactionType {
         }
         return LocalizedStringKey(key)
     }
-}
-
-extension TwigsCore.Transaction {
-    var type: TransactionType {
-        if (self.expense) {
-            return .expense
-        } else {
-            return .income
-        }
-    }
     
-    var amountString: String {
-        return String(Double(self.amount) / 100.0)
+    func toBool() -> Bool {
+        return self == .expense
     }
 }

@@ -15,9 +15,8 @@ struct RecurringTransactionsListView: View {
     
     var body: some View {
         InlineLoadingView(
-            action: {
-                return try await self.dataStore.getRecurringTransactions(self.budget.id)
-        },
+            data: $dataStore.transactions,
+            action: { await self.dataStore.getRecurringTransactions(self.budget.id) },
             errorTextLocalizedStringKey: "Failed to load recurring transactions"
         ) { (transactions: [RecurringTransaction]) in
             List {
@@ -38,6 +37,7 @@ struct RecurringTransactionView_Previews: PreviewProvider {
 #endif
 
 struct RecurringTransactionsListItemView: View {
+    @EnvironmentObject var dataStore: RecurringTransactionDataStore
     let transaction: RecurringTransaction
     
     init (_ transaction: RecurringTransaction) {
@@ -46,8 +46,12 @@ struct RecurringTransactionsListItemView: View {
 
     var body: some View {
         NavigationLink(
-            destination: RecurringTransactionDetailsView(transaction)
+            tag: transaction,
+            selection: $dataStore.selectedTransaction,
+            destination: {
+                RecurringTransactionDetailsView()
                 .navigationBarTitle("details", displayMode: .inline)
+            }
         ) {
             HStack {
                 VStack(alignment: .leading) {

@@ -12,10 +12,9 @@ import TwigsCore
 struct SidebarBudgetView: View {
     @EnvironmentObject var authenticationDataStore: AuthenticationDataStore
     @EnvironmentObject var budgetDataStore: BudgetsDataStore
-    let apiService: TwigsApiService
+    @EnvironmentObject var apiService: TwigsApiService
     @State var isSelectingBudget = true
     @State var hasSelectedBudget = false
-    @State var isAddingTransaction = false
     @State var tabSelection: Int? = 0
     
     @ViewBuilder
@@ -34,7 +33,7 @@ struct SidebarBudgetView: View {
                     NavigationLink(
                         tag: 1,
                         selection: $tabSelection,
-                        destination: { TransactionListView<EmptyView>(budget).navigationBarTitle("transactions") },
+                        destination: { TransactionListView<EmptyView>(apiService: apiService, budget: budget).navigationBarTitle("transactions") },
                         label: { Label("transactions", systemImage: "dollarsign.circle") })
                         .keyboardShortcut("2")
                     NavigationLink(
@@ -53,10 +52,6 @@ struct SidebarBudgetView: View {
                 }
                 .navigationTitle(budget.name)
             }.navigationViewStyle(.columns)
-                .environmentObject(TransactionDataStore(apiService))
-                .environmentObject(CategoryListDataStore(apiService))
-                .environmentObject(budgetDataStore)
-                .environmentObject(UserDataStore(apiService))
         } else {
             ActivityIndicator(isAnimating: .constant(true), style: .large)
         }
@@ -79,6 +74,12 @@ struct SidebarBudgetView: View {
                             await self.budgetDataStore.getBudgets()
                         }
                     }
+            })
+            .sheet(isPresented: $budgetDataStore.showBudgetSelection,
+                     content: {
+                List {
+                    BudgetListsView().environmentObject(budgetDataStore)
+                }
             })
             .interactiveDismissDisabled(true)
     }

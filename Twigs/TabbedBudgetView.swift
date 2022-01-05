@@ -10,13 +10,9 @@ import SwiftUI
 import TwigsCore
 
 struct TabbedBudgetView: View {
-    @EnvironmentObject var authDataStore: AuthenticationDataStore
     @EnvironmentObject var authenticationDataStore: AuthenticationDataStore
     @EnvironmentObject var budgetDataStore: BudgetsDataStore
-    let apiService: TwigsApiService
-    @State var isSelectingBudget = true
-    @State var hasSelectedBudget = false
-    @State var isAddingTransaction = false
+    @EnvironmentObject var apiService: TwigsInMemoryCacheService
     @State var tabSelection: Int = 0
     
     @ViewBuilder
@@ -39,15 +35,7 @@ struct TabbedBudgetView: View {
                 .tag(0)
                 .keyboardShortcut("1")
                 NavigationView {
-                    TransactionListView<EmptyView>(budget)
-                        .sheet(isPresented: $isAddingTransaction,
-                               onDismiss: {
-                            isAddingTransaction = false
-                        },
-                               content: {
-                            AddTransactionView(showSheet: self.$isAddingTransaction, budgetId: budget.id)
-                                .navigationBarTitle("add_transaction")
-                        })
+                    TransactionListView<EmptyView>(apiService: apiService, budget: budget)
                         .navigationBarTitle("transactions")
                 }
                 .tabItem {
@@ -76,10 +64,7 @@ struct TabbedBudgetView: View {
                 }
                 .tag(3)
                 .keyboardShortcut("4")
-            }.environmentObject(TransactionDataStore(apiService))
-                .environmentObject(CategoryListDataStore(apiService))
-                .environmentObject(budgetDataStore)
-                .environmentObject(UserDataStore(apiService))
+            }
         } else {
             ActivityIndicator(isAnimating: .constant(true), style: .large)
         }

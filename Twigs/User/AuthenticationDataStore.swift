@@ -3,10 +3,13 @@ import Combine
 import SwiftUI
 import TwigsCore
 
+@MainActor
 class AuthenticationDataStore: ObservableObject {
-    @Published var loading: Bool = false {
+    @Published var user: AsyncData<User> = .empty {
         didSet {
-            print("authDataStore loading: \(self.loading)")
+            if case let .success(user) = self.user {
+                currentUser = user
+            }
         }
     }
     @Published var currentUser: User? = nil {
@@ -27,18 +30,17 @@ class AuthenticationDataStore: ObservableObject {
         self._userId = userId
     }
     
-    func login(server: String, username: String, password: String) async throws {
-        self.loading = true
-        defer {
-            self.loading = false
-        }
+    func login(server: String, username: String, password: String) async {
+        self.user = .loading
         self.apiService.baseUrl = server
         // The API Service applies some validation and correcting of the server before returning it so we use that
         // value instead of the original one
         self.baseUrl = self.apiService.baseUrl ?? ""
-        var response: LoginResponse
         do {
-            response = try await self.apiService.login(username: username, password: password)
+            let response = try await self.apiService.login(username: username, password: password)
+            self.token = response.token
+            self.userId = response.userId
+            await self.loadProfile()
         } catch {
             switch error {
             case NetworkError.jsonParsingFailed(let jsonError):
@@ -46,18 +48,11 @@ class AuthenticationDataStore: ObservableObject {
             default:
                 print(error.localizedDescription)
             }
-            return
+            self.user = .error(error)
         }
-        self.token = response.token
-        self.userId = response.userId
-        try await self.loadProfile()
     }
     
-    func register(server: String, username: String, email: String, password: String, confirmPassword: String) async throws {
-        self.loading = true
-        defer {
-            self.loading = false
-        }
+    func register(server: String, username: String, email: String, password: String, confirmPassword: String) async {
         // TODO: Validate other fields as well
         if !password.elementsEqual(confirmPassword) {
             // TODO: Show error message to user
@@ -79,18 +74,20 @@ class AuthenticationDataStore: ObservableObject {
             }
             return
         }
-        try await self.login(server: server, username: username, password: password)
+        await self.login(server: server, username: username, password: password)
     }
     
-    func loadProfile() async throws {
-        self.loading = true
-        defer {
-            self.loading = false
-        }
+    func loadProfile() async {
         if userId == "" {
-            throw UserStatus.unauthenticated
+            self.user = .error(UserStatus.unauthenticated)
+            return
         }
-        self.currentUser = try await self.apiService.getUser(userId)
+        do {
+            let user = try await self.apiService.getUser(userId)
+            self.user = .success(user)
+        } catch {
+            self.user = .error(error)
+        }
     }
 }
 

@@ -23,7 +23,7 @@ struct InlineLoadingView<Content, Data>: View where Content: View, Data: Equatab
                 .task {
                     await action()
                 }
-        case .error(let error):
+        case .error(let error, _):
             Text(LocalizedStringKey(errorTextLocalizedStringKey))
             Text(error.localizedDescription)
             Button(LocalizedStringKey("action_retry"), action: {
@@ -31,7 +31,7 @@ struct InlineLoadingView<Content, Data>: View where Content: View, Data: Equatab
                     await action()
                 }
             })
-        case .success(let data):
+        case .success(let data), .editing(let data), .saving(let data):
             successBody(data)
         }
     }
@@ -40,7 +40,7 @@ struct InlineLoadingView<Content, Data>: View where Content: View, Data: Equatab
 #if DEBUG
 struct InlineLoadingView_Previews: PreviewProvider {
     static var previews: some View {
-        InlineLoadingView(action: {}, errorTextLocalizedStringKey: "An error ocurred", successBody: { EmptyView() })
+        InlineLoadingView(data: .constant(AsyncData<Never>.empty), action: {}, errorTextLocalizedStringKey: "An error ocurred", successBody: { _ in EmptyView() })
     }
 }
 #endif

@@ -10,68 +10,63 @@ import SwiftUI
 import TwigsCore
 
 struct CategoryDetailsView: View {
+    @EnvironmentObject var categoryListDataStore: CategoryListDataStore
+    @EnvironmentObject var categoryDataStore: CategoryDataStore
     @EnvironmentObject var transactionDataStore: TransactionDataStore
+    @EnvironmentObject var apiService: TwigsApiService
     let budget: Budget
-    let category: TwigsCore.Category
     @State var sum: Int? = 0
     @State var editingCategory: Bool = false
     var spent: Int {
         get {
-            if let sum = self.sum {
+            if case let .success(sum) = categoryDataStore.sum {
                 return abs(sum)
             } else {
                 return 0
             }
         }
     }
-    var remaining: Int {
-        get {
-            return category.amount - spent
-        }
-    }
-    var middleLabel: LocalizedStringKey {
-        get {
-            if category.expense {
-                return LocalizedStringKey("amount_spent")
-            } else {
-                return LocalizedStringKey("amount_earned")
-            }
+    func middleLabel(_ category: TwigsCore.Category) -> LocalizedStringKey {
+        if category.expense {
+            return LocalizedStringKey("amount_spent")
+        } else {
+            return LocalizedStringKey("amount_earned")
         }
     }
     
     var body: some View {
-        TransactionListView(self.budget, category: category) {
-            VStack {
-                Text(verbatim: category.description ?? "")
-                    .padding()
-                HStack {
-                    LabeledCounter(title: LocalizedStringKey("amount_budgeted"), amount: category.amount)
-                    LabeledCounter(title: middleLabel, amount: spent)
-                    LabeledCounter(title: LocalizedStringKey("amount_remaining"), amount: remaining)
-                }
-            }.frame(maxWidth: .infinity, alignment: .center)
-        }
-
-        .onAppear {
-            Task {
-                try await self.sum = transactionDataStore.sum(budgetId: nil, categoryId: category.id, from: nil, to: nil)
+        if let category = categoryListDataStore.selectedCategory {
+            TransactionListView(apiService: apiService, budget: budget, category: category) {
+                VStack {
+                    Text(verbatim: category.description ?? "")
+                        .padding()
+                    HStack {
+                        LabeledCounter(title: LocalizedStringKey("amount_budgeted"), amount: category.amount)
+                        LabeledCounter(title: middleLabel(category), amount: spent)
+                        LabeledCounter(title: LocalizedStringKey("amount_remaining"), amount: category.amount - spent)
+                    }
+                }.frame(maxWidth: .infinity, alignment: .center)
+            }.task {
+                await categoryDataStore.sum(categoryId: category.id)
             }
-        }
-        .navigationBarItems(trailing: Button(action: {
+            .navigationBarItems(trailing: Button(action: {
                 self.editingCategory = true
             }) {
                 Text("edit")
-            }
-        )
-        .sheet(isPresented: self.$editingCategory, onDismiss: {
-            self.editingCategory = false
-        }, content: {
-            CategoryFormSheet(showSheet: self.$editingCategory, category: self.category, budgetId: self.category.budgetId)
-        })
+            })
+            .sheet(isPresented: self.$editingCategory, onDismiss: {
+                self.editingCategory = false
+            }, content: {
+                CategoryFormSheet(categoryForm: CategoryForm(
+                    category: category,
+                    categoryList: categoryListDataStore,
+                    budgetId: category.budgetId
+                ))
+            })
+        }
     }
     
-    init (_ category: TwigsCore.Category, budget: Budget) {
-        self.category = category
+    init (_ budget: Budget) {
         self.budget = budget
     }
 }
@@ -90,7 +85,7 @@ struct LabeledCounter: View {
 #if DEBUG
 struct CategoryDetailsView_Previews: PreviewProvider {
     static var previews: some View {
-        CategoryDetailsView(MockCategoryRepository.category, budget: MockBudgetRepository.budget)
+        CategoryDetailsView(MockBudgetRepository.budget)
             .environmentObject(TransactionDataStore(MockTransactionRepository()))
     }
 }

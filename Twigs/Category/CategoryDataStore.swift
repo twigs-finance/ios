@@ -27,19 +27,4 @@ class CategoryDataStore: ObservableObject {
             self.sum = .error(error)
         }
     }
-    
-    func save(_ category: TwigsCore.Category) async {
-        self.category = .loading
-        do {
-            var savedCategory: TwigsCore.Category
-            if category.id != "" {
-                savedCategory = try await self.categoryRepository.updateCategory(category)
-            } else {
-                savedCategory = try await self.categoryRepository.createCategory(category)
-            }
-            self.category = .success(savedCategory)
-        } catch {
-            self.category = .error(error, category)
-        }
-    }
 }

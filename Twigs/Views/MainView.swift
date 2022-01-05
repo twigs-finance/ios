@@ -11,35 +11,35 @@ import TwigsCore
 
 struct MainView: View {
     @StateObject var authenticationDataStore: AuthenticationDataStore
-    @StateObject var budgetDataStore: BudgetsDataStore
     let apiService: TwigsApiService
     
     init(_ apiService: TwigsApiService, baseUrl: Binding<String>, token: Binding<String>, userId: Binding<String>) {
         self.apiService = apiService
         self._authenticationDataStore = StateObject(wrappedValue: AuthenticationDataStore(apiService, baseUrl: baseUrl, token: token, userId: userId))
-        self._budgetDataStore = StateObject(wrappedValue: BudgetsDataStore(budgetRepository: apiService, categoryRepository: apiService, transactionRepository: apiService))
     }
     
     @ViewBuilder
     var mainView: some View {
         if UIDevice.current.userInterfaceIdiom == .mac || UIDevice.current.userInterfaceIdiom == .pad {
-            SidebarBudgetView(apiService: apiService)
-                .environmentObject(authenticationDataStore)
-                .environmentObject(budgetDataStore)
+            SidebarBudgetView()
         } else {
-            TabbedBudgetView(apiService: apiService)
-                .environmentObject(authenticationDataStore)
-                .environmentObject(budgetDataStore)
+            TabbedBudgetView()
         }
     }
     
     var body: some View {
-        mainView.onAppear {
-            print("MainView.onAppear")
-            Task {
-                try await self.authenticationDataStore.loadProfile()
+        mainView
+            .environmentObject(TransactionDataStore(apiService))
+            .environmentObject(CategoryListDataStore(apiService))
+            .environmentObject(BudgetsDataStore(budgetRepository: apiService, categoryRepository: apiService, transactionRepository: apiService))
+            .environmentObject(UserDataStore(apiService))
+            .environmentObject(RecurringTransactionDataStore(apiService))
+            .environmentObject(authenticationDataStore)
+            .onAppear {
+                Task {
+                    await self.authenticationDataStore.loadProfile()
+                }
             }
-        }
     }
 }
 

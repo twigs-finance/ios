@@ -11,12 +11,22 @@ import Combine
 import Collections
 import TwigsCore
 
-class TransactionDataStore: AsyncObservableObject {
+class TransactionDataStore: ObservableObject {
     @Published var transactions: AsyncData<OrderedDictionary<String, [Transaction]>> = .empty
-    @Published var transaction: AsyncData<Transaction> = .empty
+    @Published var transaction: AsyncData<Transaction> = .empty {
+        didSet {
+            if case let .success(transaction) = self.transaction {
+                self.selectedTransaction = transaction
+            } else if case .empty = self.transaction {
+                self.selectedTransaction = nil
+            }
+        }
+    }
+    @Published var selectedTransaction: Transaction? = nil
 
     func getTransactions(_ budgetId: String, categoryId: String? = nil, from: Date? = nil, count: Int? = nil, page: Int? = nil) async {
-        try await load {
+        self.transactions = .loading
+        do {
             var categoryIds: [String] = []
             if let categoryId = categoryId {
                 categoryIds.append(categoryId)
@@ -30,29 +40,51 @@ class TransactionDataStore: AsyncObservableObject {
                 page: page
             )
             let groupedTransactions = OrderedDictionary<String,[Transaction]>(grouping: transactions, by: { $0.date.toLocaleString() })
-            self.transactions = groupedTransactions
+            self.transactions = .success(groupedTransactions)
+        } catch {
+            self.transactions = .error(error)
         }
     }
     
     func saveTransaction(_ transaction: Transaction) async {
-        try await load {
+        self.transaction = .saving(transaction)
+        do {
+            var savedTransaction: Transaction
             if (transaction.id != "") {
-                self.transaction = try await self.transactionRepository.updateTransaction(transaction)
+                savedTransaction = try await self.transactionRepository.updateTransaction(transaction)
             } else {
-                self.transaction = try await self.transactionRepository.createTransaction(transaction)
+                savedTransaction = try await self.transactionRepository.createTransaction(transaction)
             }
+            self.transaction = .success(savedTransaction)
+        } catch {
+            self.transaction = .error(error, transaction)
         }
     }
     
-    func deleteTransaction(_ transactionId: String) async {
-        try await load {
-            try await self.transactionRepository.deleteTransaction(transactionId)
-            self.transaction = nil
+    func deleteTransaction(_ transaction: Transaction) async {
+        self.transaction = .loading
+        do {
+            try await self.transactionRepository.deleteTransaction(transaction.id)
+            self.transaction = .empty
+        } catch {
+            self.transaction = .error(error, transaction)
+        }
+    }
+    
+    func editTransaction(_ transaction: Transaction) {
+        self.transaction = .editing(transaction)
+    }
+    
+    func cancelEdit() {
+        if let transaction = self.selectedTransaction {
+            self.transaction = .success(transaction)
+        } else {
+            self.transaction = .empty
         }
     }
     
     func clearSelectedTransaction() {
-        self.transaction = nil
+        self.transaction = .empty
     }
         
     private let transactionRepository: TransactionRepository

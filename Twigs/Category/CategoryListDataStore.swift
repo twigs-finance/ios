@@ -13,7 +13,16 @@ import TwigsCore
 @MainActor
 class CategoryListDataStore: ObservableObject {
     @Published var categories: AsyncData<[TwigsCore.Category]> = .empty
-    @Published var category: AsyncData<TwigsCore.Category> = .empty
+    @Published var category: AsyncData<TwigsCore.Category> = .empty {
+        didSet {
+            if case let .success(category) = self.category {
+                self.selectedCategory = category
+            } else if case .empty = self.category {
+                self.selectedCategory = nil
+            }
+        }
+    }
+    @Published var selectedCategory: TwigsCore.Category? = nil
     
     func getCategories(budgetId: String? = nil, expense: Bool? = nil, archived: Bool? = false, count: Int? = nil, page: Int? = nil) async {
         self.categories = .loading
@@ -24,7 +33,7 @@ class CategoryListDataStore: ObservableObject {
             self.categories = .error(error)
         }
     }
-    
+        
     func save(_ category: TwigsCore.Category) async {
         self.category = .loading
         do {
@@ -57,11 +66,19 @@ class CategoryListDataStore: ObservableObject {
             self.category = .error(error, category)
         }
     }
-
-    func selectCategory(_ category: TwigsCore.Category) {
-        self.category = .success(category)
+    
+    func edit(_ category: TwigsCore.Category) async {
+        self.category = .editing(category)
     }
     
+    func cancelEdit() {
+        if let category = self.selectedCategory {
+            self.category = .success(category)
+        } else {
+            self.category = .empty
+        }
+    }
+
     func clearSelectedCategory() {
         self.category = .empty
     }

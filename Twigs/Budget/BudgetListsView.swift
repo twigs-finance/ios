@@ -16,7 +16,8 @@ struct BudgetListsView: View {
     
     var body: some View {
         InlineLoadingView(
-            action: { return try await self.budgetDataStore.getBudgets(count: nil, page: nil) },
+            data: $budgetDataStore.budgets,
+            action: { await self.budgetDataStore.getBudgets(count: nil, page: nil) },
             errorTextLocalizedStringKey: "budgets_load_failure"
         ) { (budgets: [Budget]) in
             Section("budgets") {

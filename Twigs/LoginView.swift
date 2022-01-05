@@ -14,10 +14,18 @@ struct LoginView: View {
     @State var username: String = ""
     @State var password: String = ""
     @EnvironmentObject var dataStore: AuthenticationDataStore
+    var loading: Bool {
+        switch dataStore.user {
+        case .loading:
+            return true
+        default:
+            return false
+        }
+    }
     
     var body: some View {
         LoadingView(
-            isShowing: $dataStore.loading,
+            isShowing: .constant(loading),
             loadingText: "loading_login"
         ) {
             NavigationView {
@@ -36,7 +44,7 @@ struct LoginView: View {
                         .textContentType(.password)
                     Button("action_login", action: {
                         Task {
-                            try await self.dataStore.login(server: self.server, username: self.username, password: self.password)
+                            await self.dataStore.login(server: self.server, username: self.username, password: self.password)
                         }
                     }).buttonStyle(DefaultButtonStyle())
                     Spacer()

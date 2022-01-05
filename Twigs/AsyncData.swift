@@ -13,6 +13,8 @@ enum AsyncData<Data>: Equatable where Data: Equatable {
     case empty
     case loading
     case error(Error, Data? = nil)
+    case editing(Data)
+    case saving(Data)
     case success(Data)
     
     static func == (lhs: AsyncData, rhs: AsyncData) -> Bool {
@@ -24,6 +26,10 @@ enum AsyncData<Data>: Equatable where Data: Equatable {
         case (.error(let lError, let lData), .error(let rError, let rData)):
             return lError.localizedDescription == rError.localizedDescription
                 && ((lData == nil && rData == nil) || lData == rData)
+        case (.editing(let lData), .editing(let rData)):
+            return lData == rData
+        case (.saving(let lData), .saving(let rData)):
+            return lData == rData
         case (.success(let lData), .success(let rData)):
             return lData == rData
         default:

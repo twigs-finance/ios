@@ -12,27 +12,25 @@ import TwigsCore
 struct BudgetDetailsView: View {
     @EnvironmentObject var budgetDataStore: BudgetsDataStore
     let budget: Budget
-
+    
     @ViewBuilder
     var body: some View {
         InlineLoadingView(
             data: self.$budgetDataStore.overview,
             action: { await self.budgetDataStore.loadOverview(self.budget) },
             errorTextLocalizedStringKey: "budgets_load_failure"
-        ) {
-            if let overview = self.budgetDataStore.overview {
-                List {
-                    Section(overview.budget.name) {
-                        DescriptionOverview(overview: overview)
-                    }
-                    Section("income") {
-                        IncomeOverview(overview: overview)
-                    }
-                    Section("expenses") {
-                        ExpensesOverview(overview: overview)
-                    }
-                }.listStyle(.insetGrouped)
-            }
+        ) { overview in
+            List {
+                Section(overview.budget.name) {
+                    DescriptionOverview(overview: overview)
+                }
+                Section("income") {
+                    IncomeOverview(overview: overview)
+                }
+                Section("expenses") {
+                    ExpensesOverview(overview: overview)
+                }
+            }.listStyle(.insetGrouped)
         }
     }
 }

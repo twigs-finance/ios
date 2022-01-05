@@ -6,18 +6,20 @@
 //  Copyright © 2019 William Brawner. All rights reserved.
 //
 
+import SwiftUI
 import Foundation
 import TwigsCore
 
 class TwigsInMemoryCacheService: TwigsApiService {
     private var budgets = Set<Budget>()
     private var categories = Set<TwigsCore.Category>()
-    private var transactions = Set<Transaction>()
+    private var transactions = Set<TwigsCore.Transaction>()
+
     
     public init() {
         super.init(RequestHelper())
     }
-
+    
     // MARK: Budgets
     override func getBudgets(count: Int? = nil, page: Int? = nil) async throws -> [Budget] {
         let results = budgets.sorted { (first, second) -> Bool in
@@ -132,6 +134,8 @@ class TwigsInMemoryCacheService: TwigsApiService {
         }
     }
 }
+
+extension TwigsApiService: ObservableObject {}
 
 /**
  * Determines which slice of the array should be returned based on the count and page parameters
