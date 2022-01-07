@@ -75,12 +75,6 @@ struct SidebarBudgetView: View {
                         }
                     }
             })
-            .sheet(isPresented: $budgetDataStore.showBudgetSelection,
-                     content: {
-                List {
-                    BudgetListsView().environmentObject(budgetDataStore)
-                }
-            })
             .interactiveDismissDisabled(true)
     }
 }

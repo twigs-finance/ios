@@ -56,7 +56,7 @@ struct TransactionFormSheet: View {
                 } else {
                     EmptyView()
                 }
-            }
+            }.environmentObject(transactionForm)
         }
     }
 }

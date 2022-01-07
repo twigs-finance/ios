@@ -12,7 +12,7 @@ import TwigsCore
 struct TabbedBudgetView: View {
     @EnvironmentObject var authenticationDataStore: AuthenticationDataStore
     @EnvironmentObject var budgetDataStore: BudgetsDataStore
-    @EnvironmentObject var apiService: TwigsInMemoryCacheService
+    @EnvironmentObject var apiService: TwigsApiService
     @State var tabSelection: Int = 0
     
     @ViewBuilder

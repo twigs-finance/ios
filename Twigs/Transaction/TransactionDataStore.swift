@@ -11,6 +11,7 @@ import Combine
 import Collections
 import TwigsCore
 
+@MainActor
 class TransactionDataStore: ObservableObject {
     @Published var transactions: AsyncData<OrderedDictionary<String, [Transaction]>> = .empty
     @Published var transaction: AsyncData<Transaction> = .empty {
