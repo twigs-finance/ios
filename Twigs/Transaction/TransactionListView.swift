@@ -66,6 +66,9 @@ struct TransactionListView<Content>: View where Content: View {
                 TransactionList(transactions)
             }
             .searchable(text: $search)
+            .refreshable {
+                await transactionDataStore.getTransactions(self.budget.id, categoryId: self.category?.id, from: nil, count: nil, page: nil)
+            }
             .sheet(
                 isPresented: .constant(addingTransaction),
                 content: {
