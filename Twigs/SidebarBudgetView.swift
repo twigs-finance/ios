@@ -51,7 +51,11 @@ struct SidebarBudgetView: View {
                     BudgetListsView()
                 }
                 .navigationTitle(budget.name)
-            }.navigationViewStyle(.columns)
+                EmptyView()
+                if self.tabSelection ?? 0 > 0 {
+                    EmptyView()
+                }
+            }
         } else {
             ActivityIndicator(isAnimating: .constant(true), style: .large)
         }
