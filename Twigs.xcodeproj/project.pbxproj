@@ -54,6 +54,10 @@
 		80820145275FFD380040996E /* SidebarBudgetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80820144275FFD380040996E /* SidebarBudgetView.swift */; };
 		8094A9C327567CAC006C6C62 /* Collections in Frameworks */ = {isa = PBXBuildFile; productRef = 8094A9C227567CAC006C6C62 /* Collections */; };
 		809B942327221EC800B1DAE2 /* CategoryFormSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 809B942227221EC800B1DAE2 /* CategoryFormSheet.swift */; };
+		80A419ED2787C0A00090C515 /* TwigsCli.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80A419EC2787C0A00090C515 /* TwigsCli.swift */; };
+		80A419F32787C13E0090C515 /* ArgumentParser in Frameworks */ = {isa = PBXBuildFile; productRef = 80A419F22787C13E0090C515 /* ArgumentParser */; };
+		80A419F52787C1520090C515 /* ArgumentParser in Frameworks */ = {isa = PBXBuildFile; productRef = 80A419F42787C1520090C515 /* ArgumentParser */; };
+		80A419F72788A3880090C515 /* TwigsCore in Frameworks */ = {isa = PBXBuildFile; productRef = 80A419F62788A3880090C515 /* TwigsCore */; };
 		80D1FC14277C1EF9007F17FB /* InlineLoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80D1FC13277C1EF9007F17FB /* InlineLoadingView.swift */; };
 /* End PBXBuildFile section */
 
@@ -73,6 +77,18 @@
 			remoteInfo = Budget;
 		};
 /* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		80A419E82787C0A00090C515 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = /usr/share/man/man1/;
+			dstSubfolderSpec = 0;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		2821265F23555FD300072D52 /* TransactionFormSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionFormSheet.swift; sourceTree = "<group>"; };
@@ -129,6 +145,8 @@
 		808582CD277E5E9E00006859 /* TwigsCore */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = TwigsCore; path = ../TwigsCore; sourceTree = "<group>"; };
 		809B942227221EC800B1DAE2 /* CategoryFormSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryFormSheet.swift; sourceTree = "<group>"; };
 		809B94242722597800B1DAE2 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/Localizable.strings; sourceTree = "<group>"; };
+		80A419EA2787C0A00090C515 /* twigs-cli */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "twigs-cli"; sourceTree = BUILT_PRODUCTS_DIR; };
+		80A419EC2787C0A00090C515 /* TwigsCli.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TwigsCli.swift; sourceTree = "<group>"; };
 		80D1FC13277C1EF9007F17FB /* InlineLoadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InlineLoadingView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -137,6 +155,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				80A419F32787C13E0090C515 /* ArgumentParser in Frameworks */,
 				8005FD5B277E623900E48B23 /* TwigsCore in Frameworks */,
 				8094A9C327567CAC006C6C62 /* Collections in Frameworks */,
 			);
@@ -153,6 +172,15 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		80A419E72787C0A00090C515 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				80A419F72788A3880090C515 /* TwigsCore in Frameworks */,
+				80A419F52787C1520090C515 /* ArgumentParser in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -207,6 +235,7 @@
 			isa = PBXGroup;
 			children = (
 				80DBED432774AE4F00CB0A88 /* Packages */,
+				80A419EB2787C0A00090C515 /* twigs-cli */,
 				28AC94EB233C373900BFB70A /* Products */,
 				28AC94EC233C373900BFB70A /* Twigs */,
 				28AC9503233C373A00BFB70A /* TwigsTests */,
@@ -221,6 +250,7 @@
 				28AC94EA233C373900BFB70A /* Twigs.app */,
 				28AC9500233C373A00BFB70A /* TwigsTests.xctest */,
 				28AC950B233C373A00BFB70A /* TwigsUITests.xctest */,
+				80A419EA2787C0A00090C515 /* twigs-cli */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -320,6 +350,14 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		80A419EB2787C0A00090C515 /* twigs-cli */ = {
+			isa = PBXGroup;
+			children = (
+				80A419EC2787C0A00090C515 /* TwigsCli.swift */,
+			);
+			path = "twigs-cli";
+			sourceTree = "<group>";
+		};
 		80D6B1EF275B11C10075D0EC /* Recurring Transactions */ = {
 			isa = PBXGroup;
 			children = (
@@ -358,6 +396,7 @@
 			packageProductDependencies = (
 				8094A9C227567CAC006C6C62 /* Collections */,
 				8005FD5A277E623900E48B23 /* TwigsCore */,
+				80A419F22787C13E0090C515 /* ArgumentParser */,
 			);
 			productName = Budget;
 			productReference = 28AC94EA233C373900BFB70A /* Twigs.app */;
@@ -399,6 +438,27 @@
 			productReference = 28AC950B233C373A00BFB70A /* TwigsUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
 		};
+		80A419E92787C0A00090C515 /* twigs-cli */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 80A419F02787C0A00090C515 /* Build configuration list for PBXNativeTarget "twigs-cli" */;
+			buildPhases = (
+				80A419E62787C0A00090C515 /* Sources */,
+				80A419E72787C0A00090C515 /* Frameworks */,
+				80A419E82787C0A00090C515 /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "twigs-cli";
+			packageProductDependencies = (
+				80A419F42787C1520090C515 /* ArgumentParser */,
+				80A419F62788A3880090C515 /* TwigsCore */,
+			);
+			productName = "twigs-cli";
+			productReference = 80A419EA2787C0A00090C515 /* twigs-cli */;
+			productType = "com.apple.product-type.tool";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -420,6 +480,9 @@
 						CreatedOnToolsVersion = 11.0;
 						TestTargetID = 28AC94E9233C373900BFB70A;
 					};
+					80A419E92787C0A00090C515 = {
+						CreatedOnToolsVersion = 13.2.1;
+					};
 				};
 			};
 			buildConfigurationList = 28AC94E5233C373900BFB70A /* Build configuration list for PBXProject "Twigs" */;
@@ -434,6 +497,7 @@
 			mainGroup = 28AC94E1233C373900BFB70A;
 			packageReferences = (
 				8094A9C127567CAC006C6C62 /* XCRemoteSwiftPackageReference "swift-collections" */,
+				80A419F12787C13E0090C515 /* XCRemoteSwiftPackageReference "swift-argument-parser" */,
 			);
 			productRefGroup = 28AC94EB233C373900BFB70A /* Products */;
 			projectDirPath = "";
@@ -442,6 +506,7 @@
 				28AC94E9233C373900BFB70A /* Twigs */,
 				28AC94FF233C373A00BFB70A /* TwigsTests */,
 				28AC950A233C373A00BFB70A /* TwigsUITests */,
+				80A419E92787C0A00090C515 /* twigs-cli */,
 			);
 		};
 /* End PBXProject section */
@@ -535,6 +600,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				28AC9510233C373A00BFB70A /* BudgetUITests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		80A419E62787C0A00090C515 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				80A419ED2787C0A00090C515 /* TwigsCli.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -834,6 +907,34 @@
 			};
 			name = Release;
 		};
+		80A419EE2787C0A00090C515 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = VJ33S6H7W7;
+				ENABLE_HARDENED_RUNTIME = YES;
+				MACOSX_DEPLOYMENT_TARGET = 12.1;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		80A419EF2787C0A00090C515 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = VJ33S6H7W7;
+				ENABLE_HARDENED_RUNTIME = YES;
+				MACOSX_DEPLOYMENT_TARGET = 12.1;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -873,12 +974,29 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
+		80A419F02787C0A00090C515 /* Build configuration list for PBXNativeTarget "twigs-cli" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				80A419EE2787C0A00090C515 /* Debug */,
+				80A419EF2787C0A00090C515 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
 		8094A9C127567CAC006C6C62 /* XCRemoteSwiftPackageReference "swift-collections" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/apple/swift-collections.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.0.0;
+			};
+		};
+		80A419F12787C13E0090C515 /* XCRemoteSwiftPackageReference "swift-argument-parser" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/apple/swift-argument-parser.git";
 			requirement = {
 				kind = upToNextMajorVersion;
 				minimumVersion = 1.0.0;
@@ -895,6 +1013,20 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 8094A9C127567CAC006C6C62 /* XCRemoteSwiftPackageReference "swift-collections" */;
 			productName = Collections;
+		};
+		80A419F22787C13E0090C515 /* ArgumentParser */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 80A419F12787C13E0090C515 /* XCRemoteSwiftPackageReference "swift-argument-parser" */;
+			productName = ArgumentParser;
+		};
+		80A419F42787C1520090C515 /* ArgumentParser */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 80A419F12787C13E0090C515 /* XCRemoteSwiftPackageReference "swift-argument-parser" */;
+			productName = ArgumentParser;
+		};
+		80A419F62788A3880090C515 /* TwigsCore */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = TwigsCore;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
