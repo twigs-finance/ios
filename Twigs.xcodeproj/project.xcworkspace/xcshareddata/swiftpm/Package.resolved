@@ -1,25 +1,22 @@
 {
-  "object": {
-    "pins": [
-      {
-        "package": "swift-argument-parser",
-        "repositoryURL": "https://github.com/apple/swift-argument-parser.git",
-        "state": {
-          "branch": null,
-          "revision": "e1465042f195f374b94f915ba8ca49de24300a0d",
-          "version": "1.0.2"
-        }
-      },
-      {
-        "package": "swift-collections",
-        "repositoryURL": "https://github.com/apple/swift-collections.git",
-        "state": {
-          "branch": null,
-          "revision": "48254824bb4248676bf7ce56014ff57b142b77eb",
-          "version": "1.0.2"
-        }
+  "pins" : [
+    {
+      "package": "swift-argument-parser",
+      "repositoryURL": "https://github.com/apple/swift-argument-parser.git",
+      "state": {
+        "branch": null,
+        "revision": "e1465042f195f374b94f915ba8ca49de24300a0d",
+        "version": "1.0.2"
       }
-    ]
-  },
-  "version": 1
+    },
+    {
+      "package": "swift-collections",
+      "repositoryURL": "https://github.com/apple/swift-collections.git",
+      "state": {
+        "branch": null,
+        "revision": "48254824bb4248676bf7ce56014ff57b142b77eb",
+        "version": "1.0.2"
+    }
+  ],
+  "version" : 2
 }
