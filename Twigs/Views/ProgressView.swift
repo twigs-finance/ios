@@ -32,7 +32,7 @@ struct ProgressView: View {
     
     private func getProgressBarWidth(geometry: GeometryProxy) -> CGFloat {
         let frame = geometry.frame(in: .global)
-        return frame.size.width * min(CGFloat(value / maxValue), CGFloat(1))
+        return max(0, frame.size.width * min(CGFloat(value / maxValue), CGFloat(1)))
     }
 }
 
