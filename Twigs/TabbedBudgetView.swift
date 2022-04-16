@@ -13,7 +13,7 @@ struct TabbedBudgetView: View {
     @EnvironmentObject var authenticationDataStore: AuthenticationDataStore
     @EnvironmentObject var budgetDataStore: BudgetsDataStore
     @EnvironmentObject var apiService: TwigsApiService
-    @State var tabSelection: Int = 0
+    @AppStorage("budget_tab") var tabSelection: Int = 0
     
     @ViewBuilder
     var mainView: some View {
