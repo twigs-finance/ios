@@ -47,6 +47,7 @@
 // MARK: Transactions
 "transactions" = "Transactions";
 "add_transaction" = "Add Transaction";
+"edit_transaction" = "Edit Transaction";
 "notes" = "Notes";
 "registered_by" = "Registered by";
 "no_transactions" = "No transactions found for the given criteria";

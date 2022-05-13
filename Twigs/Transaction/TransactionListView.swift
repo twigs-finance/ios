@@ -81,7 +81,6 @@ struct TransactionListView<Content>: View where Content: View {
                         categoryId: self.category?.id,
                         transaction: nil
                     ))
-                    .navigationBarTitle("add_transaction")
             })
             .navigationBarItems(
                 trailing: HStack {

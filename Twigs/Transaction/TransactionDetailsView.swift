@@ -8,6 +8,7 @@
 
 import SwiftUI
 import TwigsCore
+import XCTest
 
 struct TransactionDetailsView: View {
     @EnvironmentObject var apiService: TwigsApiService

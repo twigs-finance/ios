@@ -16,54 +16,68 @@ struct TransactionFormSheet: View {
     
     @ViewBuilder
     var body: some View {
-        switch self.transactionDataStore.transaction {
-        case .loading:
-            EmbeddedLoadingView()
-        default:
-            Form {
-                TextField(LocalizedStringKey("prompt_name"), text: $transactionForm.title)
-                    .textInputAutocapitalization(.words)
-                TextField(LocalizedStringKey("prompt_description"), text: $transactionForm.description)
-                    .textInputAutocapitalization(.sentences)
-                DatePicker(selection: $transactionForm.date, label: { Text(LocalizedStringKey("prompt_date")) })
-                TextField(LocalizedStringKey("prompt_amount"), text: $transactionForm.amount)
-                    .keyboardType(.decimalPad)
-                Picker(LocalizedStringKey("prompt_type"), selection: $transactionForm.type) {
-                    ForEach(TransactionType.allCases) { type in
-                        Text(type.localizedKey)
+        NavigationView {
+            switch self.transactionDataStore.transaction {
+            case .loading:
+                EmbeddedLoadingView()
+            default:
+                Form {
+                    TextField(LocalizedStringKey("prompt_name"), text: $transactionForm.title)
+                        .textInputAutocapitalization(.words)
+                    TextField(LocalizedStringKey("prompt_description"), text: $transactionForm.description)
+                        .textInputAutocapitalization(.sentences)
+                    DatePicker(selection: $transactionForm.date, label: { Text(LocalizedStringKey("prompt_date")) })
+                    TextField(LocalizedStringKey("prompt_amount"), text: $transactionForm.amount)
+                        .keyboardType(.decimalPad)
+                    Picker(LocalizedStringKey("prompt_type"), selection: $transactionForm.type) {
+                        ForEach(TransactionType.allCases) { type in
+                            Text(type.localizedKey)
+                        }
                     }
-                }
-                BudgetPicker()
-                CategoryPicker()
-                if transactionForm.showDelete {
-                    Button(action: {
-                        self.showingAlert = true
-                    }) {
-                        Text(LocalizedStringKey("delete"))
-                            .foregroundColor(.red)
+                    BudgetPicker()
+                    CategoryPicker()
+                    if transactionForm.showDelete {
+                        Button(action: {
+                            self.showingAlert = true
+                        }) {
+                            Text(LocalizedStringKey("delete"))
+                                .foregroundColor(.red)
+                        }
+                        .alert(isPresented:$showingAlert) {
+                            Alert(
+                                title: Text(LocalizedStringKey("confirm_delete")),
+                                message: Text(LocalizedStringKey("cannot_undo")),
+                                primaryButton: .destructive(
+                                    Text(LocalizedStringKey("delete")),
+                                    action: { Task { await transactionForm.delete() }}
+                                ),
+                                secondaryButton: .cancel()
+                            )
+                        }
+                    } else {
+                        EmptyView()
                     }
-                    .alert(isPresented:$showingAlert) {
-                        Alert(
-                            title: Text(LocalizedStringKey("confirm_delete")),
-                            message: Text(LocalizedStringKey("cannot_undo")),
-                            primaryButton: .destructive(
-                                Text(LocalizedStringKey("delete")),
-                                action: { Task { await transactionForm.delete() }}
-                            ),
-                            secondaryButton: .cancel()
-                        )
+                }.environmentObject(transactionForm)
+                    .task {
+                        await transactionForm.load()
                     }
-                } else {
-                    EmptyView()
-                }
-            }.environmentObject(transactionForm)
+                    .navigationTitle(transactionForm.transactionId.isEmpty ? "add_transaction" : "edit_transaction")
+                    .navigationBarItems(
+                        leading: Button("cancel", action: { transactionForm.transactionList.cancelEdit() }),
+                        trailing: Button("save", action: {
+                            Task {
+                                await transactionForm.save()
+                            }
+                        })
+                    )
+            }
         }
     }
 }
 
 struct BudgetPicker: View {
     @EnvironmentObject var transactionForm: TransactionForm
-
+    
     @ViewBuilder
     var body: some View {
         if case let .success(budgets) = self.transactionForm.budgets {

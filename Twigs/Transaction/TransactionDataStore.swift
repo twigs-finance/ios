@@ -24,8 +24,22 @@ class TransactionDataStore: ObservableObject {
         }
     }
     @Published var selectedTransaction: Transaction? = nil
-
+    private var budgetId: String = ""
+    private var categoryId: String? = nil
+    private var from: Date? = nil
+    private var count: Int? = nil
+    private var page: Int? = nil
+    
     func getTransactions(_ budgetId: String, categoryId: String? = nil, from: Date? = nil, count: Int? = nil, page: Int? = nil) async {
+        self.budgetId = budgetId
+        self.categoryId = categoryId
+        self.from = from
+        self.count = count
+        self.page = page
+        await self.getTransactions()
+    }
+    
+    func getTransactions() async {
         self.transactions = .loading
         do {
             var categoryIds: [String] = []
@@ -57,6 +71,7 @@ class TransactionDataStore: ObservableObject {
                 savedTransaction = try await self.transactionRepository.createTransaction(transaction)
             }
             self.transaction = .success(savedTransaction)
+            await getTransactions()
         } catch {
             self.transaction = .error(error, transaction)
         }
