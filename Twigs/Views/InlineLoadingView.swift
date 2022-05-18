@@ -20,9 +20,6 @@ struct InlineLoadingView<Content, Data>: View where Content: View, Data: Equatab
         switch self.data {
         case .empty, .loading:
             ActivityIndicator(isAnimating: .constant(true), style: .large)
-                .task {
-                    await action()
-                }
         case .error(let error, _):
             Text(LocalizedStringKey(errorTextLocalizedStringKey))
             Text(error.localizedDescription)
