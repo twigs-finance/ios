@@ -436,6 +436,7 @@ class DataStore : ObservableObject {
         do {
             let user = try await self.apiService.getUser(userId)
             self.currentUser = .success(user)
+            await getBudgets()
         } catch {
             self.currentUser = .error(error)
         }

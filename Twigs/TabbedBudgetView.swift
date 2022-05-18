@@ -73,26 +73,19 @@ struct TabbedBudgetView: View {
     
     var body: some View {
         mainView.sheet(isPresented: $dataStore.showLogin,
-                       onDismiss: {
-            Task {
-                await self.dataStore.getBudgets()
-            }
-        },
                        content: {
             LoginView()
                 .environmentObject(dataStore)
-                .onDisappear {
-                    Task {
-                        await self.dataStore.getBudgets()
-                    }
-                }
-        }).sheet(isPresented: $dataStore.showBudgetSelection,
+                .interactiveDismissDisabled(true)
+        })
+        
+        .sheet(isPresented: $dataStore.showBudgetSelection,
                  content: {
             List {
                 BudgetListsView().environmentObject(dataStore)
             }
-        })
             .interactiveDismissDisabled(true)
+        })
     }
 }
 
