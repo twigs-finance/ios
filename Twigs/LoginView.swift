@@ -44,6 +44,11 @@ struct LoginView: View {
                         .textFieldStyle(RoundedBorderTextFieldStyle())
                         .textContentType(UITextContentType.password)
                         .textContentType(.password)
+                        .onSubmit {
+                            Task {
+                                await self.dataStore.login(username: self.username, password: self.password)
+                            }
+                        }
                     Button("action_login", action: {
                         Task {
                             await self.dataStore.login(username: self.username, password: self.password)

@@ -34,6 +34,16 @@ struct RegistrationView: View {
             SecureField("prompt_confirm_password", text: self.$confirmedPassword)
                 .textFieldStyle(RoundedBorderTextFieldStyle())
                 .textContentType(UITextContentType.newPassword)
+                .onSubmit {
+                    Task {
+                        await self.dataStore.register(
+                            username: self.username,
+                            email: self.email,
+                            password: self.password,
+                            confirmPassword: self.confirmedPassword
+                        )
+                    }
+                }
             Button("action_register", action: {
                 Task {
                     await self.dataStore.register(
