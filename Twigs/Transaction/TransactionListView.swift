@@ -12,16 +12,14 @@ import Collections
 import TwigsCore
 
 struct TransactionListView<Content>: View where Content: View {
-    @EnvironmentObject var authDataStore: AuthenticationDataStore
-    @StateObject var transactionDataStore: TransactionDataStore
-    let apiService: TwigsApiService
+    @EnvironmentObject var dataStore: DataStore
     @State var search: String = ""
     @ViewBuilder let header: (() -> Content)?
     var addingTransaction: Bool {
-        if case .editing(_) = self.transactionDataStore.transaction {
+        if case .editing(_) = self.dataStore.transaction {
             return true
         }
-        if case .saving(_) = self.transactionDataStore.transaction {
+        if case .saving(_) = self.dataStore.transaction {
             return true
         }
         return false
@@ -55,11 +53,41 @@ struct TransactionListView<Content>: View where Content: View {
         }
     }
     
+    private var currentUserId: String? {
+        get {
+            if case let .success(currentUser) = dataStore.currentUser {
+                return currentUser.id
+            } else {
+                return nil
+            }
+        }
+    }
+    
+    private var budgetId: String? {
+        get {
+            if case let .success(budget) = dataStore.budget {
+                return budget.id
+            } else {
+                return nil
+            }
+        }
+    }
+    
+    private var categoryId: String? {
+        get {
+            if case let .success(category) = dataStore.category {
+                return category.id
+            } else {
+                return nil
+            }
+        }
+    }
+
     @ViewBuilder
     var body: some View {
         InlineLoadingView(
-            data: $transactionDataStore.transactions,
-            action: { await transactionDataStore.getTransactions(self.budget.id, categoryId: self.category?.id) },
+            data: $dataStore.transactions,
+            action: { await dataStore.getTransactions() },
             errorTextLocalizedStringKey: "Failed to load transactions"
         ) { transactions in
             List {
@@ -67,25 +95,23 @@ struct TransactionListView<Content>: View where Content: View {
             }
             .searchable(text: $search)
             .refreshable {
-                await transactionDataStore.getTransactions(self.budget.id, categoryId: self.category?.id, from: nil, count: nil, page: nil)
+                await dataStore.getTransactions()
             }
             .sheet(
                 isPresented: .constant(addingTransaction),
                 content: {
                     TransactionFormSheet(transactionForm: TransactionForm(
-                        budgetRepository: apiService,
-                        categoryRepository: apiService,
-                        transactionList: transactionDataStore,
-                        createdBy: authDataStore.currentUser!.id,
-                        budgetId: self.budget.id,
-                        categoryId: self.category?.id,
+                        dataStore: dataStore,
+                        createdBy: currentUserId ?? "",
+                        budgetId: budgetId ?? "",
+                        categoryId: categoryId,
                         transaction: nil
                     ))
-            })
+                })
             .navigationBarItems(
                 trailing: HStack {
                     Button(action: {
-                        transactionDataStore.editTransaction(TwigsCore.Transaction(createdBy: authDataStore.currentUser!.id, budgetId: budget.id))
+                        dataStore.newTransaction()
                     }) {
                         Image(systemName: "plus")
                             .padding()
@@ -95,20 +121,13 @@ struct TransactionListView<Content>: View where Content: View {
         }
     }
     
-    let budget: Budget
-    let category: TwigsCore.Category?
-    init(apiService: TwigsApiService, budget: Budget, category: TwigsCore.Category? = nil, header: (() -> Content)? = nil) {
-        self.apiService = apiService
-        self._transactionDataStore = StateObject(wrappedValue: TransactionDataStore(apiService))
-        self.budget = budget
-        self.category = category
+    init(header: (() -> Content)? = nil) {
         self.header = header
     }
 }
 
 struct TransactionListItemView: View {
-    @EnvironmentObject var dataStore: TransactionDataStore
-    @EnvironmentObject var apiService: TwigsApiService
+    @EnvironmentObject var dataStore: DataStore
     var transaction: TwigsCore.Transaction
     
     var body: some View {
@@ -116,11 +135,8 @@ struct TransactionListItemView: View {
             tag: self.transaction,
             selection: self.$dataStore.selectedTransaction,
             destination: {
-                TransactionDetailsView(TransactionDetails(
-                    budgetRepository: apiService,
-                    categoryRepository: apiService,
-                    userRepository: apiService
-                )).navigationBarTitle("details", displayMode: .inline)
+                TransactionDetailsView(TransactionDetails(dataStore.apiService))
+                    .navigationBarTitle("details", displayMode: .inline)
             },
             label: {
                 HStack {

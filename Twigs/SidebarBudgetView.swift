@@ -10,16 +10,14 @@ import SwiftUI
 import TwigsCore
 
 struct SidebarBudgetView: View {
-    @EnvironmentObject var authenticationDataStore: AuthenticationDataStore
-    @EnvironmentObject var budgetDataStore: BudgetsDataStore
-    @EnvironmentObject var apiService: TwigsApiService
+    @EnvironmentObject var dataStore: DataStore
     @State var isSelectingBudget = true
     @State var hasSelectedBudget = false
     @State var tabSelection: Int? = 0
     
     @ViewBuilder
     var mainView: some View {
-        if case let .success(budget) = self.budgetDataStore.budget {
+        if case let .success(budget) = self.dataStore.budget {
             NavigationView {
                 List {
                     NavigationLink(
@@ -33,7 +31,7 @@ struct SidebarBudgetView: View {
                     NavigationLink(
                         tag: 1,
                         selection: $tabSelection,
-                        destination: { TransactionListView<EmptyView>(apiService: apiService, budget: budget).navigationBarTitle("transactions") },
+                        destination: { TransactionListView<EmptyView>().navigationBarTitle("transactions") },
                         label: { Label("transactions", systemImage: "dollarsign.circle") })
                         .keyboardShortcut("2")
                     NavigationLink(
@@ -45,7 +43,7 @@ struct SidebarBudgetView: View {
                     NavigationLink(
                         tag: 3,
                         selection: $tabSelection,
-                        destination: { RecurringTransactionsListView(dataStore: RecurringTransactionDataStore(apiService), budget: budget).navigationBarTitle("recurring_transactions") },
+                        destination: { RecurringTransactionsListView().navigationBarTitle("recurring_transactions") },
                         label: { Label("recurring_transactions", systemImage: "arrow.triangle.2.circlepath") })
                         .keyboardShortcut("4")
                     BudgetListsView()
@@ -64,18 +62,18 @@ struct SidebarBudgetView: View {
     @ViewBuilder
     var body: some View {
         mainView
-            .sheet(isPresented: $authenticationDataStore.showLogin,
+            .sheet(isPresented: $dataStore.showLogin,
                    onDismiss: {
                 Task {
-                    await self.budgetDataStore.getBudgets()
+                    await self.dataStore.getBudgets()
                 }
             },
                    content: {
                 LoginView()
-                    .environmentObject(authenticationDataStore)
+                    .environmentObject(dataStore)
                     .onDisappear {
                         Task {
-                            await self.budgetDataStore.getBudgets()
+                            await self.dataStore.getBudgets()
                         }
                     }
             })

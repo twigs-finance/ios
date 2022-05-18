@@ -11,7 +11,7 @@ import TwigsCore
 
 class CategoryForm: ObservableObject {
     let category: TwigsCore.Category?
-    let categoryList: CategoryListDataStore
+    let dataStore: DataStore
     let budgetId: String
     let categoryId: String
     @Published var title: String
@@ -23,11 +23,11 @@ class CategoryForm: ObservableObject {
     
     init(
         category: TwigsCore.Category?,
-        categoryList: CategoryListDataStore,
+        dataStore: DataStore,
         budgetId: String
     ) {
         self.category = category
-        self.categoryList = categoryList
+        self.dataStore = dataStore
         self.budgetId = budgetId
         self.categoryId = category?.id ?? ""
         self.showDelete = !self.categoryId.isEmpty
@@ -42,7 +42,7 @@ class CategoryForm: ObservableObject {
 
     func save() async {
         let amount = Int((Double(self.amount) ?? 0.0) * 100)
-        await categoryList.save(TwigsCore.Category(
+        await dataStore.save(TwigsCore.Category(
             budgetId: budgetId,
             id: categoryId,
             title: title,
@@ -57,6 +57,6 @@ class CategoryForm: ObservableObject {
         guard let category = self.category else {
             return
         }
-        await categoryList.delete(category)
+        await dataStore.delete(category)
     }
 }

@@ -12,12 +12,12 @@ import Combine
 import TwigsCore
 
 struct BudgetListsView: View {
-    @EnvironmentObject var budgetDataStore: BudgetsDataStore
+    @EnvironmentObject var dataStore: DataStore
     
     var body: some View {
         InlineLoadingView(
-            data: $budgetDataStore.budgets,
-            action: { await self.budgetDataStore.getBudgets(count: nil, page: nil) },
+            data: $dataStore.budgets,
+            action: { await self.dataStore.getBudgets(count: nil, page: nil) },
             errorTextLocalizedStringKey: "budgets_load_failure"
         ) { (budgets: [Budget]) in
             Section("budgets") {
@@ -30,13 +30,13 @@ struct BudgetListsView: View {
 }
 
 struct BudgetListItemView: View {
-    @EnvironmentObject var budgetDataStore: BudgetsDataStore
+    @EnvironmentObject var dataStore: DataStore
     let budget: Budget
     
     var body: some View {
         Button(
             action: {
-                self.budgetDataStore.selectBudget(budget)
+                self.dataStore.selectBudget(budget)
             },
             label: {
                 VStack(alignment: .leading) {

@@ -10,21 +10,20 @@ import SwiftUI
 import TwigsCore
 
 struct TabbedBudgetView: View {
-    @EnvironmentObject var authenticationDataStore: AuthenticationDataStore
-    @EnvironmentObject var budgetDataStore: BudgetsDataStore
+    @EnvironmentObject var dataStore: DataStore
     @EnvironmentObject var apiService: TwigsApiService
     @AppStorage("budget_tab") var tabSelection: Int = 0
     
     @ViewBuilder
     var mainView: some View {
-        if case let .success(budget) = budgetDataStore.budget {
+        if case let .success(budget) = dataStore.budget {
             TabView(selection: $tabSelection) {
                 NavigationView {
                     BudgetDetailsView(budget: budget)
                         .navigationBarTitle("overview")
                         .navigationBarItems(leading: HStack {
                             Button("budgets", action: {
-                                self.budgetDataStore.showBudgetSelection = true
+                                self.dataStore.showBudgetSelection = true
                             }).padding()
                         })
                 }
@@ -35,7 +34,7 @@ struct TabbedBudgetView: View {
                 .tag(0)
                 .keyboardShortcut("1")
                 NavigationView {
-                    TransactionListView<EmptyView>(apiService: apiService, budget: budget)
+                    TransactionListView<EmptyView>()
                         .navigationBarTitle("transactions")
                 }
                 .tabItem {
@@ -55,7 +54,7 @@ struct TabbedBudgetView: View {
                 .tag(2)
                 .keyboardShortcut("3")
                 NavigationView {
-                    RecurringTransactionsListView(dataStore: RecurringTransactionDataStore(apiService), budget: budget)
+                    RecurringTransactionsListView()
                         .navigationBarTitle("recurring_transactions")
                 }
                 .tabItem {
@@ -71,24 +70,24 @@ struct TabbedBudgetView: View {
     }
     
     var body: some View {
-        mainView.sheet(isPresented: $authenticationDataStore.showLogin,
+        mainView.sheet(isPresented: $dataStore.showLogin,
                        onDismiss: {
             Task {
-                await self.budgetDataStore.getBudgets()
+                await self.dataStore.getBudgets()
             }
         },
                        content: {
             LoginView()
-                .environmentObject(authenticationDataStore)
+                .environmentObject(dataStore)
                 .onDisappear {
                     Task {
-                        await self.budgetDataStore.getBudgets()
+                        await self.dataStore.getBudgets()
                     }
                 }
-        }).sheet(isPresented: $budgetDataStore.showBudgetSelection,
+        }).sheet(isPresented: $dataStore.showBudgetSelection,
                  content: {
             List {
-                BudgetListsView().environmentObject(budgetDataStore)
+                BudgetListsView().environmentObject(dataStore)
             }
         })
             .interactiveDismissDisabled(true)

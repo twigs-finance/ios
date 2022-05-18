@@ -14,7 +14,7 @@ struct RegistrationView: View {
     @State var email: String = ""
     @State var password: String = ""
     @State var confirmedPassword: String = ""
-    @EnvironmentObject var dataStore: AuthenticationDataStore
+    @EnvironmentObject var dataStore: DataStore
     
     var body: some View {
         VStack {
@@ -37,7 +37,7 @@ struct RegistrationView: View {
                 .textContentType(UITextContentType.newPassword)
             Button("action_register", action: {
                 Task {
-                    try await self.dataStore.register(
+                    await self.dataStore.register(
                         server: self.server,
                         username: self.username,
                         email: self.email,

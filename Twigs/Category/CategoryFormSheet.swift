@@ -10,13 +10,13 @@ import SwiftUI
 import TwigsCore
 
 struct CategoryFormSheet: View {
-    @EnvironmentObject var categoryList: CategoryListDataStore
+    @EnvironmentObject var dataStore: DataStore
     @ObservedObject var categoryForm: CategoryForm
     @State private var showingAlert = false
     
     @ViewBuilder
     var stateContent: some View {
-        switch categoryList.category {
+        switch dataStore.category {
         case .success(_):
             EmptyView()
         case .saving(_):
@@ -62,7 +62,7 @@ struct CategoryFormSheet: View {
             stateContent
                 .navigationBarItems(
                     leading: Button("cancel") {
-                        categoryList.cancelEdit()
+                        dataStore.cancelEditCategory()
                     },
                     trailing: Button("save") {
                         Task {

@@ -10,8 +10,9 @@ import SwiftUI
 import TwigsCore
 
 struct ProfileView: View {
-    @EnvironmentObject var authDataStore: AuthenticationDataStore
+    @EnvironmentObject var dataStore: DataStore
 
+    @ViewBuilder
     var body: some View {
         VStack(spacing: 10) {
             Image(systemName: "person.circle.fill")
@@ -21,7 +22,9 @@ struct ProfileView: View {
                 .clipShape(Circle())
                 .overlay(Circle().stroke(Color.white, lineWidth: 4))
                 .shadow(radius: 5)
-            Text(authDataStore.currentUser!.username)
+            if case let .success(user) = self.dataStore.currentUser {
+                Text(user.username)
+            }
             NavigationLink(destination: EmptyView()) {
                 Text("change_password")
             }

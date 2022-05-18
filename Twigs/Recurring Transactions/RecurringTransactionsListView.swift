@@ -10,13 +10,12 @@ import SwiftUI
 import TwigsCore
 
 struct RecurringTransactionsListView: View {
-    @ObservedObject var dataStore: RecurringTransactionDataStore
-    let budget: Budget
+    @EnvironmentObject var dataStore: DataStore
     
     var body: some View {
         InlineLoadingView(
-            data: $dataStore.transactions,
-            action: { await self.dataStore.getRecurringTransactions(self.budget.id) },
+            data: $dataStore.recurringTransactions,
+            action: { await self.dataStore.getRecurringTransactions() },
             errorTextLocalizedStringKey: "Failed to load recurring transactions"
         ) { (transactions: [RecurringTransaction]) in
             List {
@@ -31,13 +30,13 @@ struct RecurringTransactionsListView: View {
 #if DEBUG
 struct RecurringTransactionView_Previews: PreviewProvider {
     static var previews: some View {
-        RecurringTransactionsListView(dataStore: RecurringTransactionDataStore(MockRecurringTransactionRepository()), budget: MockBudgetRepository.budget)
+        RecurringTransactionsListView()
     }
 }
 #endif
 
 struct RecurringTransactionsListItemView: View {
-    @EnvironmentObject var dataStore: RecurringTransactionDataStore
+    @EnvironmentObject var dataStore: DataStore
     let transaction: RecurringTransaction
     
     init (_ transaction: RecurringTransaction) {
@@ -47,7 +46,7 @@ struct RecurringTransactionsListItemView: View {
     var body: some View {
         NavigationLink(
             tag: transaction,
-            selection: $dataStore.selectedTransaction,
+            selection: $dataStore.selectedRecurringTransaction,
             destination: {
                 RecurringTransactionDetailsView()
                 .navigationBarTitle("details", displayMode: .inline)

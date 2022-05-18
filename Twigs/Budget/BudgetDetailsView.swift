@@ -10,14 +10,14 @@ import SwiftUI
 import TwigsCore
 
 struct BudgetDetailsView: View {
-    @EnvironmentObject var budgetDataStore: BudgetsDataStore
+    @EnvironmentObject var dataStore: DataStore
     let budget: Budget
     
     @ViewBuilder
     var body: some View {
         InlineLoadingView(
-            data: self.$budgetDataStore.overview,
-            action: { await self.budgetDataStore.loadOverview(self.budget) },
+            data: self.$dataStore.overview,
+            action: { await self.dataStore.loadOverview(self.budget) },
             errorTextLocalizedStringKey: "budgets_load_failure"
         ) { overview in
             List {
@@ -96,7 +96,7 @@ struct ExpensesOverview: View {
 struct BudgetDetailsView_Previews: PreviewProvider {
     static var previews: some View {
         BudgetDetailsView(budget: MockBudgetRepository.budget)
-            .environmentObject(BudgetsDataStore(budgetRepository: MockBudgetRepository(), categoryRepository: MockCategoryRepository(), transactionRepository: MockTransactionRepository()))
+            .environmentObject(TwigsInMemoryCacheService())
     }
 }
 #endif

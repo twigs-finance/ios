@@ -22,7 +22,7 @@ class MockRecurringTransactionRepository: RecurringTransactionsRepository {
         amount: 10000,
         categoryId: MockCategoryRepository.category.id,
         expense: true,
-        createdBy: MockUserRepository.user.id,
+        createdBy: MockUserRepository.currentUser.id,
         budgetId: MockBudgetRepository.budget.id
     )
 

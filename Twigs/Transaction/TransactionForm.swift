@@ -10,9 +10,8 @@ import Foundation
 import TwigsCore
 
 class TransactionForm: ObservableObject {
-    let budgetRepository: BudgetRepository
-    let categoryRepository: CategoryRepository
-    let transactionList: TransactionDataStore
+    let apiService: TwigsApiService
+    let dataStore: DataStore
     let transaction: TwigsCore.Transaction?
     let createdBy: String
     let transactionId: String
@@ -34,20 +33,17 @@ class TransactionForm: ObservableObject {
     let showDelete: Bool
     
     init(
-        budgetRepository: BudgetRepository,
-        categoryRepository: CategoryRepository,
-        transactionList: TransactionDataStore,
+        dataStore: DataStore,
         createdBy: String,
         budgetId: String,
         categoryId: String? = nil,
         transaction: TwigsCore.Transaction? = nil
     ) {
-        self.budgetRepository = budgetRepository
-        self.categoryRepository = categoryRepository
+        self.apiService = dataStore.apiService
         self.budgetId = budgetId
         self.categoryId = categoryId ?? ""
         self.createdBy = createdBy
-        self.transactionList = transactionList
+        self.dataStore = dataStore
         let baseTransaction = transaction ?? TwigsCore.Transaction(categoryId: categoryId, createdBy: createdBy, budgetId: budgetId)
         self.transaction = transaction
         self.transactionId = baseTransaction.id
@@ -64,13 +60,13 @@ class TransactionForm: ObservableObject {
         self.categories = .loading
         var budgets: [Budget]
         do {
-            budgets = try await budgetRepository.getBudgets(count: nil, page: nil)
+            budgets = try await apiService.getBudgets(count: nil, page: nil)
             self.budgets = .success(budgets)
         } catch {
             self.budgets = .error(error)
         }
         do {
-            let categories = try await categoryRepository.getCategories(budgetId: nil, expense: nil, archived: false, count: nil, page: nil)
+            let categories = try await apiService.getCategories(budgetId: nil, expense: nil, archived: false, count: nil, page: nil)
             self.cachedCategories = categories
             updateCategories()
         } catch {
@@ -80,7 +76,7 @@ class TransactionForm: ObservableObject {
     
     func save() async {
         let amount = Double(self.amount) ?? 0.0
-        await transactionList.saveTransaction(Transaction(
+        await dataStore.saveTransaction(Transaction(
             id: transactionId,
             title: title,
             description: description,
@@ -97,7 +93,7 @@ class TransactionForm: ObservableObject {
         guard let transaction = self.transaction else {
             return
         }
-        await transactionList.deleteTransaction(transaction)
+        await dataStore.deleteTransaction(transaction)
     }
     
     private func updateCategories() {

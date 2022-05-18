@@ -10,10 +10,10 @@ import SwiftUI
 import TwigsCore
 
 struct RecurringTransactionDetailsView: View {
-    @EnvironmentObject var dataStore: RecurringTransactionDataStore
+    @EnvironmentObject var dataStore: DataStore
     
     var body: some View {
-        if let transaction = dataStore.selectedTransaction {
+        if let transaction = dataStore.selectedRecurringTransaction {
             ScrollView {
                 VStack(alignment: .leading) {
                     Text(transaction.title)

@@ -10,14 +10,14 @@ import SwiftUI
 import TwigsCore
 
 struct TransactionFormSheet: View {
-    @EnvironmentObject var transactionDataStore: TransactionDataStore
+    @EnvironmentObject var dataStore: DataStore
     @ObservedObject var transactionForm: TransactionForm
     @State private var showingAlert = false
     
     @ViewBuilder
     var body: some View {
         NavigationView {
-            switch self.transactionDataStore.transaction {
+            switch self.dataStore.transaction {
             case .loading:
                 EmbeddedLoadingView()
             default:
@@ -63,7 +63,7 @@ struct TransactionFormSheet: View {
                     }
                     .navigationTitle(transactionForm.transactionId.isEmpty ? "add_transaction" : "edit_transaction")
                     .navigationBarItems(
-                        leading: Button("cancel", action: { transactionForm.transactionList.cancelEdit() }),
+                        leading: Button("cancel", action: { dataStore.cancelEditTransaction() }),
                         trailing: Button("save", action: {
                             Task {
                                 await transactionForm.save()

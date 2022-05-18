@@ -13,7 +13,7 @@ import TwigsCore
 #if DEBUG
 class MockUserRepository: UserRepository {
     static let loginResponse = LoginResponse(token: "token", expiration: "2020-01-01T12:00:00Z", userId: "0")
-    static let user = User(id: "0", username: "root", email: "root@localhost", avatar: nil)
+    static let currentUser = User(id: "0", username: "root", email: "root@localhost", avatar: nil)
     static var token: String? = nil
 
     func setToken(_ token: String) {
@@ -21,11 +21,11 @@ class MockUserRepository: UserRepository {
     }
     
     func getUser(_ id: String) async throws -> User {
-        return MockUserRepository.user
+        return MockUserRepository.currentUser
     }
     
     func searchUsers(_ withUsername: String) async throws -> [User] {
-        return [MockUserRepository.user]
+        return [MockUserRepository.currentUser]
     }
     
     func setServer(_ server: String) {
@@ -36,7 +36,7 @@ class MockUserRepository: UserRepository {
     }
     
     func register(username: String, email: String, password: String) async throws -> User {
-        return MockUserRepository.user
+        return MockUserRepository.currentUser
     }
 }
 

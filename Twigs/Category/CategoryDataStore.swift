@@ -12,16 +12,16 @@ import TwigsCore
 @MainActor
 class CategoryDataStore: ObservableObject {
     @Published var sum: AsyncData<Int> = .empty
-    let transactionRepository: TransactionRepository
+    let apiService: TwigsApiService
     
-    init(transactionRepository: TransactionRepository) {
-        self.transactionRepository = transactionRepository
+    init(_ apiService: TwigsApiService) {
+        self.apiService = apiService
     }
     
     func sum(categoryId: String, from: Date? = nil, to: Date? = nil) async {
         self.sum = .loading
         do {
-            let sum = try await self.transactionRepository.sumTransactions(budgetId: nil, categoryId: categoryId, from: from, to: to).balance
+            let sum = try await self.apiService.sumTransactions(budgetId: nil, categoryId: categoryId, from: from, to: to).balance
             self.sum = .success(sum)
         } catch {
             self.sum = .error(error)

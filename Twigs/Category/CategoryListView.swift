@@ -11,26 +11,25 @@ import Combine
 import TwigsCore
 
 struct CategoryListView: View {
-    @EnvironmentObject var categoryDataStore: CategoryListDataStore
-    @EnvironmentObject var apiService: TwigsApiService
+    @EnvironmentObject var dataStore: DataStore
     @State var requestId: String = ""
     
     @ViewBuilder
     var body: some View {
         InlineLoadingView(
-            data: $categoryDataStore.categories,
-            action: { await self.categoryDataStore.getCategories(budgetId: budget.id, expense: nil, archived: nil, count: nil, page: nil) },
+            data: $dataStore.categories,
+            action: { await self.dataStore.getCategories(budgetId: budget.id, expense: nil, archived: nil, count: nil, page: nil) },
             errorTextLocalizedStringKey: "Failed to load categories"
         ) { categories in
             List {
                 Section {
                     ForEach(categories.filter { !$0.archived }) { category in
-                        CategoryListItemView(CategoryDataStore(transactionRepository: apiService), budget: budget, category: category)
+                        CategoryListItemView(CategoryDataStore(dataStore.apiService), budget: budget, category: category)
                     }
                 }
                 Section("Archived") {
                     ForEach(categories.filter { $0.archived }) { category in
-                        CategoryListItemView(CategoryDataStore(transactionRepository: apiService), budget: budget, category: category)
+                        CategoryListItemView(CategoryDataStore(dataStore.apiService), budget: budget, category: category)
                     }
                 }
             }
@@ -46,7 +45,7 @@ struct CategoryListView: View {
 struct CategoryListItemView: View {
     let category: TwigsCore.Category
     let budget: Budget
-    @EnvironmentObject var categoryListDataStore: CategoryListDataStore
+    @EnvironmentObject var dataStore: DataStore
     @ObservedObject var categoryDataStore: CategoryDataStore
     
     init(_ categoryDataStore: CategoryDataStore, budget: Budget, category: TwigsCore.Category) {
@@ -68,11 +67,11 @@ struct CategoryListItemView: View {
     var body: some View {
         NavigationLink(
             tag: category,
-            selection: $categoryListDataStore.selectedCategory,
+            selection: $dataStore.selectedCategory,
             destination: {
                 CategoryDetailsView(self.budget)
                     .environmentObject(categoryDataStore)
-                    .navigationBarTitle(categoryListDataStore.selectedCategory?.title ?? "")
+                    .navigationBarTitle(dataStore.selectedCategory?.title ?? "")
             },
             label: {
                 VStack(alignment: .leading) {

@@ -10,9 +10,8 @@ import SwiftUI
 import TwigsCore
 
 struct CategoryDetailsView: View {
-    @EnvironmentObject var categoryListDataStore: CategoryListDataStore
+    @EnvironmentObject var dataStore: DataStore
     @EnvironmentObject var categoryDataStore: CategoryDataStore
-    @EnvironmentObject var transactionDataStore: TransactionDataStore
     @EnvironmentObject var apiService: TwigsApiService
     let budget: Budget
     @State var sum: Int? = 0
@@ -35,8 +34,8 @@ struct CategoryDetailsView: View {
     }
     
     var body: some View {
-        if let category = categoryListDataStore.selectedCategory {
-            TransactionListView(apiService: apiService, budget: budget, category: category) {
+        if let category = dataStore.selectedCategory {
+            TransactionListView() {
                 VStack {
                     Text(verbatim: category.description ?? "")
                         .padding()
@@ -59,7 +58,7 @@ struct CategoryDetailsView: View {
             }, content: {
                 CategoryFormSheet(categoryForm: CategoryForm(
                     category: category,
-                    categoryList: categoryListDataStore,
+                    dataStore: dataStore,
                     budgetId: category.budgetId
                 ))
             })
@@ -86,7 +85,7 @@ struct LabeledCounter: View {
 struct CategoryDetailsView_Previews: PreviewProvider {
     static var previews: some View {
         CategoryDetailsView(MockBudgetRepository.budget)
-            .environmentObject(TransactionDataStore(MockTransactionRepository()))
+            .environmentObject(TwigsInMemoryCacheService())
     }
 }
 #endif

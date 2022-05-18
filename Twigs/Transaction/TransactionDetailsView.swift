@@ -8,12 +8,11 @@
 
 import SwiftUI
 import TwigsCore
-import XCTest
+import ArgumentParser
 
 struct TransactionDetailsView: View {
     @EnvironmentObject var apiService: TwigsApiService
-    @EnvironmentObject var authDataStore: AuthenticationDataStore
-    @EnvironmentObject var dataStore: TransactionDataStore
+    @EnvironmentObject var dataStore: DataStore
     @ObservedObject var transactionDetails: TransactionDetails
     var editing: Bool {
         if case .editing(_) = dataStore.transaction {
@@ -27,6 +26,15 @@ struct TransactionDetailsView: View {
     
     init(_ transactionDetails: TransactionDetails) {
         self.transactionDetails = transactionDetails
+    }
+    private var currentUserId: String? {
+        get {
+            if case let .success(currentUser) = self.dataStore.currentUser {
+                return currentUser.id
+            } else {
+                return nil
+            }
+        }
     }
     
     var body: some View {
@@ -63,10 +71,8 @@ struct TransactionDetailsView: View {
             })
             .sheet(isPresented: .constant(self.editing), onDismiss: nil) {
                 TransactionFormSheet(transactionForm: TransactionForm(
-                    budgetRepository: apiService,
-                    categoryRepository: apiService,
-                    transactionList: dataStore,
-                    createdBy: authDataStore.currentUser!.id,
+                    dataStore: dataStore,
+                    createdBy: currentUserId!,
                     budgetId: transaction.budgetId,
                     categoryId: transaction.categoryId,
                     transaction: transaction
@@ -173,7 +179,7 @@ struct UserLineItem: View {
 #if DEBUG
 struct TransactionDetailsView_Previews: PreviewProvider {
     static var previews: some View {
-        TransactionDetailsView(TransactionDetails(budgetRepository: MockBudgetRepository(), categoryRepository: MockCategoryRepository(), userRepository: MockUserRepository()))
+        TransactionDetailsView(TransactionDetails(TwigsInMemoryCacheService()))
     }
 }
 #endif

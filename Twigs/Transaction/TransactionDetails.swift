@@ -14,14 +14,10 @@ class TransactionDetails: ObservableObject {
     @Published var category: AsyncData<TwigsCore.Category> = .empty
     @Published var budget: AsyncData<Budget> = .empty
     @Published var user: AsyncData<User> = .empty
-    let budgetRepository: BudgetRepository
-    let categoryRepository: CategoryRepository
-    let userRepository: UserRepository
+    let apiService: TwigsApiService
     
-    init(budgetRepository: BudgetRepository, categoryRepository: CategoryRepository, userRepository: UserRepository) {
-        self.budgetRepository = budgetRepository
-        self.categoryRepository = categoryRepository
-        self.userRepository = userRepository
+    init(_ apiService: TwigsApiService) {
+        self.apiService = apiService
     }
     
     func loadDetails(_ transaction: TwigsCore.Transaction) async {
@@ -41,7 +37,7 @@ class TransactionDetails: ObservableObject {
     private func loadBudget(_ id: String) async {
         self.budget = .loading
         do {
-            let budget = try await budgetRepository.getBudget(id)
+            let budget = try await apiService.getBudget(id)
             self.budget = .success(budget)
         } catch {
             self.budget = .error(error)
@@ -51,7 +47,7 @@ class TransactionDetails: ObservableObject {
     private func loadCategory(_ id: String) async {
         self.category = .loading
         do {
-            let category = try await categoryRepository.getCategory(id)
+            let category = try await apiService.getCategory(id)
             self.category = .success(category)
         } catch {
             self.category = .error(error)
@@ -61,7 +57,7 @@ class TransactionDetails: ObservableObject {
     private func loadUser(_ id: String) async {
         self.user = .loading
         do {
-            let user = try await userRepository.getUser(id)
+            let user = try await apiService.getUser(id)
             self.user = .success(user)
         } catch {
             self.user = .error(error)

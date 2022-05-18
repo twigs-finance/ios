@@ -10,22 +10,12 @@ import SwiftUI
 import TwigsCore
 
 struct MainView: View {
-    @StateObject var authenticationDataStore: AuthenticationDataStore
-    @StateObject var budgetDataStore: BudgetsDataStore
-    @StateObject var transactionList: TransactionDataStore
-    @StateObject var categoryList: CategoryListDataStore
-    @StateObject var userDataStore: UserDataStore
-    @StateObject var recurringTransactionList: RecurringTransactionDataStore
+    @StateObject var dataStore: DataStore
     let apiService: TwigsApiService
     
-    init(_ apiService: TwigsApiService, baseUrl: Binding<String>, token: Binding<String>, userId: Binding<String>) {
+    init(_ apiService: TwigsApiService) {
         self.apiService = apiService
-        self._authenticationDataStore = StateObject(wrappedValue: AuthenticationDataStore(apiService, baseUrl: baseUrl, token: token, userId: userId))
-        self._budgetDataStore = StateObject(wrappedValue: BudgetsDataStore(budgetRepository: apiService, categoryRepository: apiService, transactionRepository: apiService))
-        self._categoryList = StateObject(wrappedValue: CategoryListDataStore(apiService))
-        self._userDataStore = StateObject(wrappedValue: UserDataStore(apiService))
-        self._transactionList = StateObject(wrappedValue: TransactionDataStore(apiService))
-        self._recurringTransactionList = StateObject(wrappedValue: RecurringTransactionDataStore(apiService))
+        self._dataStore = StateObject(wrappedValue: DataStore(apiService))
     }
     
     @ViewBuilder
@@ -39,15 +29,10 @@ struct MainView: View {
     
     var body: some View {
         mainView
-            .environmentObject(transactionList)
-            .environmentObject(categoryList)
-            .environmentObject(budgetDataStore)
-            .environmentObject(userDataStore)
-            .environmentObject(recurringTransactionList)
-            .environmentObject(authenticationDataStore)
+            .environmentObject(dataStore)
             .onAppear {
                 Task {
-                    await self.authenticationDataStore.loadProfile()
+                    await self.dataStore.loadProfile()
                 }
             }
     }
@@ -55,6 +40,6 @@ struct MainView: View {
 
 struct MainView_Previews: PreviewProvider {
     static var previews: some View {
-        MainView(TwigsInMemoryCacheService(), baseUrl: .constant(""), token: .constant(""), userId: .constant(""))
+        MainView(TwigsInMemoryCacheService())
     }
 }

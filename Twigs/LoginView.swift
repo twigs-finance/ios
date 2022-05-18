@@ -13,7 +13,7 @@ struct LoginView: View {
     @State var server: String = ""
     @State var username: String = ""
     @State var password: String = ""
-    @EnvironmentObject var dataStore: AuthenticationDataStore
+    @EnvironmentObject var dataStore: DataStore
     var loading: Bool {
         switch dataStore.user {
         case .loading:
