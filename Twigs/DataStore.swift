@@ -19,13 +19,9 @@ class DataStore : ObservableObject {
     @Published var budgets: AsyncData<[Budget]> = .empty
     @Published var budget: AsyncData<Budget> = .empty {
         didSet {
-            self.overview = .empty
             if case let .success(budget) = self.budget {
                 UserDefaults.standard.set(budget.id, forKey: LAST_BUDGET)
                 self.showBudgetSelection = false
-                Task {
-                    await loadOverview(budget)
-                }
             }
         }
     }
@@ -51,10 +47,10 @@ class DataStore : ObservableObject {
                 return
             }
             if let id = UserDefaults.standard.string(forKey: LAST_BUDGET), let lastBudget = budgets.first(where: { $0.id == id }) {
-                self.budget = .success(lastBudget)
+                await self.selectBudget(lastBudget)
             } else {
                 if let budget = budgets.first {
-                    self.budget = .success(budget)
+                    await self.selectBudget(budget)
                 }
             }
         } catch {
@@ -95,8 +91,12 @@ class DataStore : ObservableObject {
         }
     }
     
-    func selectBudget(_ budget: Budget) {
+    func selectBudget(_ budget: Budget) async {
         self.budget = .success(budget)
+        await loadOverview(budget)
+        await getTransactions()
+        await getCategories(budgetId: budget.id, expense: nil, archived: nil, count: nil, page: nil)
+        await getRecurringTransactions()
     }
 
     @Published var categories: AsyncData<[TwigsCore.Category]> = .empty

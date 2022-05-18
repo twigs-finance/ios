@@ -36,7 +36,9 @@ struct BudgetListItemView: View {
     var body: some View {
         Button(
             action: {
-                self.dataStore.selectBudget(budget)
+                Task {
+                    await self.dataStore.selectBudget(budget)
+                }
             },
             label: {
                 VStack(alignment: .leading) {
