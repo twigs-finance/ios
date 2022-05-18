@@ -32,7 +32,8 @@ class DataStore : ObservableObject {
         _ apiService: TwigsApiService
     ) {
         self.apiService = apiService
-        self.baseUrl = UserDefaults.standard.string(forKey: KEY_BASE_URL)
+        self.baseUrl = UserDefaults.standard.string(forKey: KEY_BASE_URL) ?? ""
+        self.apiService.baseUrl = baseUrl
         self.token = UserDefaults.standard.string(forKey: KEY_TOKEN)
         self.userId = UserDefaults.standard.string(forKey: KEY_USER_ID)
     }
@@ -350,7 +351,7 @@ class DataStore : ObservableObject {
     private let KEY_TOKEN = "TOKEN"
     private let KEY_USER_ID = "USER_ID"
 
-    @Published var baseUrl: String? {
+    @Published var baseUrl: String {
         didSet {
             self.apiService.baseUrl = baseUrl
             UserDefaults.standard.set(baseUrl, forKey: KEY_BASE_URL)
@@ -369,12 +370,8 @@ class DataStore : ObservableObject {
     }
     @Published var showLogin: Bool = true
     
-    func login(server: String, username: String, password: String) async {
+    func login(username: String, password: String) async {
         self.currentUser = .loading
-        self.apiService.baseUrl = server
-        // The API Service applies some validation and correcting of the server before returning it so we use that
-        // value instead of the original one
-        self.baseUrl = self.apiService.baseUrl ?? ""
         do {
             let response = try await self.apiService.login(username: username, password: password)
             self.token = response.token
@@ -391,17 +388,12 @@ class DataStore : ObservableObject {
         }
     }
     
-    func register(server: String, username: String, email: String, password: String, confirmPassword: String) async {
+    func register(username: String, email: String, password: String, confirmPassword: String) async {
         // TODO: Validate other fields as well
         if !password.elementsEqual(confirmPassword) {
             // TODO: Show error message to user
             return
         }
-        
-        self.apiService.baseUrl = server
-        // The API Service applies some validation and correcting of the server before returning it so we use that
-        // value instead of the original one
-        self.baseUrl = self.apiService.baseUrl ?? ""
         do {
             _ = try await apiService.register(username: username, email: email, password: password)
         } catch {
@@ -413,7 +405,7 @@ class DataStore : ObservableObject {
             }
             return
         }
-        await self.login(server: server, username: username, password: password)
+        await self.login(username: username, password: password)
     }
     
     func loadProfile() async {

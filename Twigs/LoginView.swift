@@ -10,7 +10,6 @@ import SwiftUI
 import Combine
 
 struct LoginView: View {
-    @State var server: String = ""
     @State var username: String = ""
     @State var password: String = ""
     @EnvironmentObject var dataStore: DataStore
@@ -31,7 +30,7 @@ struct LoginView: View {
             NavigationView {
                 VStack {
                     Text("info_login")
-                    TextField(LocalizedStringKey("prompt_server"), text: self.$server)
+                    TextField(LocalizedStringKey("prompt_server"), text: self.$dataStore.baseUrl)
                         .autocapitalization(.none)
                         .textFieldStyle(RoundedBorderTextFieldStyle())
                         .textContentType(.URL)
@@ -47,12 +46,12 @@ struct LoginView: View {
                         .textContentType(.password)
                     Button("action_login", action: {
                         Task {
-                            await self.dataStore.login(server: self.server, username: self.username, password: self.password)
+                            await self.dataStore.login(username: self.username, password: self.password)
                         }
                     }).buttonStyle(DefaultButtonStyle())
                     Spacer()
                     Text("info_register")
-                    NavigationLink(destination: RegistrationView(server: self.$server)) {
+                    NavigationLink(destination: RegistrationView(username: self.$username, password: self.$password)) {
                         Text("action_register")
                             .buttonStyle(DefaultButtonStyle())
                     }

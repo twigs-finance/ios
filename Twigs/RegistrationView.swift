@@ -9,16 +9,15 @@
 import SwiftUI
 
 struct RegistrationView: View {
-    @Binding var server: String
-    @State var username: String = ""
+    @Binding var username: String
     @State var email: String = ""
-    @State var password: String = ""
+    @Binding var password: String
     @State var confirmedPassword: String = ""
     @EnvironmentObject var dataStore: DataStore
     
     var body: some View {
         VStack {
-            TextField(LocalizedStringKey("prompt_server"), text: self.$server)
+            TextField(LocalizedStringKey("prompt_server"), text: self.$dataStore.baseUrl)
                 .textFieldStyle(RoundedBorderTextFieldStyle())
                 .textContentType(.URL)
             TextField("prompt_username", text: self.$username)
@@ -38,7 +37,6 @@ struct RegistrationView: View {
             Button("action_register", action: {
                 Task {
                     await self.dataStore.register(
-                        server: self.server,
                         username: self.username,
                         email: self.email,
                         password: self.password,
