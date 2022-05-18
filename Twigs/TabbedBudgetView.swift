@@ -81,8 +81,22 @@ struct TabbedBudgetView: View {
         
         .sheet(isPresented: $dataStore.showBudgetSelection,
                  content: {
-            List {
-                BudgetListsView().environmentObject(dataStore)
+            NavigationView {
+                VStack {
+                    List {
+                        BudgetListsView().environmentObject(dataStore)
+                    }
+                    .navigationTitle("budgets")
+                    .navigationBarItems(trailing: Button(action: {dataStore.newBudget()}, label: {
+                        Image(systemName: "plus")
+                            .padding()
+                    }))
+                    NavigationLink(
+                        isActive: self.$dataStore.editingBudget,
+                        destination: { BudgetFormView().navigationTitle("new_budget") },
+                        label: { EmptyView() }
+                    )
+                }
             }
             .interactiveDismissDisabled(true)
         })

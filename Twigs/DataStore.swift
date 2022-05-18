@@ -27,7 +27,8 @@ class DataStore : ObservableObject {
     }
     @Published var overview: AsyncData<BudgetOverview> = .empty
     @Published var showBudgetSelection: Bool = true
-    
+    @Published var editingBudget: Bool = false
+
     init(
         _ apiService: TwigsApiService
     ) {
@@ -57,6 +58,61 @@ class DataStore : ObservableObject {
         } catch {
             self.budgets = .error(error)
         }
+    }
+    
+    func newBudget() {
+        self.budget = .editing(Budget(id: "", name: "", description: "", currencyCode: ""))
+        self.editingBudget = true
+    }
+    
+    func save(_ budget: Budget) async {
+        self.budget = .saving(budget)
+        do {
+            var savedBudget: Budget
+            if budget.id != "" {
+                savedBudget = try await self.apiService.updateBudget(budget)
+            } else {
+                savedBudget = try await self.apiService.newBudget(budget)
+            }
+            await self.selectBudget(savedBudget)
+            if case let .success(budgets) = self.budgets {
+                var updatedBudgets = budgets.filter(withoutId: budget.id)
+                updatedBudgets.append(savedBudget)
+                self.budgets = .success(updatedBudgets.sorted(by: { $0.name < $1.name }))
+            }
+        } catch {
+            self.budget = .error(error, budget)
+        }
+    }
+    
+    func deleteBudget() async {
+        guard case let .editing(budget) = self.budget, budget.id != "" else {
+            return
+        }
+        self.budget = .loading
+        do {
+            try await self.apiService.deleteBudget(budget.id)
+            await self.selectBudget(nil)
+            if case let .success(budgets) = self.budgets {
+                self.budgets = .success(budgets.filter(withoutId: budget.id))
+            }
+        } catch {
+            self.budget = .error(error, budget)
+        }
+    }
+    
+    func cancelEditBudget() async {
+        guard case let .success(budgets) = self.budgets else {
+            return
+        }
+        if budgets.isEmpty {
+            // Prevent the user from exiting the new budget flow if they haven't created any budgets yet
+            return
+        }
+        guard case let .editing(budget) = self.budget else {
+            return
+        }
+        await self.selectBudget(budget)
     }
     
     func loadOverview(_ budget: Budget) async {
@@ -92,12 +148,20 @@ class DataStore : ObservableObject {
         }
     }
     
-    func selectBudget(_ budget: Budget) async {
-        self.budget = .success(budget)
-        await loadOverview(budget)
-        await getTransactions()
-        await getCategories(budgetId: budget.id, expense: nil, archived: nil, count: nil, page: nil)
-        await getRecurringTransactions()
+    func selectBudget(_ budget: Budget?) async {
+        self.editingBudget = false
+        if let budget = budget {
+            self.budget = .success(budget)
+            await loadOverview(budget)
+            await getTransactions()
+            await getCategories(budgetId: budget.id, expense: nil, archived: nil, count: nil, page: nil)
+            await getRecurringTransactions()
+        } else {
+            self.budget = .empty
+            self.transactions = .empty
+            self.categories = .empty
+            self.recurringTransactions = .empty
+        }
     }
 
     @Published var categories: AsyncData<[TwigsCore.Category]> = .empty

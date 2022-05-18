@@ -20,10 +20,8 @@ struct BudgetListsView: View {
             action: { await self.dataStore.getBudgets(count: nil, page: nil) },
             errorTextLocalizedStringKey: "budgets_load_failure"
         ) { (budgets: [Budget]) in
-            Section("budgets") {
-                ForEach(budgets) { budget in
-                    BudgetListItemView(budget)
-                }
+            ForEach(budgets) { budget in
+                BudgetListItemView(budget)
             }
         }
     }

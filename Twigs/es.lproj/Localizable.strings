@@ -64,6 +64,7 @@
 // MARK: Budgets
 "budget" = "Presupuesto";
 "budgets" = "Presupuestos";
+"new_budget" = "Nuevo Presupuesto";
 "current_balance" = "Saldo Actual:";
 "income" = "Ingresos:";
 "expenses" = "Gastos:";

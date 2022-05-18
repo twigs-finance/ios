@@ -64,6 +64,7 @@
 // MARK: Budgets
 "budget" = "Budget";
 "budgets" = "Budgets";
+"new_budget" = "New Budget";
 "current_balance" = "Current Balance:";
 "expected" = "Expected:";
 "actual" = "Actual:";
