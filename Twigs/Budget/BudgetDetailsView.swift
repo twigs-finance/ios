@@ -30,7 +30,11 @@ struct BudgetDetailsView: View {
                 Section("expenses") {
                     ExpensesOverview(overview: overview)
                 }
-            }.listStyle(.insetGrouped)
+            }
+            .listStyle(.insetGrouped)
+            .refreshable {
+                await dataStore.loadOverview(self.budget)
+            }
         }
     }
 }
