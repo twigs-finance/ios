@@ -27,9 +27,11 @@ struct CategoryListView: View {
                         CategoryListItemView(CategoryDataStore(dataStore.apiService), budget: budget, category: category)
                     }
                 }
-                Section("Archived") {
-                    ForEach(categories.filter { $0.archived }) { category in
-                        CategoryListItemView(CategoryDataStore(dataStore.apiService), budget: budget, category: category)
+                if categories.contains(where: { $0.archived }) {
+                    Section("Archived") {
+                        ForEach(categories.filter { $0.archived }) { category in
+                            CategoryListItemView(CategoryDataStore(dataStore.apiService), budget: budget, category: category)
+                        }
                     }
                 }
             }
