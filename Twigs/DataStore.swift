@@ -245,16 +245,6 @@ class DataStore : ObservableObject {
     @Published var selectedTransaction: Transaction? = nil
     private var budgetId: String = ""
     private var categoryId: String? = nil
-    private var from: Date? = nil
-    private var count: Int? = nil
-    private var page: Int? = nil
-    
-    func getTransactions(from: Date? = nil, count: Int? = nil, page: Int? = nil) async {
-        self.from = from
-        self.count = count
-        self.page = page
-        await self.getTransactions()
-    }
     
     func getTransactions() async {
         guard case let .success(budget) = self.budget else {
@@ -276,10 +266,10 @@ class DataStore : ObservableObject {
             let transactions = try await self.apiService.getTransactions(
                 budgetIds: [budgetId],
                 categoryIds: categoryIds,
-                from: from ?? Date.firstOfMonth,
+                from: Date.firstOfMonth,
                 to: nil,
-                count: count,
-                page: page
+                count: nil,
+                page: nil
             )
             let groupedTransactions = OrderedDictionary<String,[Transaction]>(grouping: transactions, by: { $0.date.toLocaleString() })
             self.transactions = .success(groupedTransactions)
