@@ -408,6 +408,26 @@ class DataStore : ObservableObject {
         await self.login(username: username, password: password)
     }
     
+    func logout() {
+        self.budgets = .empty
+        self.budget = .empty
+        self.overview = .empty
+        self.categories = .empty
+        self.category = .empty
+        self.transactions = .empty
+        self.transaction = .empty
+        self.recurringTransactions = .empty
+        self.recurringTransaction = .empty
+        self.selectedRecurringTransaction = nil
+        self.selectedCategory = nil
+        self.selectedTransaction = nil
+        self.currentUser = .empty
+        self.user = .empty
+        self.token = nil
+        UserDefaults.standard.removeObject(forKey: KEY_TOKEN)
+        UserDefaults.standard.removeObject(forKey: KEY_USER_ID)
+    }
+    
     func loadProfile() async {
         guard let userId = self.userId, !userId.isEmpty else {
             self.currentUser = .error(UserStatus.unauthenticated)

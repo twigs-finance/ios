@@ -25,7 +25,9 @@ struct TabbedBudgetView: View {
                             Button("budgets", action: {
                                 self.dataStore.showBudgetSelection = true
                             }).padding()
-                        })
+                        }, trailing: Button("logout", action: {
+                            self.dataStore.logout()
+                        }).padding())
                 }
                 .tabItem {
                     Image(systemName: "chart.line.uptrend.xyaxis.circle.fill")

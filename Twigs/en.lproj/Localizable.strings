@@ -37,6 +37,7 @@
 "prompt_password" = "Password";
 "action_login" = "Login";
 "loading_login" = "Logging in...";
+"logout" = "Logout";
 
 // MARK: Registration
 "info_register" = "Don't have an account?";

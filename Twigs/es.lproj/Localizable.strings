@@ -37,6 +37,7 @@
 "prompt_password" = "Contraseña";
 "action_login" = "Inicia sesión";
 "loading_login" = "Iniciando sesión...";
+"logout" = "Cerrar sesión";
 
 // MARK: Registration
 "info_register" = "¿No tienes una cuenta?";
