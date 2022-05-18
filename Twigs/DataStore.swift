@@ -28,6 +28,7 @@ class DataStore : ObservableObject {
     @Published var overview: AsyncData<BudgetOverview> = .empty
     @Published var showBudgetSelection: Bool = true
     @Published var editingBudget: Bool = false
+    @Published var editingCategory: Bool = false
 
     init(
         _ apiService: TwigsApiService
@@ -176,7 +177,14 @@ class DataStore : ObservableObject {
     }
     @Published var selectedCategory: TwigsCore.Category? = nil
     
-    func getCategories(budgetId: String? = nil, expense: Bool? = nil, archived: Bool? = false, count: Int? = nil, page: Int? = nil) async {
+    func getCategories() async {
+        guard case let .success(budget) = self.budget else {
+            return
+        }
+        await self.getCategories(budgetId: budget.id)
+    }
+    
+    func getCategories(budgetId: String, expense: Bool? = nil, archived: Bool? = false, count: Int? = nil, page: Int? = nil) async {
         self.categories = .loading
         do {
             let categories = try await apiService.getCategories(budgetId: budgetId, expense: expense, archived: archived, count: count, page: page)
@@ -196,6 +204,7 @@ class DataStore : ObservableObject {
                 savedCategory = try await self.apiService.createCategory(category)
             }
             self.category = .success(savedCategory)
+            self.editingCategory = false
             if case let .success(categories) = self.categories {
                 var updatedCategories = categories.filter(withoutId: category.id)
                 updatedCategories.append(savedCategory)
@@ -211,6 +220,7 @@ class DataStore : ObservableObject {
         do {
             try await self.apiService.deleteCategory(category.id)
             self.category = .empty
+            self.editingCategory = false
             if case let .success(categories) = self.categories {
                 self.categories = .success(categories.filter(withoutId: category.id))
             }
@@ -220,10 +230,12 @@ class DataStore : ObservableObject {
     }
     
     func edit(_ category: TwigsCore.Category) async {
+        self.editingCategory = true
         self.category = .editing(category)
     }
     
     func cancelEditCategory() {
+        self.editingCategory = false
         if let category = self.selectedCategory {
             self.category = .success(category)
         } else {

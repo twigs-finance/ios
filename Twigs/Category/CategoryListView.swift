@@ -13,29 +13,60 @@ import TwigsCore
 struct CategoryListView: View {
     @EnvironmentObject var dataStore: DataStore
     @State var requestId: String = ""
+    private var budgetId: String {
+        get {
+            if case let .success(budget) = dataStore.budget {
+                return budget.id
+            } else {
+                return ""
+            }
+        }
+    }
     
     @ViewBuilder
     var body: some View {
-        InlineLoadingView(
-            data: $dataStore.categories,
-            action: { await self.dataStore.getCategories(budgetId: budget.id, expense: nil, archived: nil, count: nil, page: nil) },
-            errorTextLocalizedStringKey: "Failed to load categories"
-        ) { categories in
-            List {
-                Section {
-                    ForEach(categories.filter { !$0.archived }) { category in
-                        CategoryListItemView(CategoryDataStore(dataStore.apiService), budget: budget, category: category)
-                    }
-                }
-                if categories.contains(where: { $0.archived }) {
-                    Section("Archived") {
-                        ForEach(categories.filter { $0.archived }) { category in
+        List {
+            InlineLoadingView(
+                data: $dataStore.categories,
+                action: { await self.dataStore.getCategories(budgetId: budget.id, expense: nil, archived: nil, count: nil, page: nil) },
+                errorTextLocalizedStringKey: "Failed to load categories"
+            ) { categories in
+                if categories.isEmpty {
+                    Text("no_categories")
+                } else {
+                    Section {
+                        ForEach(categories.filter { !$0.archived }) { category in
                             CategoryListItemView(CategoryDataStore(dataStore.apiService), budget: budget, category: category)
+                        }
+                    }
+                    if categories.contains(where: { $0.archived }) {
+                        Section("Archived") {
+                            ForEach(categories.filter { $0.archived }) { category in
+                                CategoryListItemView(CategoryDataStore(dataStore.apiService), budget: budget, category: category)
+                            }
                         }
                     }
                 }
             }
+        }.refreshable {
+            await dataStore.getCategories()
         }
+        .navigationBarItems(trailing: Button(action: {
+            Task {
+                await dataStore.edit(TwigsCore.Category(budgetId: budgetId))
+            }
+        }, label: {
+            Image(systemName: "plus").padding()
+        }))
+        .sheet(isPresented: self.$dataStore.editingCategory, onDismiss: {
+            self.dataStore.cancelEditCategory()
+        }, content: {
+            CategoryFormSheet(categoryForm: CategoryForm(
+                category: TwigsCore.Category(budgetId: budgetId),
+                dataStore: dataStore,
+                budgetId: budgetId
+            ))
+        })
     }
     
     private let budget: Budget

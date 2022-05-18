@@ -15,7 +15,6 @@ struct CategoryDetailsView: View {
     @EnvironmentObject var apiService: TwigsApiService
     let budget: Budget
     @State var sum: Int? = 0
-    @State var editingCategory: Bool = false
     var spent: Int {
         get {
             if case let .success(sum) = categoryDataStore.sum {
@@ -49,12 +48,14 @@ struct CategoryDetailsView: View {
                 await categoryDataStore.sum(categoryId: category.id)
             }
             .navigationBarItems(trailing: Button(action: {
-                self.editingCategory = true
+                Task {
+                    await dataStore.edit(category)
+                }
             }) {
                 Text("edit")
             })
-            .sheet(isPresented: self.$editingCategory, onDismiss: {
-                self.editingCategory = false
+            .sheet(isPresented: self.$dataStore.editingCategory, onDismiss: {
+                self.dataStore.cancelEditCategory()
             }, content: {
                 CategoryFormSheet(categoryForm: CategoryForm(
                     category: category,
