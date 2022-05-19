@@ -22,6 +22,10 @@ class DataStore : ObservableObject {
             if case let .success(budget) = self.budget {
                 UserDefaults.standard.set(budget.id, forKey: LAST_BUDGET)
                 self.showBudgetSelection = false
+                self.editingBudget = false
+            }
+            if case .editing(_) = self.budget {
+                self.editingBudget = true
             }
         }
     }
@@ -63,7 +67,6 @@ class DataStore : ObservableObject {
     
     func newBudget() {
         self.budget = .editing(Budget(id: "", name: "", description: "", currencyCode: ""))
-        self.editingBudget = true
     }
     
     func save(_ budget: Budget) async {
@@ -150,7 +153,6 @@ class DataStore : ObservableObject {
     }
     
     func selectBudget(_ budget: Budget?) async {
-        self.editingBudget = false
         if let budget = budget {
             self.budget = .success(budget)
             await loadOverview(budget)
@@ -163,6 +165,13 @@ class DataStore : ObservableObject {
             self.categories = .empty
             self.recurringTransactions = .empty
         }
+    }
+    
+    func editBudget() {
+        guard case let .success(budget) = self.budget else {
+            return
+        }
+        self.budget = .editing(budget)
     }
 
     @Published var categories: AsyncData<[TwigsCore.Category]> = .empty

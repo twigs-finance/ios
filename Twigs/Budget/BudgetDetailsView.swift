@@ -35,6 +35,26 @@ struct BudgetDetailsView: View {
             .refreshable {
                 await dataStore.loadOverview(self.budget)
             }
+            .navigationBarItems(trailing: Button(action: {
+                dataStore.editBudget()
+            }, label: { Text("edit") }))
+            .sheet(
+                isPresented: $dataStore.editingBudget,
+                onDismiss: { Task {
+                    await dataStore.cancelEditBudget()
+                }},
+                content: {
+                    NavigationView {
+                        BudgetFormView(budget)
+                            .navigationBarItems(leading: Button(action: { Task {
+                                await dataStore.cancelEditBudget()
+                            }}, label: {
+                                Text("cancel")
+                            })
+                                .navigationTitle("edit_budget"))
+                    }
+                }
+            )
         }
     }
 }

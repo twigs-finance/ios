@@ -11,22 +11,14 @@ import TwigsCore
 
 struct BudgetFormView: View {
     @EnvironmentObject var dataStore: DataStore
-    @State private var title = ""
-    @State private var description = ""
+    @State private var title: String
+    @State private var description: String
     @State private var showingAlert = false
-    private var budgetId: String {
-        get {
-            if case let .editing(budget) = dataStore.budget {
-                return budget.id
-            } else {
-                return ""
-            }
-        }
-    }
+    private var budgetId: String
     
     @ViewBuilder
     var stateContent: some View {
-        switch dataStore.category {
+        switch dataStore.budget {
         case .success(_):
             EmptyView()
         case .saving(_):
@@ -67,6 +59,12 @@ struct BudgetFormView: View {
                         await self.dataStore.save(Budget(id: budgetId, name: title, description: description, currencyCode: nil))
                     }
                 })
+    }
+    
+    init(_ budget: Budget? = nil) {
+        self.budgetId = budget?.id ?? ""
+        self.title = budget?.name ?? ""
+        self.description = budget?.description ?? ""
     }
 }
 

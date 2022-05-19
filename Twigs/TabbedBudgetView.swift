@@ -16,7 +16,8 @@ struct TabbedBudgetView: View {
     
     @ViewBuilder
     var mainView: some View {
-        if case let .success(budget) = dataStore.budget {
+        switch self.dataStore.budget {
+        case .success(let budget), .editing(let budget), .saving(let budget):
             TabView(selection: $tabSelection) {
                 NavigationView {
                     BudgetDetailsView(budget: budget)
@@ -66,7 +67,7 @@ struct TabbedBudgetView: View {
                 .tag(3)
                 .keyboardShortcut("4")
             }
-        } else {
+        default:
             ActivityIndicator(isAnimating: .constant(true), style: .large)
         }
     }
@@ -78,7 +79,6 @@ struct TabbedBudgetView: View {
                 .environmentObject(dataStore)
                 .interactiveDismissDisabled(true)
         })
-        
         .sheet(isPresented: $dataStore.showBudgetSelection,
                  content: {
             NavigationView {
