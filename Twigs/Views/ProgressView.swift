@@ -14,6 +14,8 @@ struct ProgressView: View {
     var progressTintColor: Color = .blue
     var progressBarHeight: Float = 20
     var progressBarCornerRadius: Float = 4.0
+    @State
+    var progressBarWidth: CGFloat = 0.0
     
     var body: some View {
         GeometryReader { geometry in
@@ -24,7 +26,10 @@ struct ProgressView: View {
                     .frame(width: getProgressBarWidth(geometry: geometry))
                     .opacity(0.5)
                     .background(self.progressTintColor)
-                    .animation(.default)
+                    .animation(.default, value: progressBarWidth)
+                    .onAppear {
+                        self.progressBarWidth = getProgressBarWidth(geometry: geometry)
+                    }
             }.frame(height: CGFloat(self.progressBarHeight))
                 .cornerRadius(CGFloat(self.progressBarCornerRadius))
         }
