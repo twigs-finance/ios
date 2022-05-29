@@ -11,9 +11,25 @@ import TwigsCore
 
 struct MonthlyFrequencyPicker: UIViewRepresentable {
     @Binding var dayOfMonth: DayOfMonth
-    @State var dayOfWeek: Int
-    @State var intDay: Int
-    @State var ordinalDay: Int
+    var dayOfWeek: Int {
+        didSet {
+            dayOfMonth = .ordinal(Ordinal.allCases[ordinalDay], DayOfWeek.allCases[dayOfWeek])
+        }
+    }
+    var intDay: Int {
+        didSet {
+            dayOfMonth = .fixed(intDay + 1)
+        }
+    }
+    var ordinalDay: Int {
+        didSet {
+            if ordinalDay == 0 {
+                dayOfMonth = .fixed(intDay + 1)
+            } else {
+                dayOfMonth = .ordinal(Ordinal.allCases[ordinalDay], DayOfWeek.allCases[dayOfWeek])
+            }
+        }
+    }
     
     init(dayOfMonth: Binding<DayOfMonth>) {
         self._dayOfMonth = dayOfMonth
@@ -33,7 +49,7 @@ struct MonthlyFrequencyPicker: UIViewRepresentable {
     }
     
     func makeCoordinator() -> MonthlyFrequencyPicker.Coordinator {
-        Coordinator(self, selectedOrdinal: $ordinalDay, selectedDay: $intDay, selectedDayOfWeek: $dayOfWeek)
+        Coordinator(self)
     }
     
     func makeUIView(context: UIViewRepresentableContext<MonthlyFrequencyPicker>) -> UIPickerView {
@@ -56,22 +72,10 @@ struct MonthlyFrequencyPicker: UIViewRepresentable {
         }
         
         var parent: MonthlyFrequencyPicker
-        @Binding var selectedOrdinal: Int {
-            didSet {
-                // This is a workaround for the pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) function not getting the correct values for the selectedOrdinal
-                ordinal = self.selectedOrdinal
-            }
-        }
-        @Binding var selectedDay: Int
-        @Binding var selectedDayOfWeek: Int
-        
         private var ordinal = 0
         
-        init(_ pickerView: MonthlyFrequencyPicker, selectedOrdinal: Binding<Int>, selectedDay: Binding<Int>, selectedDayOfWeek: Binding<Int>) {
+        init(_ pickerView: MonthlyFrequencyPicker) {
             self.parent = pickerView
-            self._selectedOrdinal = selectedOrdinal
-            self._selectedDay = selectedDay
-            self._selectedDayOfWeek = selectedDayOfWeek
         }
         
         func numberOfComponents(in pickerView: UIPickerView) -> Int {
@@ -103,13 +107,14 @@ struct MonthlyFrequencyPicker: UIViewRepresentable {
         
         func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
             if component == 0 {
-                selectedOrdinal = row
+                parent.ordinalDay = row
+                ordinal = row
                 return
             }
             if ordinal == 0 {
-                selectedDay = row
+                parent.intDay = row
             } else {
-                selectedDayOfWeek = row
+                parent.dayOfWeek = row
             }
         }
     }
