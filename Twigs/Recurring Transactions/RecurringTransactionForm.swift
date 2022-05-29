@@ -101,15 +101,15 @@ class RecurringTransactionForm: ObservableObject {
     func save() async {
         let amount = Double(self.amount) ?? 0.0
         var frequencyUnit: FrequencyUnit
-        switch self.frequencyUnit {
-        case .daily:
-            frequencyUnit = .daily
-        case .weekly(_):
+        switch self.baseFrequencyUnit {
+        case "week":
             frequencyUnit = .weekly(self.daysOfWeek)
-        case .monthly(_):
+        case "month":
             frequencyUnit = .monthly(self.dayOfMonth)
-        case .yearly(_):
+        case "year":
             frequencyUnit = .yearly(self.dayOfYear)
+        default:
+            frequencyUnit = .daily
         }
         let components = Calendar.current.dateComponents([.hour, .minute, .second], from: self.start)
         let time = Time(hours: components.hour!, minutes: components.minute!, seconds: components.second!)!

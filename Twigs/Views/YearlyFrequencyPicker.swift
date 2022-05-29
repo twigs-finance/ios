@@ -11,15 +11,18 @@ import TwigsCore
 
 struct YearlyFrequencyPicker: UIViewRepresentable {
     @Binding var dayOfYear: DayOfYear
-    @State var selectedMonth: Int {
+    var selectedMonth: Int {
         didSet {
             selectedDay = min(self.selectedDay, DayOfYear.maxDays(inMonth: self.selectedMonth + 1) - 1)
         }
     }
-    @State var selectedDay: Int {
+    var selectedDay: Int {
         didSet {
+            print("Upading selectedDay")
             if let dayOfYear = DayOfYear(month: selectedMonth + 1, day: selectedDay + 1) {
                 self.dayOfYear = dayOfYear
+            } else {
+                print("WARNING: Failed to set dayOfYear with \(selectedMonth) and \(selectedDay)")
             }
         }
     }
@@ -31,7 +34,7 @@ struct YearlyFrequencyPicker: UIViewRepresentable {
     }
     
     func makeCoordinator() -> YearlyFrequencyPicker.Coordinator {
-        Coordinator(self, selectedMonth: $selectedMonth, selectedDay: $selectedDay)
+        Coordinator(self)
     }
     
     func makeUIView(context: UIViewRepresentableContext<YearlyFrequencyPicker>) -> UIPickerView {
@@ -64,20 +67,10 @@ struct YearlyFrequencyPicker: UIViewRepresentable {
         ]
 
         var parent: YearlyFrequencyPicker
-        @Binding var selectedMonth: Int {
-            didSet {
-                // This is a workaround for the pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) function not getting the correct values for selectedMonth
-                month = self.selectedMonth
-            }
-        }
-        @Binding var selectedDay: Int
-        
         private var month = 0
 
-        init(_ pickerView: YearlyFrequencyPicker, selectedMonth: Binding<Int>, selectedDay: Binding<Int> ) {
+        init(_ pickerView: YearlyFrequencyPicker) {
             self.parent = pickerView
-            self._selectedMonth = selectedMonth
-            self._selectedDay = selectedDay
         }
         
         func numberOfComponents(in pickerView: UIPickerView) -> Int {
@@ -101,9 +94,11 @@ struct YearlyFrequencyPicker: UIViewRepresentable {
         
         func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
             if component == 0 {
-                selectedMonth = row
+                parent.selectedMonth = row
+                month = row
             } else {
-                selectedDay = row
+                parent.selectedDay = row
+                print("update selectedDay")
             }
         }
     }
