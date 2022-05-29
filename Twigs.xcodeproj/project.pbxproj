@@ -47,14 +47,20 @@
 		806C7850272B700B00FA1375 /* TwigsApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 806C784F272B700B00FA1375 /* TwigsApp.swift */; };
 		8076A84F2809FE8E006B9DC9 /* ArgumentParser in Frameworks */ = {isa = PBXBuildFile; productRef = 8076A84E2809FE8E006B9DC9 /* ArgumentParser */; };
 		8076A8522809FE99006B9DC9 /* Collections in Frameworks */ = {isa = PBXBuildFile; productRef = 8076A8512809FE99006B9DC9 /* Collections */; };
+		807FEAB52837F71200D05338 /* RecurringTransactionForm.swift in Sources */ = {isa = PBXBuildFile; fileRef = 807FEAB42837F71200D05338 /* RecurringTransactionForm.swift */; };
+		807FEAB72838042500D05338 /* MultiPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 807FEAB62838042500D05338 /* MultiPicker.swift */; };
 		80820145275FFD380040996E /* SidebarBudgetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80820144275FFD380040996E /* SidebarBudgetView.swift */; };
 		808CA1A728354005002EDD59 /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 808CA1A628354005002EDD59 /* XCTest.framework */; };
 		808CA1A928355B30002EDD59 /* BudgetFormView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 808CA1A828355B30002EDD59 /* BudgetFormView.swift */; };
 		809B942327221EC800B1DAE2 /* CategoryFormSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 809B942227221EC800B1DAE2 /* CategoryFormSheet.swift */; };
 		80A419ED2787C0A00090C515 /* TwigsCli.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80A419EC2787C0A00090C515 /* TwigsCli.swift */; };
 		80A419F52787C1520090C515 /* ArgumentParser in Frameworks */ = {isa = PBXBuildFile; productRef = 80A419F42787C1520090C515 /* ArgumentParser */; };
+		80AF7A982835ED3B009565C6 /* RecurringTransactionFormView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80AF7A972835ED3B009565C6 /* RecurringTransactionFormView.swift */; };
 		80D1FC14277C1EF9007F17FB /* InlineLoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80D1FC13277C1EF9007F17FB /* InlineLoadingView.swift */; };
 		80D2CE1A2833448500EDD6C2 /* DataStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80D2CE192833448500EDD6C2 /* DataStore.swift */; };
+		80FC1BBE28411DD800682F21 /* YearlyFrequencyPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80FC1BBD28411DD800682F21 /* YearlyFrequencyPicker.swift */; };
+		80FC1BC0284146A000682F21 /* WeeklyFrequencyPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80FC1BBF284146A000682F21 /* WeeklyFrequencyPicker.swift */; };
+		80FC1BC2284146CD00682F21 /* MonthlyFrequencyPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80FC1BC1284146CD00682F21 /* MonthlyFrequencyPicker.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -132,6 +138,8 @@
 		8044BA3C2784CC0D009A78D4 /* TransactionForm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionForm.swift; sourceTree = "<group>"; };
 		8044BA3E27853054009A78D4 /* CategoryForm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryForm.swift; sourceTree = "<group>"; };
 		806C784F272B700B00FA1375 /* TwigsApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TwigsApp.swift; sourceTree = "<group>"; };
+		807FEAB42837F71200D05338 /* RecurringTransactionForm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecurringTransactionForm.swift; sourceTree = "<group>"; };
+		807FEAB62838042500D05338 /* MultiPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultiPicker.swift; sourceTree = "<group>"; };
 		80820144275FFD380040996E /* SidebarBudgetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SidebarBudgetView.swift; sourceTree = "<group>"; };
 		808CA1A628354005002EDD59 /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Platforms/iPhoneOS.platform/Developer/Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
 		808CA1A828355B30002EDD59 /* BudgetFormView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BudgetFormView.swift; sourceTree = "<group>"; };
@@ -139,8 +147,12 @@
 		809B94242722597800B1DAE2 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/Localizable.strings; sourceTree = "<group>"; };
 		80A419EA2787C0A00090C515 /* twigs-cli */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "twigs-cli"; sourceTree = BUILT_PRODUCTS_DIR; };
 		80A419EC2787C0A00090C515 /* TwigsCli.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TwigsCli.swift; sourceTree = "<group>"; };
+		80AF7A972835ED3B009565C6 /* RecurringTransactionFormView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecurringTransactionFormView.swift; sourceTree = "<group>"; };
 		80D1FC13277C1EF9007F17FB /* InlineLoadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InlineLoadingView.swift; sourceTree = "<group>"; };
 		80D2CE192833448500EDD6C2 /* DataStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataStore.swift; sourceTree = "<group>"; };
+		80FC1BBD28411DD800682F21 /* YearlyFrequencyPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YearlyFrequencyPicker.swift; sourceTree = "<group>"; };
+		80FC1BBF284146A000682F21 /* WeeklyFrequencyPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeeklyFrequencyPicker.swift; sourceTree = "<group>"; };
+		80FC1BC1284146CD00682F21 /* MonthlyFrequencyPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MonthlyFrequencyPicker.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -219,6 +231,10 @@
 				282126BC235CDE1400072D52 /* ProgressView.swift */,
 				80D1FC13277C1EF9007F17FB /* InlineLoadingView.swift */,
 				8005FD5C277EAB0200E48B23 /* MainView.swift */,
+				807FEAB62838042500D05338 /* MultiPicker.swift */,
+				80FC1BBD28411DD800682F21 /* YearlyFrequencyPicker.swift */,
+				80FC1BBF284146A000682F21 /* WeeklyFrequencyPicker.swift */,
+				80FC1BC1284146CD00682F21 /* MonthlyFrequencyPicker.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -355,6 +371,8 @@
 				801D08CB275ECEFA00931465 /* RecurringTransactionsListView.swift */,
 				801D08CD275F189E00931465 /* RecurringTransactionsRepository.swift */,
 				801D08D1275FB7DE00931465 /* RecurringTransactionDetailsView.swift */,
+				80AF7A972835ED3B009565C6 /* RecurringTransactionFormView.swift */,
+				807FEAB42837F71200D05338 /* RecurringTransactionForm.swift */,
 			);
 			path = "Recurring Transactions";
 			sourceTree = "<group>";
@@ -538,6 +556,7 @@
 			files = (
 				2821266023555FD300072D52 /* TransactionFormSheet.swift in Sources */,
 				8044BA3D2784CC0D009A78D4 /* TransactionForm.swift in Sources */,
+				80FC1BC0284146A000682F21 /* WeeklyFrequencyPicker.swift in Sources */,
 				28FE6AFC23441E4500D5543E /* CategoryRepository.swift in Sources */,
 				801D08CE275F189E00931465 /* RecurringTransactionsRepository.swift in Sources */,
 				2841022723419A2B00EAFA29 /* TabbedBudgetView.swift in Sources */,
@@ -547,6 +566,7 @@
 				28AC952C233C434800BFB70A /* UserRepository.swift in Sources */,
 				28FE6B04234449DC00D5543E /* TransactionListView.swift in Sources */,
 				28AC94F2233C373900BFB70A /* LoginView.swift in Sources */,
+				80FC1BC2284146CD00682F21 /* MonthlyFrequencyPicker.swift in Sources */,
 				802161D0277647920075761A /* AsyncObservableObject.swift in Sources */,
 				282126BB235CDD3C00072D52 /* BudgetDetailsView.swift in Sources */,
 				80D2CE1A2833448500EDD6C2 /* DataStore.swift in Sources */,
@@ -562,14 +582,18 @@
 				282126A1235929B800072D52 /* ProfileView.swift in Sources */,
 				28AC9529233C433400BFB70A /* TransactionRepository.swift in Sources */,
 				809B942327221EC800B1DAE2 /* CategoryFormSheet.swift in Sources */,
+				807FEAB72838042500D05338 /* MultiPicker.swift in Sources */,
 				28FE6AF62342E4CC00D5543E /* BudgetRepository.swift in Sources */,
+				80FC1BBE28411DD800682F21 /* YearlyFrequencyPicker.swift in Sources */,
 				8044BA3F27853054009A78D4 /* CategoryForm.swift in Sources */,
+				807FEAB52837F71200D05338 /* RecurringTransactionForm.swift in Sources */,
 				80820145275FFD380040996E /* SidebarBudgetView.swift in Sources */,
 				8044BA3927828E9D009A78D4 /* CategoryDataStore.swift in Sources */,
 				284102302342D97300EAFA29 /* BudgetListsView.swift in Sources */,
 				282126BD235CDE1400072D52 /* ProgressView.swift in Sources */,
 				806C7850272B700B00FA1375 /* TwigsApp.swift in Sources */,
 				808CA1A928355B30002EDD59 /* BudgetFormView.swift in Sources */,
+				80AF7A982835ED3B009565C6 /* RecurringTransactionFormView.swift in Sources */,
 				28CE8B9523525F990072BC4C /* Extensions.swift in Sources */,
 				801D08CC275ECEFA00931465 /* RecurringTransactionsListView.swift in Sources */,
 			);

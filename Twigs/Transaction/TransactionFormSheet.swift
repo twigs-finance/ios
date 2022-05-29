@@ -34,8 +34,8 @@ struct TransactionFormSheet: View {
                             Text(type.localizedKey)
                         }
                     }
-                    BudgetPicker()
-                    CategoryPicker()
+                    BudgetPicker(budgets: $transactionForm.budgets, budgetId: $transactionForm.budgetId)
+                    CategoryPicker(categories: $transactionForm.categories, categoryId: $transactionForm.categoryId)
                     if transactionForm.showDelete {
                         Button(action: {
                             self.showingAlert = true
@@ -76,18 +76,19 @@ struct TransactionFormSheet: View {
 }
 
 struct BudgetPicker: View {
-    @EnvironmentObject var transactionForm: TransactionForm
+    @Binding var budgets: AsyncData<[Budget]>
+    @Binding var budgetId: String
     
     @ViewBuilder
     var body: some View {
-        if case let .success(budgets) = self.transactionForm.budgets {
-            Picker(LocalizedStringKey("prompt_budget"), selection: $transactionForm.budgetId) {
+        if case let .success(budgets) = budgets {
+            Picker(LocalizedStringKey("prompt_budget"), selection: $budgetId) {
                 ForEach(budgets) { budget in
                     Text(budget.name)
                 }
             }
         } else {
-            Picker(LocalizedStringKey("prompt_budget"), selection: $transactionForm.budgetId) {
+            Picker(LocalizedStringKey("prompt_budget"), selection: $budgetId) {
                 Text("")
             }
         }
@@ -95,14 +96,15 @@ struct BudgetPicker: View {
 }
 
 struct CategoryPicker: View {
-    @EnvironmentObject var transactionForm: TransactionForm
-    
+    @Binding var categories: AsyncData<[TwigsCore.Category]>
+    @Binding var categoryId: String
+
     @ViewBuilder
     var body: some View {
-        if case let .success(categories) = self.transactionForm.categories {
-            Picker(LocalizedStringKey("prompt_category"), selection: $transactionForm.categoryId) {
+        if case let .success(categories) = categories {
+            Picker(LocalizedStringKey("prompt_category"), selection: $categoryId) {
                 ForEach(categories) { category in
-                    Text(category.title)
+                    Text(category.title).tag(category.id)
                 }
             }
         } else {

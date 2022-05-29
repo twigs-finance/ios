@@ -81,3 +81,54 @@
 // MARK: Recurring Transactions
 "recurring" = "Recurrentes";
 "recurring_transactions" = "Transacciones Recurrentes";
+"add_recurring_transaction" = "Agregar Transacción Recurrente";
+"edit_recurring_transaction" = "Editar Transacción Recurrente";
+"prompt_start" = "Inicio";
+"prompt_end" = "Final";
+"note_end_optional" = "Nota: La fecha final es opcional";
+"frequency" = "Frequencia";
+
+"day" = "Día";
+"week" = "Semana";
+"month" = "Mes";
+"year" = "Año";
+
+"sunday" = "DOM";
+"monday" = "LUN";
+"tuesday" = "MAR";
+"wednesday" = "MIE";
+"thursday" = "JUE";
+"friday" = "VIE";
+"saturday" = "SAB";
+
+"first" = "Primer";
+"second" = "Segundo";
+"third" = "Tercer";
+"fourth" = "Cuarto";
+"last" = "Último";
+
+"SUNDAY" = "domingo";
+"MONDAY" = "lunes";
+"TUESDAY" = "martes";
+"WEDNESDAY" = "miércoles";
+"THURSDAY" = "jueves";
+"FRIDAY" = "viernes";
+"SATURDAY" = "sábado";
+
+"january" = "enero";
+"february" = "febrero";
+"march" = "marzo";
+"april" = "abril";
+"may" = "mayo";
+"june" = "junio";
+"july" = "julio";
+"august" = "agosto";
+"september" = "septiembre";
+"october" = "octubre";
+"november" = "noviembre";
+"december" = "diciembre";
+
+"start" = "Inicio";
+"end" = "Fin";
+"never" = "Nunca";
+"onDate" = "Fecha";

@@ -24,6 +24,29 @@ struct RecurringTransactionsListView: View {
                 }
             }
         }
+        .toolbar {
+            ToolbarItem(placement: .navigationBarTrailing) {
+                Button(action: {
+                    dataStore.newRecurringTransaction()
+                }, label: {
+                    Image(systemName: "plus").padding()
+                })
+            }
+        }
+        .sheet(
+            isPresented: $dataStore.editingRecurringTransaction,
+            onDismiss: {
+                dataStore.cancelEditRecurringTransaction()
+            },
+            content: {
+                RecurringTransactionFormView(transactionForm: RecurringTransactionForm(
+                    dataStore: dataStore,
+                    createdBy: dataStore.currentUserId ?? "",
+                    budgetId: dataStore.budgetId ?? "",
+                    categoryId: dataStore.selectedRecurringTransaction?.categoryId ?? dataStore.categoryId,
+                    transaction: dataStore.selectedRecurringTransaction
+                ))
+            })
     }
 }
 

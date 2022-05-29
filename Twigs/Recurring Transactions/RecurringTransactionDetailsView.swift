@@ -28,11 +28,22 @@ struct RecurringTransactionDetailsView: View {
                     Text(transaction.frequency.naturalDescription)
                     Spacer().frame(height: 10)
                     LabeledField(label: "start", value: transaction.start.toLocaleString(), loading: .constant(false), showDivider: true)
-                    LabeledField(label: "end", value: transaction.end?.toLocaleString(), loading: .constant(false), showDivider: true)
+                    LabeledField(label: "end", value: transaction.finish?.toLocaleString(), loading: .constant(false), showDivider: true)
 //                    CategoryLineItem()
 //                    BudgetLineItem()
 //                    UserLineItem()
                 }.padding()
+            }
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button(action: {
+                        Task {
+                            await dataStore.edit(transaction)
+                        }
+                    }) {
+                        Text("edit")
+                    }
+                }
             }
         }
     }

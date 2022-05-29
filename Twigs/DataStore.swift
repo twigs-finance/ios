@@ -33,6 +33,37 @@ class DataStore : ObservableObject {
     @Published var showBudgetSelection: Bool = true
     @Published var editingBudget: Bool = false
     @Published var editingCategory: Bool = false
+    @Published var editingRecurringTransaction: Bool = false
+
+    var currentUserId: String? {
+        get {
+            if case let .success(currentUser) = self.currentUser {
+                return currentUser.id
+            } else {
+                return nil
+            }
+        }
+    }
+    
+    var budgetId: String? {
+        get {
+            if case let .success(budget) = self.budget {
+                return budget.id
+            } else {
+                return nil
+            }
+        }
+    }
+    
+    var categoryId: String? {
+        get {
+            if case let .success(category) = self.category {
+                return category.id
+            } else {
+                return nil
+            }
+        }
+    }
 
     init(
         _ apiService: TwigsApiService
@@ -261,8 +292,12 @@ class DataStore : ObservableObject {
         didSet {
             if case let .success(transaction) = self.recurringTransaction {
                 self.selectedRecurringTransaction = transaction
+                self.editingRecurringTransaction = false
             } else if case .empty = recurringTransaction {
                 self.selectedRecurringTransaction = nil
+                self.editingRecurringTransaction = false
+            } else if case .editing(_) = self.recurringTransaction {
+                self.editingRecurringTransaction = true
             }
         }
     }
@@ -278,6 +313,31 @@ class DataStore : ObservableObject {
             self.recurringTransactions = .success(transactions.sorted(by: { $0.title < $1.title }))
         } catch {
             self.recurringTransactions = .error(error)
+        }
+    }
+    
+    func newRecurringTransaction() {
+        guard case let .success(user) = self.currentUser else {
+            return
+        }
+        guard case let .success(budget) = self.budget else {
+            return
+        }
+        self.recurringTransaction = .editing(RecurringTransaction(createdBy: user.id, budgetId: budget.id))
+    }
+    
+    func edit(_ transaction: RecurringTransaction) async {
+        self.recurringTransaction = .editing(transaction)
+    }
+    
+    func cancelEditRecurringTransaction() {
+        guard case let .editing(rt) = self.recurringTransaction else {
+            return
+        }
+        if !rt.id.isEmpty {
+            self.recurringTransaction = .success(rt)
+        } else {
+            self.recurringTransaction = .empty
         }
     }
     
@@ -329,19 +389,11 @@ class DataStore : ObservableObject {
         }
     }
     @Published var selectedTransaction: Transaction? = nil
-    private var budgetId: String = ""
-    private var categoryId: String? = nil
     
     func getTransactions() async {
-        guard case let .success(budget) = self.budget else {
+        guard  let budgetId = self.budgetId else {
             self.transactions = .error(NetworkError.unknown)
             return
-        }
-        self.budgetId = budget.id
-        if case let .success(category) = self.category {
-            self.categoryId = category.id
-        } else {
-            self.categoryId = nil
         }
         self.transactions = .loading
         do {

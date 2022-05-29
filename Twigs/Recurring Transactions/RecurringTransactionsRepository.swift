@@ -18,7 +18,7 @@ class MockRecurringTransactionRepository: RecurringTransactionsRepository {
         description: "A mock transaction used for testing",
         frequency: Frequency(unit: .daily, count: 1, time: Time(from: "09:00:00")!)!,
         start: Date(),
-        end: nil,
+        finish: nil,
         amount: 10000,
         categoryId: MockCategoryRepository.category.id,
         expense: true,
