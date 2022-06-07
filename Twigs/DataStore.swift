@@ -476,10 +476,11 @@ class DataStore : ObservableObject {
     
     @Published var currentUser: AsyncData<User> = .empty {
         didSet {
-            if case .success(_) = self.currentUser {
-                self.showLogin = false
-            } else {
+            switch currentUser {
+            case .empty, .loading:
                 self.showLogin = true
+            default:
+                self.showLogin = false
             }
         }
     }
@@ -578,6 +579,72 @@ class DataStore : ObservableObject {
             self.currentUser = .error(error)
         }
     }
+    
+    func updateUsername(_ username: String) async -> UsernameError? {
+        guard case let .success(current) = self.currentUser else {
+            return .unknown
+        }
+        self.currentUser = .saving(current)
+        do {
+            let updated = try await self.apiService.updateUser(current.copy(username: username))
+            self.currentUser = .success(updated)
+            return nil
+        } catch {
+            self.currentUser = .error(error, current)
+            return .unavailable
+        }
+    }
+    
+    func updateEmail(_ email: String) async -> EmailError? {
+        guard case let .success(current) = self.currentUser else {
+            return .unknown
+        }
+        if !email.isEmpty && (!email.contains("@") || !email.contains(".")) {
+            return .invalid
+        }
+        self.currentUser = .saving(current)
+        do {
+            let updated = try await self.apiService.updateUser(current.copy(email: email))
+            self.currentUser = .success(updated)
+            return nil
+        } catch {
+            self.currentUser = .error(error, current)
+            return .unavailable
+        }
+    }
+    
+    func updatePassword(_ password: String, confirmPassword: String) async -> PasswordError? {
+        guard case let .success(current) = self.currentUser else {
+            return .unknown
+        }
+        if password != confirmPassword {
+            return .notMatching
+        }
+        self.currentUser = .saving(current)
+        do {
+            let updated = try await self.apiService.updateUser(current.copy(password: password))
+            self.currentUser = .success(updated)
+            return nil
+        } catch {
+            self.currentUser = .error(error, current)
+            return .unknown
+        }
+    }
+
+    func saveUser(_ user: User) async -> Bool {
+        guard case let .success(current) = self.currentUser else {
+            return false
+        }
+        self.currentUser = .saving(current)
+        do {
+            let updated = try await self.apiService.updateUser(user)
+            self.currentUser = .success(updated)
+            return true
+        } catch {
+            self.currentUser = .error(error, current)
+            return false
+        }
+    }
 
     @Published var user: AsyncData<User> = .empty
 
@@ -589,6 +656,24 @@ class DataStore : ObservableObject {
             self.currentUser = .error(error)
         }
     }
+}
+
+enum UsernameError: String, Error {
+    case empty = "cannot_be_empty"
+    case unavailable = "username_taken"
+    case unknown = "unknown_error"
+}
+
+enum EmailError: String, Error {
+    case invalid = "email_invalid"
+    case unavailable = "email_taken"
+    case unknown = "unknown_error"
+}
+
+enum PasswordError: String, Error {
+    case empty = "cannot_be_empty"
+    case notMatching = "passwords_dont_match"
+    case unknown = "unknown_error"
 }
 
 enum UserStatus: Error, Equatable {

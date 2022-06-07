@@ -73,6 +73,8 @@
 
 // MARK: Profile
 "profile" = "Profile";
+"change_username" = "Change Username";
+"change_profile_picture" = "Change Profile Picture";
 "change_password" = "Change Password";
 "change_email" = "Change Email";
 "delete_account" = "Delete Account";
@@ -131,3 +133,10 @@
 "end" = "End";
 "never" = "Never";
 "onDate" = "On Date";
+
+"email_invalid" = "Invalid email address";
+"cannot_be_empty" = "This cannot be empty";
+"username_taken" = "Username taken";
+"email_taken" = "Email taken";
+"passwords_dont_match" = "Password don't match"
+"unknown_error" = "An unknown error has occurred";

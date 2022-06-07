@@ -74,6 +74,8 @@
 
 // MARK: Profile
 "profile" = "Perfil";
+"change_username" = "Cambiar Nombre de Usuario";
+"change_profile_picture" = "Cambiar Foto de Perfíl";
 "change_password" = "Cambiar Contraseña";
 "change_email" = "Cambiar Correo";
 "delete_account" = "Eliminar Cuenta";
@@ -132,3 +134,10 @@
 "end" = "Fin ";
 "never" = "Nunca";
 "onDate" = "Fecha";
+
+"email_invalid" = "Correo electrónico inválido";
+"cannot_be_empty" = "No se puede omitir";
+"username_taken" = "Nombre de usuario no disponible";
+"email_taken" = "Correo electrónico no disponible";
+"passwords_dont_match" = "Contraseñas no coinciden"
+"unknown_error" = "Se ocurrió un error";

@@ -66,6 +66,16 @@ struct TabbedBudgetView: View {
                 }
                 .tag(3)
                 .keyboardShortcut("4")
+                NavigationView {
+                    ProfileView()
+                        .navigationBarTitle("profile")
+                }
+                .tabItem {
+                    Image(systemName: "person.circle.fill")
+                    Text("profile")
+                }
+                .tag(4)
+                .keyboardShortcut("5")
             }
         default:
             ActivityIndicator(isAnimating: .constant(true), style: .large)
@@ -104,9 +114,13 @@ struct TabbedBudgetView: View {
 }
 
 
-//
-//struct TabbedBudgetView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        TabbedBudgetView()
-//    }
-//}
+
+struct TabbedBudgetView_Previews: PreviewProvider {
+    @StateObject static var apiService = TwigsInMemoryCacheService()
+    
+    static var previews: some View {
+        TabbedBudgetView()
+            .environmentObject(DataStore(apiService))
+            .environmentObject(apiService)
+    }
+}

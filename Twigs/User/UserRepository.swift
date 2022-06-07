@@ -13,7 +13,7 @@ import TwigsCore
 #if DEBUG
 class MockUserRepository: UserRepository {
     static let loginResponse = LoginResponse(token: "token", expiration: "2020-01-01T12:00:00Z", userId: "0")
-    static let currentUser = User(id: "0", username: "root", email: "root@localhost", avatar: nil)
+    static let currentUser = User(id: "0", username: "root", email: "root@localhost", password: nil, avatar: nil)
     static var token: String? = nil
 
     func setToken(_ token: String) {
