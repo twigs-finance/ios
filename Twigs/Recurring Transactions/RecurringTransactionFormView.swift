@@ -132,6 +132,7 @@ struct FrequencyPickerView: View {
     }
 }
 
+#if DEBUG
 struct RecurringTransactionFormView_Previews: PreviewProvider {
     static var dataStore = DataStore(TwigsInMemoryCacheService())
     static var previews: some View {
@@ -142,3 +143,4 @@ struct RecurringTransactionFormView_Previews: PreviewProvider {
         )).environmentObject(dataStore)
     }
 }
+#endif
