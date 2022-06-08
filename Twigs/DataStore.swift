@@ -354,7 +354,11 @@ class DataStore : ObservableObject {
             } else {
                 savedTransaction = try await self.apiService.createRecurringTransaction(transaction)
             }
-            self.recurringTransaction = .success(savedTransaction)
+            if transaction.id != "" {
+                self.recurringTransaction = .success(savedTransaction)
+            } else {
+                self.recurringTransaction = .empty
+            }
             if case var .success(transactions) = self.recurringTransactions {
                 transactions = transactions.filter(withoutId: savedTransaction.id)
                 transactions.append(savedTransaction)
@@ -429,7 +433,11 @@ class DataStore : ObservableObject {
             } else {
                 savedTransaction = try await self.apiService.createTransaction(transaction)
             }
-            self.transaction = .success(savedTransaction)
+            if transaction.id != "" {
+                self.transaction = .success(savedTransaction)
+            } else {
+                self.transaction = .empty
+            }
             await getTransactions()
         } catch {
             self.transaction = .error(error, transaction)
