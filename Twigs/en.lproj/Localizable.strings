@@ -135,8 +135,12 @@
 "onDate" = "On Date";
 
 "email_invalid" = "Invalid email address";
-"cannot_be_empty" = "This cannot be empty";
+"username_cannot_be_empty" = "Username cannot be empty";
+"password_cannot_be_empty" = "Password cannot be empty";
 "username_taken" = "Username taken";
 "email_taken" = "Email taken";
-"passwords_dont_match" = "Password don't match"
+"passwords_dont_match" = "Password don't match";
 "unknown_error" = "An unknown error has occurred";
+"server_error" = "Server error";
+"server_invalid" = "Invalid server URL";
+"credentials_invalid" = "Invalid username/password";

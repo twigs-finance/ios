@@ -63,19 +63,9 @@ struct SidebarBudgetView: View {
     var body: some View {
         mainView
             .sheet(isPresented: $dataStore.showLogin,
-                   onDismiss: {
-                Task {
-                    await self.dataStore.getBudgets()
-                }
-            },
                    content: {
                 LoginView()
                     .environmentObject(dataStore)
-                    .onDisappear {
-                        Task {
-                            await self.dataStore.getBudgets()
-                        }
-                    }
             })
             .interactiveDismissDisabled(true)
     }

@@ -30,7 +30,7 @@ class DataStore : ObservableObject {
         }
     }
     @Published var overview: AsyncData<BudgetOverview> = .empty
-    @Published var showBudgetSelection: Bool = true
+    @Published var showBudgetSelection: Bool = false
     @Published var editingBudget: Bool = false
     @Published var editingCategory: Bool = false
     @Published var editingRecurringTransaction: Bool = false
@@ -81,6 +81,9 @@ class DataStore : ObservableObject {
         do {
             let budgets = try await self.apiService.getBudgets(count: count, page: page).sorted(by: { $0.name < $1.name })
             self.budgets = .success(budgets)
+            if budgets.isEmpty {
+                showBudgetSelection = true
+            }
             if self.budget != .empty {
                 return
             }
@@ -93,6 +96,7 @@ class DataStore : ObservableObject {
             }
         } catch {
             self.budgets = .error(error)
+            showBudgetSelection = true
         }
     }
     
@@ -479,6 +483,8 @@ class DataStore : ObservableObject {
             switch currentUser {
             case .empty, .loading:
                 self.showLogin = true
+            case .error(_, let user):
+                self.showLogin = user == nil
             default:
                 self.showLogin = false
             }
@@ -508,7 +514,15 @@ class DataStore : ObservableObject {
     }
     @Published var showLogin: Bool = true
     
+    func clearUserError() {
+        self.currentUser = .empty
+    }
+    
     func login(username: String, password: String) async {
+        if baseUrl.isEmpty {
+            self.currentUser = .error(NetworkError.invalidUrl)
+            return
+        }
         self.currentUser = .loading
         do {
             let response = try await self.apiService.login(username: username, password: password)
@@ -527,9 +541,24 @@ class DataStore : ObservableObject {
     }
     
     func register(username: String, email: String, password: String, confirmPassword: String) async {
-        // TODO: Validate other fields as well
+        if baseUrl.isEmpty {
+            self.currentUser = .error(NetworkError.invalidUrl)
+            return
+        }
+        if username.isEmpty {
+            self.currentUser = .error(UsernameError.empty)
+            return
+        }
+        if !email.isEmpty && (!email.contains("@") || !email.contains(".")) {
+            self.currentUser = .error(EmailError.invalid)
+            return
+        }
+        if password.isEmpty {
+            self.currentUser = .error(PasswordError.empty)
+            return
+        }
         if !password.elementsEqual(confirmPassword) {
-            // TODO: Show error message to user
+            self.currentUser = .error(PasswordError.notMatching)
             return
         }
         do {
@@ -541,6 +570,7 @@ class DataStore : ObservableObject {
             default:
                 print(error.localizedDescription)
             }
+            self.currentUser = .error(error)
             return
         }
         await self.login(username: username, password: password)
@@ -568,7 +598,6 @@ class DataStore : ObservableObject {
     
     func loadProfile() async {
         guard let userId = self.userId, !userId.isEmpty else {
-            self.currentUser = .error(UserStatus.unauthenticated)
             return
         }
         do {
@@ -659,7 +688,7 @@ class DataStore : ObservableObject {
 }
 
 enum UsernameError: String, Error {
-    case empty = "cannot_be_empty"
+    case empty = "username_cannot_be_empty"
     case unavailable = "username_taken"
     case unknown = "unknown_error"
 }
@@ -671,15 +700,7 @@ enum EmailError: String, Error {
 }
 
 enum PasswordError: String, Error {
-    case empty = "cannot_be_empty"
+    case empty = "password_cannot_be_empty"
     case notMatching = "passwords_dont_match"
     case unknown = "unknown_error"
-}
-
-enum UserStatus: Error, Equatable {
-    case unauthenticated
-    case authenticating
-    case failedAuthentication
-    case authenticated
-    case passwordMismatch
 }

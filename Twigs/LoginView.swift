@@ -8,28 +8,46 @@
 
 import SwiftUI
 import Combine
+import TwigsCore
 
 struct LoginView: View {
     @State var username: String = ""
     @State var password: String = ""
     @EnvironmentObject var dataStore: DataStore
-    var loading: Bool {
-        switch dataStore.user {
-        case .loading:
-            return true
-        default:
-            return false
+    var error: String? {
+        if case let .error(error as NetworkError, _) = dataStore.currentUser {
+            switch error {
+            case .badRequest(let reason):
+                if reason == nil || reason?.isEmpty == true {
+                    return "unknown_error"
+                }
+                return reason
+            case .server:
+                return "server_error"
+            case .invalidUrl, .notFound:
+                return "server_invalid"
+            case .unauthorized:
+                return "credentials_invalid"
+            default:
+                return "unknown_error"
+            }
         }
+        return nil
     }
     
     var body: some View {
-        LoadingView(
-            isShowing: .constant(loading),
-            loadingText: "loading_login"
-        ) {
+        switch dataStore.currentUser {
+        case .loading:
+            ActivityIndicator(isAnimating: .constant(true), style: .medium)
+        default:
             NavigationView {
                 VStack {
                     Text("info_login")
+                    if let error = self.error {
+                        Text(LocalizedStringKey(error))
+                            .multilineTextAlignment(.center)
+                            .foregroundColor(.red)
+                    }
                     TextField(LocalizedStringKey("prompt_server"), text: self.$dataStore.baseUrl)
                         .autocapitalization(.none)
                         .textFieldStyle(RoundedBorderTextFieldStyle())
@@ -49,19 +67,35 @@ struct LoginView: View {
                                 await self.dataStore.login(username: self.username, password: self.password)
                             }
                         }
-                    Button("action_login", action: {
+                    Button(action: {
                         Task {
                             await self.dataStore.login(username: self.username, password: self.password)
                         }
-                    }).buttonStyle(DefaultButtonStyle())
+                    }, label: {
+                        Text("action_login")
+                            .frame(maxWidth: .infinity)
+                    })
+                    .buttonStyle(.borderedProminent)
                     Spacer()
-                    Text("info_register")
-                    NavigationLink(destination: RegistrationView(username: self.$username, password: self.$password)) {
-                        Text("action_register")
-                            .buttonStyle(DefaultButtonStyle())
+                    HStack {
+                        Text("info_register")
+                        NavigationLink(
+                            destination: RegistrationView(username: self.$username, password: self.$password)
+                                .navigationTitle("action_register")
+                                .onAppear {
+                                    dataStore.clearUserError()
+                                }
+                                .onDisappear {
+                                    dataStore.clearUserError()
+                                }
+                        ) {
+                            Text("action_register")
+                                .buttonStyle(DefaultButtonStyle())
+                        }
                     }
                 }.padding()
             }.navigationBarHidden(true)
+                .navigationTitle("action_login")
         }
     }
 }

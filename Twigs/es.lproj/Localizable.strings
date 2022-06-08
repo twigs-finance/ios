@@ -136,8 +136,12 @@
 "onDate" = "Fecha";
 
 "email_invalid" = "Correo electrónico inválido";
-"cannot_be_empty" = "No se puede omitir";
+"username_cannot_be_empty" = "Nombre de usuario no se puede omitir";
+"password_cannot_be_empty" = "Contraseña no se puede omitir";
 "username_taken" = "Nombre de usuario no disponible";
 "email_taken" = "Correo electrónico no disponible";
-"passwords_dont_match" = "Contraseñas no coinciden"
+"passwords_dont_match" = "Contraseñas no coinciden";
 "unknown_error" = "Se ocurrió un error";
+"server_error" = "Error de servidor";
+"server_invalid" = "URL de servidor inválido";
+"credentials_invalid" = "Usuario/contraseña inválidos";
