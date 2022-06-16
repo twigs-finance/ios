@@ -17,7 +17,7 @@ struct BudgetDetailsView: View {
     var body: some View {
         InlineLoadingView(
             data: self.$dataStore.overview,
-            action: { await self.dataStore.loadOverview(self.budget) },
+            action: { await self.dataStore.loadOverview(showLoader: false) },
             errorTextLocalizedStringKey: "budgets_load_failure"
         ) { overview in
             List {
@@ -33,7 +33,7 @@ struct BudgetDetailsView: View {
             }
             .listStyle(.insetGrouped)
             .refreshable {
-                await dataStore.loadOverview(self.budget)
+                await dataStore.loadOverview(showLoader: false)
             }
             .navigationBarItems(trailing: Button(action: {
                 dataStore.editBudget()

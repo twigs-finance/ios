@@ -23,6 +23,9 @@ struct RecurringTransactionsListView: View {
                     RecurringTransactionsListItemView(transaction)
                 }
             }
+            .refreshable {
+                await dataStore.getRecurringTransactions(showLoader: false)
+            }
         }
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {

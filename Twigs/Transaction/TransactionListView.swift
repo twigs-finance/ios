@@ -95,7 +95,7 @@ struct TransactionListView<Content>: View where Content: View {
             }
             .searchable(text: $search)
             .refreshable {
-                await dataStore.getTransactions()
+                await dataStore.getTransactions(showLoader: false)
             }
             .sheet(
                 isPresented: .constant(addingTransaction),

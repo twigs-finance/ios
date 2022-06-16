@@ -154,8 +154,13 @@ class DataStore : ObservableObject {
         await self.selectBudget(budget)
     }
     
-    func loadOverview(_ budget: Budget) async {
-        self.overview = .loading
+    func loadOverview(showLoader: Bool = true) async {
+        guard case let .success(budget) = self.budget else {
+            return
+        }
+        if showLoader {
+            self.overview = .loading
+        }
         do {
             let budgetBalance = try await self.apiService.sumTransactions(budgetId: budget.id, categoryId: nil, from: nil, to: nil)
             let categories = try await self.apiService.getCategories(budgetId: budget.id, expense: nil, archived: false, count: nil, page: nil)
@@ -190,7 +195,7 @@ class DataStore : ObservableObject {
     func selectBudget(_ budget: Budget?) async {
         if let budget = budget {
             self.budget = .success(budget)
-            await loadOverview(budget)
+            await loadOverview()
             await getTransactions()
             await getCategories(budgetId: budget.id, expense: nil, archived: nil, count: nil, page: nil)
             await getRecurringTransactions()
@@ -221,15 +226,17 @@ class DataStore : ObservableObject {
     }
     @Published var selectedCategory: TwigsCore.Category? = nil
     
-    func getCategories() async {
+    func getCategories(showLoader: Bool = true) async {
         guard case let .success(budget) = self.budget else {
             return
         }
-        await self.getCategories(budgetId: budget.id)
+        await self.getCategories(budgetId: budget.id, showLoader: showLoader)
     }
     
-    func getCategories(budgetId: String, expense: Bool? = nil, archived: Bool? = false, count: Int? = nil, page: Int? = nil) async {
-        self.categories = .loading
+    func getCategories(budgetId: String, expense: Bool? = nil, archived: Bool? = false, count: Int? = nil, page: Int? = nil, showLoader: Bool = true) async {
+        if showLoader {
+            self.categories = .loading
+        }
         do {
             let categories = try await apiService.getCategories(budgetId: budgetId, expense: expense, archived: archived, count: count, page: page)
             self.categories = .success(categories)
@@ -307,11 +314,13 @@ class DataStore : ObservableObject {
     }
     @Published var selectedRecurringTransaction: RecurringTransaction? = nil
         
-    func getRecurringTransactions() async {
+    func getRecurringTransactions(showLoader: Bool = true) async {
         guard case let .success(budget) = self.budget else {
             return
         }
-        self.recurringTransactions = .loading
+        if showLoader {
+            self.recurringTransactions = .loading
+        }
         do {
             let transactions = try await self.apiService.getRecurringTransactions(budget.id)
             self.recurringTransactions = .success(transactions.sorted(by: { $0.title < $1.title }))
@@ -398,12 +407,14 @@ class DataStore : ObservableObject {
     }
     @Published var selectedTransaction: Transaction? = nil
     
-    func getTransactions() async {
+    func getTransactions(showLoader: Bool = true) async {
         guard  let budgetId = self.budgetId else {
             self.transactions = .error(NetworkError.unknown)
             return
         }
-        self.transactions = .loading
+        if showLoader {
+            self.transactions = .loading
+        }
         do {
             var categoryIds: [String] = []
             if let categoryId = categoryId {
