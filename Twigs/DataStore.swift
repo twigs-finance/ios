@@ -460,6 +460,7 @@ class DataStore : ObservableObject {
         do {
             try await self.apiService.deleteTransaction(transaction.id)
             self.transaction = .empty
+            await getTransactions()
         } catch {
             self.transaction = .error(error, transaction)
         }
