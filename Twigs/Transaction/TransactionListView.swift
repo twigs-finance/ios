@@ -24,7 +24,7 @@ struct TransactionListView<Content>: View where Content: View {
         }
         return false
     }
-    
+
     @ViewBuilder
     private func TransactionList(_ transactions: OrderedDictionary<String, [TwigsCore.Transaction]>) -> some View {
         if transactions.isEmpty {
@@ -37,10 +37,21 @@ struct TransactionListView<Content>: View where Content: View {
             }
             ForEach(transactions.keys, id: \.self) { (key: String) in
                 Group {
-                    let filtered = search.isEmpty ? transactions[key]! : transactions[key]!.filter { $0.title.lowercased().contains(search.lowercased())
-                        || $0.description?.lowercased().contains(search.lowercased()) ?? false
-                        || $0.amount.toCurrencyString().contains(search)
-                    }
+                    let filtered = transactions[key]!
+                        .filter {
+                            if let categoryId = dataStore.selectedCategory?.id {
+                                if $0.categoryId != categoryId {
+                                    return false
+                                }
+                            }
+                            if !search.isEmpty {
+                                return $0.title.lowercased().contains(search.lowercased())
+                                    || $0.description?.lowercased().contains(search.lowercased()) ?? false
+                                    || $0.amount.toCurrencyString().contains(search)
+                            }
+
+                            return true
+                        }
                     if !filtered.isEmpty {
                         Section(header: Text(key)) {
                             ForEach(filtered) { transaction in
@@ -52,7 +63,7 @@ struct TransactionListView<Content>: View where Content: View {
             }
         }
     }
-    
+
     private var currentUserId: String? {
         get {
             if case let .success(currentUser) = dataStore.currentUser {
@@ -62,21 +73,11 @@ struct TransactionListView<Content>: View where Content: View {
             }
         }
     }
-    
+
     private var budgetId: String? {
         get {
             if case let .success(budget) = dataStore.budget {
                 return budget.id
-            } else {
-                return nil
-            }
-        }
-    }
-    
-    private var categoryId: String? {
-        get {
-            if case let .success(category) = dataStore.category {
-                return category.id
             } else {
                 return nil
             }
@@ -104,7 +105,7 @@ struct TransactionListView<Content>: View where Content: View {
                         dataStore: dataStore,
                         createdBy: currentUserId ?? "",
                         budgetId: budgetId ?? "",
-                        categoryId: categoryId,
+                        categoryId: dataStore.categoryId,
                         transaction: nil
                     ))
                 })
@@ -120,7 +121,7 @@ struct TransactionListView<Content>: View where Content: View {
             )
         }
     }
-    
+
     init(header: (() -> Content)? = nil) {
         self.header = header
     }
@@ -129,7 +130,7 @@ struct TransactionListView<Content>: View where Content: View {
 struct TransactionListItemView: View {
     @EnvironmentObject var dataStore: DataStore
     var transaction: TwigsCore.Transaction
-    
+
     var body: some View {
         NavigationLink(
             tag: self.transaction,
@@ -163,7 +164,7 @@ struct TransactionListItemView: View {
             }
         )
     }
-    
+
     init (_ transaction: TwigsCore.Transaction) {
         self.transaction = transaction
     }

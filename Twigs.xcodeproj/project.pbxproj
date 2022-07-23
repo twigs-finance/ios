@@ -39,7 +39,6 @@
 		801D08CE275F189E00931465 /* RecurringTransactionsRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 801D08CD275F189E00931465 /* RecurringTransactionsRepository.swift */; };
 		801D08D2275FB7DE00931465 /* RecurringTransactionDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 801D08D1275FB7DE00931465 /* RecurringTransactionDetailsView.swift */; };
 		802161D0277647920075761A /* AsyncObservableObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 802161CF277647920075761A /* AsyncObservableObject.swift */; };
-		8021EFAD280A0FCA00043F18 /* TwigsCore in Frameworks */ = {isa = PBXBuildFile; productRef = 8021EFAC280A0FCA00043F18 /* TwigsCore */; };
 		8043EB84271F26ED00498E73 /* CategoryDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8043EB83271F26ED00498E73 /* CategoryDetailsView.swift */; };
 		8044BA3927828E9D009A78D4 /* CategoryDataStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8044BA3827828E9D009A78D4 /* CategoryDataStore.swift */; };
 		8044BA3B2784B659009A78D4 /* TransactionDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8044BA3A2784B659009A78D4 /* TransactionDetails.swift */; };
@@ -59,6 +58,7 @@
 		80AC75CD284E8E100099E846 /* EditPasswordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80AC75CC284E8E100099E846 /* EditPasswordView.swift */; };
 		80AC75CF284E8E1B0099E846 /* EditEmailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80AC75CE284E8E1B0099E846 /* EditEmailView.swift */; };
 		80AF7A982835ED3B009565C6 /* RecurringTransactionFormView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80AF7A972835ED3B009565C6 /* RecurringTransactionFormView.swift */; };
+		80D06DD1288C817800B50467 /* TwigsCore in Frameworks */ = {isa = PBXBuildFile; productRef = 80D06DD0288C817800B50467 /* TwigsCore */; };
 		80D1FC14277C1EF9007F17FB /* InlineLoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80D1FC13277C1EF9007F17FB /* InlineLoadingView.swift */; };
 		80D2CE1A2833448500EDD6C2 /* DataStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80D2CE192833448500EDD6C2 /* DataStore.swift */; };
 		80FC1BBE28411DD800682F21 /* YearlyFrequencyPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80FC1BBD28411DD800682F21 /* YearlyFrequencyPicker.swift */; };
@@ -166,7 +166,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8021EFAD280A0FCA00043F18 /* TwigsCore in Frameworks */,
+				80D06DD1288C817800B50467 /* TwigsCore in Frameworks */,
 				8076A8522809FE99006B9DC9 /* Collections in Frameworks */,
 				8076A84F2809FE8E006B9DC9 /* ArgumentParser in Frameworks */,
 			);
@@ -413,7 +413,7 @@
 			packageProductDependencies = (
 				8076A84E2809FE8E006B9DC9 /* ArgumentParser */,
 				8076A8512809FE99006B9DC9 /* Collections */,
-				8021EFAC280A0FCA00043F18 /* TwigsCore */,
+				80D06DD0288C817800B50467 /* TwigsCore */,
 			);
 			productName = Budget;
 			productReference = 28AC94EA233C373900BFB70A /* Twigs.app */;
@@ -800,7 +800,7 @@
 				CODE_SIGN_ENTITLEMENTS = Twigs/Twigs.entitlements;
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 16;
+				CURRENT_PROJECT_VERSION = 18;
 				DERIVE_MACCATALYST_PRODUCT_BUNDLE_IDENTIFIER = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"Twigs/Preview Content\"";
 				DEVELOPMENT_TEAM = 9Z6DE6KNJ9;
@@ -829,7 +829,7 @@
 				CODE_SIGN_ENTITLEMENTS = Twigs/Twigs.entitlements;
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 16;
+				CURRENT_PROJECT_VERSION = 18;
 				DERIVE_MACCATALYST_PRODUCT_BUNDLE_IDENTIFIER = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"Twigs/Preview Content\"";
 				DEVELOPMENT_TEAM = 9Z6DE6KNJ9;
@@ -1057,10 +1057,6 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		8021EFAC280A0FCA00043F18 /* TwigsCore */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = TwigsCore;
-		};
 		8076A84E2809FE8E006B9DC9 /* ArgumentParser */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 80A419F12787C13E0090C515 /* XCRemoteSwiftPackageReference "swift-argument-parser" */;
@@ -1075,6 +1071,10 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 80A419F12787C13E0090C515 /* XCRemoteSwiftPackageReference "swift-argument-parser" */;
 			productName = ArgumentParser;
+		};
+		80D06DD0288C817800B50467 /* TwigsCore */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = TwigsCore;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

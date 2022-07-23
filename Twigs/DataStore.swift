@@ -44,7 +44,7 @@ class DataStore : ObservableObject {
             }
         }
     }
-    
+
     var budgetId: String? {
         get {
             if case let .success(budget) = self.budget {
@@ -54,7 +54,7 @@ class DataStore : ObservableObject {
             }
         }
     }
-    
+
     var categoryId: String? {
         get {
             if case let .success(category) = self.category {
@@ -74,7 +74,7 @@ class DataStore : ObservableObject {
         self.token = UserDefaults.standard.string(forKey: KEY_TOKEN)
         self.userId = UserDefaults.standard.string(forKey: KEY_USER_ID)
     }
-    
+
     func getBudgets(count: Int? = nil, page: Int? = nil) async {
         // TODO: Find some way to extract this to a generic function
         self.budgets = .loading
@@ -99,11 +99,11 @@ class DataStore : ObservableObject {
             showBudgetSelection = true
         }
     }
-    
+
     func newBudget() {
         self.budget = .editing(Budget(id: "", name: "", description: "", currencyCode: ""))
     }
-    
+
     func save(_ budget: Budget) async {
         self.budget = .saving(budget)
         do {
@@ -123,7 +123,7 @@ class DataStore : ObservableObject {
             self.budget = .error(error, budget)
         }
     }
-    
+
     func deleteBudget() async {
         guard case let .editing(budget) = self.budget, budget.id != "" else {
             return
@@ -139,7 +139,7 @@ class DataStore : ObservableObject {
             self.budget = .error(error, budget)
         }
     }
-    
+
     func cancelEditBudget() async {
         guard case let .success(budgets) = self.budgets else {
             return
@@ -153,7 +153,7 @@ class DataStore : ObservableObject {
         }
         await self.selectBudget(budget)
     }
-    
+
     func loadOverview(showLoader: Bool = true) async {
         guard case let .success(budget) = self.budget else {
             return
@@ -178,7 +178,7 @@ class DataStore : ObservableObject {
                     } else {
                         budgetOverview.expectedIncome += category.amount
                     }
-                    
+
                     if category.expense {
                         budgetOverview.actualExpenses += abs(response.balance)
                     } else {
@@ -191,7 +191,7 @@ class DataStore : ObservableObject {
             self.overview = .error(error)
         }
     }
-    
+
     func selectBudget(_ budget: Budget?) async {
         if let budget = budget {
             self.budget = .success(budget)
@@ -206,7 +206,7 @@ class DataStore : ObservableObject {
             self.recurringTransactions = .empty
         }
     }
-    
+
     func editBudget() {
         guard case let .success(budget) = self.budget else {
             return
@@ -225,14 +225,14 @@ class DataStore : ObservableObject {
         }
     }
     @Published var selectedCategory: TwigsCore.Category? = nil
-    
+
     func getCategories(showLoader: Bool = true) async {
         guard case let .success(budget) = self.budget else {
             return
         }
         await self.getCategories(budgetId: budget.id, showLoader: showLoader)
     }
-    
+
     func getCategories(budgetId: String, expense: Bool? = nil, archived: Bool? = false, count: Int? = nil, page: Int? = nil, showLoader: Bool = true) async {
         if showLoader {
             self.categories = .loading
@@ -244,7 +244,7 @@ class DataStore : ObservableObject {
             self.categories = .error(error)
         }
     }
-        
+
     func save(_ category: TwigsCore.Category) async {
         self.category = .loading
         do {
@@ -265,7 +265,7 @@ class DataStore : ObservableObject {
             self.category = .error(error, category)
         }
     }
-    
+
     func delete(_ category: TwigsCore.Category) async {
         self.category = .loading
         do {
@@ -279,12 +279,12 @@ class DataStore : ObservableObject {
             self.category = .error(error, category)
         }
     }
-    
+
     func edit(_ category: TwigsCore.Category) async {
         self.editingCategory = true
         self.category = .editing(category)
     }
-    
+
     func cancelEditCategory() {
         self.editingCategory = false
         if let category = self.selectedCategory {
@@ -313,7 +313,7 @@ class DataStore : ObservableObject {
         }
     }
     @Published var selectedRecurringTransaction: RecurringTransaction? = nil
-        
+
     func getRecurringTransactions(showLoader: Bool = true) async {
         guard case let .success(budget) = self.budget else {
             return
@@ -328,7 +328,7 @@ class DataStore : ObservableObject {
             self.recurringTransactions = .error(error)
         }
     }
-    
+
     func newRecurringTransaction() {
         guard case let .success(user) = self.currentUser else {
             return
@@ -338,11 +338,11 @@ class DataStore : ObservableObject {
         }
         self.recurringTransaction = .editing(RecurringTransaction(createdBy: user.id, budgetId: budget.id))
     }
-    
+
     func edit(_ transaction: RecurringTransaction) async {
         self.recurringTransaction = .editing(transaction)
     }
-    
+
     func cancelEditRecurringTransaction() {
         guard case let .editing(rt) = self.recurringTransaction else {
             return
@@ -353,7 +353,7 @@ class DataStore : ObservableObject {
             self.recurringTransaction = .empty
         }
     }
-    
+
     func saveRecurringTransaction(_ transaction: RecurringTransaction) async {
         self.recurringTransaction = .loading
         do {
@@ -377,7 +377,7 @@ class DataStore : ObservableObject {
             self.recurringTransactions = .error(error)
         }
     }
-    
+
     func deleteRecurringTransaction(_ transaction: RecurringTransaction) async {
         self.recurringTransaction = .loading
         do {
@@ -390,7 +390,7 @@ class DataStore : ObservableObject {
             self.recurringTransaction = .error(error, transaction)
         }
     }
-    
+
     func clearSelectedRecurringTransaction() {
         self.recurringTransaction = .empty
     }
@@ -406,7 +406,7 @@ class DataStore : ObservableObject {
         }
     }
     @Published var selectedTransaction: Transaction? = nil
-    
+
     func getTransactions(showLoader: Bool = true) async {
         guard  let budgetId = self.budgetId else {
             self.transactions = .error(NetworkError.unknown)
@@ -434,7 +434,7 @@ class DataStore : ObservableObject {
             self.transactions = .error(error)
         }
     }
-    
+
     func saveTransaction(_ transaction: Transaction) async {
         self.transaction = .saving(transaction)
         do {
@@ -454,7 +454,7 @@ class DataStore : ObservableObject {
             self.transaction = .error(error, transaction)
         }
     }
-    
+
     func deleteTransaction(_ transaction: Transaction) async {
         self.transaction = .loading
         do {
@@ -465,7 +465,7 @@ class DataStore : ObservableObject {
             self.transaction = .error(error, transaction)
         }
     }
-    
+
     func newTransaction() {
         var budgetId = ""
         if case let .success(budget) = self.budget {
@@ -481,7 +481,7 @@ class DataStore : ObservableObject {
         }
         self.transaction = .editing(TwigsCore.Transaction(categoryId: categoryId, createdBy: createdBy, budgetId: budgetId))
     }
-    
+
     func editTransaction(_ transaction: Transaction) {
         self.transaction = .editing(transaction)
     }
@@ -493,11 +493,11 @@ class DataStore : ObservableObject {
             self.transaction = .empty
         }
     }
-    
+
     func clearSelectedTransaction() {
         self.transaction = .empty
     }
-    
+
     @Published var currentUser: AsyncData<User> = .empty {
         didSet {
             switch currentUser {
@@ -510,7 +510,7 @@ class DataStore : ObservableObject {
             }
         }
     }
-    
+
     private let KEY_BASE_URL = "BASE_URL"
     private let KEY_TOKEN = "TOKEN"
     private let KEY_USER_ID = "USER_ID"
@@ -533,11 +533,11 @@ class DataStore : ObservableObject {
         }
     }
     @Published var showLogin: Bool = true
-    
+
     func clearUserError() {
         self.currentUser = .empty
     }
-    
+
     func login(username: String, password: String) async {
         if baseUrl.isEmpty {
             self.currentUser = .error(NetworkError.invalidUrl)
@@ -559,7 +559,7 @@ class DataStore : ObservableObject {
             self.currentUser = .error(error)
         }
     }
-    
+
     func register(username: String, email: String, password: String, confirmPassword: String) async {
         if baseUrl.isEmpty {
             self.currentUser = .error(NetworkError.invalidUrl)
@@ -595,7 +595,7 @@ class DataStore : ObservableObject {
         }
         await self.login(username: username, password: password)
     }
-    
+
     func logout() {
         self.budgets = .empty
         self.budget = .empty
@@ -615,7 +615,7 @@ class DataStore : ObservableObject {
         UserDefaults.standard.removeObject(forKey: KEY_TOKEN)
         UserDefaults.standard.removeObject(forKey: KEY_USER_ID)
     }
-    
+
     func loadProfile() async {
         guard let userId = self.userId, !userId.isEmpty else {
             return
@@ -628,7 +628,7 @@ class DataStore : ObservableObject {
             self.currentUser = .error(error)
         }
     }
-    
+
     func updateUsername(_ username: String) async -> UsernameError? {
         guard case let .success(current) = self.currentUser else {
             return .unknown
@@ -643,7 +643,7 @@ class DataStore : ObservableObject {
             return .unavailable
         }
     }
-    
+
     func updateEmail(_ email: String) async -> EmailError? {
         guard case let .success(current) = self.currentUser else {
             return .unknown
@@ -661,7 +661,7 @@ class DataStore : ObservableObject {
             return .unavailable
         }
     }
-    
+
     func updatePassword(_ password: String, confirmPassword: String) async -> PasswordError? {
         guard case let .success(current) = self.currentUser else {
             return .unknown

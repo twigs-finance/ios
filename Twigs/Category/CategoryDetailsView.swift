@@ -31,7 +31,7 @@ struct CategoryDetailsView: View {
             return LocalizedStringKey("amount_earned")
         }
     }
-    
+
     var body: some View {
         if let category = dataStore.selectedCategory {
             TransactionListView() {
@@ -65,7 +65,7 @@ struct CategoryDetailsView: View {
             })
         }
     }
-    
+
     init (_ budget: Budget) {
         self.budget = budget
     }
