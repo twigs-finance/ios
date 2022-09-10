@@ -298,7 +298,7 @@ class DataStore : ObservableObject {
         self.category = .empty
     }
 
-    @Published var recurringTransactions: AsyncData<[RecurringTransaction]> = .empty
+    @Published var recurringTransactions: AsyncData<OrderedDictionary<String, [RecurringTransaction]>> = .empty
     @Published var recurringTransaction: AsyncData<RecurringTransaction> = .empty {
         didSet {
             if case let .success(transaction) = self.recurringTransaction {
@@ -323,7 +323,18 @@ class DataStore : ObservableObject {
         }
         do {
             let transactions = try await self.apiService.getRecurringTransactions(budget.id)
-            self.recurringTransactions = .success(transactions.sorted(by: { $0.title < $1.title }))
+                .sorted(by: { $0.title < $1.title })
+            var recurringTransactions: OrderedDictionary<String, [RecurringTransaction]> = [:]
+            recurringTransactions["This month"] = transactions.filter {
+                $0.isThisMonth && !$0.isExpired
+            }
+            recurringTransactions["Future"] = transactions.filter {
+                !$0.isThisMonth && !$0.isExpired
+            }
+            recurringTransactions["Expired"] = transactions.filter {
+                $0.isExpired
+            }
+            self.recurringTransactions = .success(recurringTransactions)
         } catch {
             self.recurringTransactions = .error(error)
         }
@@ -368,11 +379,7 @@ class DataStore : ObservableObject {
             } else {
                 self.recurringTransaction = .empty
             }
-            if case var .success(transactions) = self.recurringTransactions {
-                transactions = transactions.filter(withoutId: savedTransaction.id)
-                transactions.append(savedTransaction)
-                self.recurringTransactions = .success(transactions.sorted(by: { $0.title < $1.title }))
-            }
+            await self.getRecurringTransactions()
         } catch {
             self.recurringTransactions = .error(error)
         }
@@ -383,9 +390,7 @@ class DataStore : ObservableObject {
         do {
             try await self.apiService.deleteRecurringTransaction(transaction.id)
             self.recurringTransaction = .empty
-            if case let .success(transactions) = self.recurringTransactions {
-                self.recurringTransactions = .success(transactions.filter(withoutId: transaction.id))
-            }
+            await self.getRecurringTransactions()
         } catch {
             self.recurringTransaction = .error(error, transaction)
         }

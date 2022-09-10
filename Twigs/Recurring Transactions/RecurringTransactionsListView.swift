@@ -8,6 +8,7 @@
 
 import SwiftUI
 import TwigsCore
+import OrderedCollections
 
 struct RecurringTransactionsListView: View {
     @EnvironmentObject var dataStore: DataStore
@@ -17,10 +18,18 @@ struct RecurringTransactionsListView: View {
             data: $dataStore.recurringTransactions,
             action: { await self.dataStore.getRecurringTransactions() },
             errorTextLocalizedStringKey: "Failed to load recurring transactions"
-        ) { (transactions: [RecurringTransaction]) in
+        ) { (transactions: OrderedDictionary<String, [RecurringTransaction]>) in
             List {
-                ForEach(transactions) { transaction in
-                    RecurringTransactionsListItemView(transaction)
+                ForEach(transactions.keys, id: \.self) { (key: String) in
+                    Group {
+                        if !transactions[key]!.isEmpty {
+                            Section(header: Text(key)) {
+                                ForEach(transactions[key]!) { transaction in
+                                    RecurringTransactionsListItemView(transaction)
+                                }
+                            }
+                        }
+                    }
                 }
             }
             .refreshable {
