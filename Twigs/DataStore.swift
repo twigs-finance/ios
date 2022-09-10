@@ -16,6 +16,7 @@ private let LAST_BUDGET = "LAST_BUDGET"
 @MainActor
 class DataStore : ObservableObject {
     let apiService: TwigsApiService
+    let errorReporter: ErrorReporter
     @Published var budgets: AsyncData<[Budget]> = .empty
     @Published var budget: AsyncData<Budget> = .empty {
         didSet {
@@ -66,9 +67,11 @@ class DataStore : ObservableObject {
     }
 
     init(
-        _ apiService: TwigsApiService
+        _ apiService: TwigsApiService,
+        errorReporter: ErrorReporter = LoggingErrorReporter()
     ) {
         self.apiService = apiService
+        self.errorReporter = errorReporter
         self.baseUrl = UserDefaults.standard.string(forKey: KEY_BASE_URL) ?? ""
         self.apiService.baseUrl = baseUrl
         self.token = UserDefaults.standard.string(forKey: KEY_TOKEN)
@@ -95,6 +98,7 @@ class DataStore : ObservableObject {
                 }
             }
         } catch {
+            self.errorReporter.reportError(error: error)
             self.budgets = .error(error)
             showBudgetSelection = true
         }
@@ -120,6 +124,7 @@ class DataStore : ObservableObject {
                 self.budgets = .success(updatedBudgets.sorted(by: { $0.name < $1.name }))
             }
         } catch {
+            self.errorReporter.reportError(error: error)
             self.budget = .error(error, budget)
         }
     }
@@ -136,6 +141,7 @@ class DataStore : ObservableObject {
                 self.budgets = .success(budgets.filter(withoutId: budget.id))
             }
         } catch {
+            self.errorReporter.reportError(error: error)
             self.budget = .error(error, budget)
         }
     }
@@ -188,6 +194,7 @@ class DataStore : ObservableObject {
             }
             self.overview = .success(budgetOverview)
         } catch {
+            self.errorReporter.reportError(error: error)
             self.overview = .error(error)
         }
     }
@@ -241,6 +248,7 @@ class DataStore : ObservableObject {
             let categories = try await apiService.getCategories(budgetId: budgetId, expense: expense, archived: archived, count: count, page: page)
             self.categories = .success(categories)
         } catch {
+            self.errorReporter.reportError(error: error)
             self.categories = .error(error)
         }
     }
@@ -262,6 +270,7 @@ class DataStore : ObservableObject {
                 self.categories = .success(updatedCategories.sorted(by: { $0.title < $1.title }))
             }
         } catch {
+            self.errorReporter.reportError(error: error)
             self.category = .error(error, category)
         }
     }
@@ -276,6 +285,7 @@ class DataStore : ObservableObject {
                 self.categories = .success(categories.filter(withoutId: category.id))
             }
         } catch {
+            self.errorReporter.reportError(error: error)
             self.category = .error(error, category)
         }
     }
@@ -336,6 +346,7 @@ class DataStore : ObservableObject {
             }
             self.recurringTransactions = .success(recurringTransactions)
         } catch {
+            self.errorReporter.reportError(error: error)
             self.recurringTransactions = .error(error)
         }
     }
@@ -381,6 +392,7 @@ class DataStore : ObservableObject {
             }
             await self.getRecurringTransactions()
         } catch {
+            self.errorReporter.reportError(error: error)
             self.recurringTransactions = .error(error)
         }
     }
@@ -392,6 +404,7 @@ class DataStore : ObservableObject {
             self.recurringTransaction = .empty
             await self.getRecurringTransactions()
         } catch {
+            self.errorReporter.reportError(error: error)
             self.recurringTransaction = .error(error, transaction)
         }
     }
@@ -436,6 +449,7 @@ class DataStore : ObservableObject {
             let groupedTransactions = OrderedDictionary<String,[Transaction]>(grouping: transactions, by: { $0.date.toLocaleString() })
             self.transactions = .success(groupedTransactions)
         } catch {
+            self.errorReporter.reportError(error: error)
             self.transactions = .error(error)
         }
     }
@@ -456,6 +470,7 @@ class DataStore : ObservableObject {
             }
             await getTransactions()
         } catch {
+            self.errorReporter.reportError(error: error)
             self.transaction = .error(error, transaction)
         }
     }
@@ -467,6 +482,7 @@ class DataStore : ObservableObject {
             self.transaction = .empty
             await getTransactions()
         } catch {
+            self.errorReporter.reportError(error: error)
             self.transaction = .error(error, transaction)
         }
     }
@@ -555,6 +571,7 @@ class DataStore : ObservableObject {
             self.userId = response.userId
             await self.loadProfile()
         } catch {
+            self.errorReporter.reportError(error: error)
             switch error {
             case NetworkError.jsonParsingFailed(let jsonError):
                 print(jsonError.localizedDescription)
@@ -589,6 +606,7 @@ class DataStore : ObservableObject {
         do {
             _ = try await apiService.register(username: username, email: email, password: password)
         } catch {
+            self.errorReporter.reportError(error: error)
             switch error {
             case NetworkError.jsonParsingFailed(let jsonError):
                 print(jsonError.localizedDescription)
@@ -630,6 +648,7 @@ class DataStore : ObservableObject {
             self.currentUser = .success(user)
             await getBudgets()
         } catch {
+            self.errorReporter.reportError(error: error)
             self.currentUser = .error(error)
         }
     }
@@ -644,6 +663,7 @@ class DataStore : ObservableObject {
             self.currentUser = .success(updated)
             return nil
         } catch {
+            self.errorReporter.reportError(error: error)
             self.currentUser = .error(error, current)
             return .unavailable
         }
@@ -662,6 +682,7 @@ class DataStore : ObservableObject {
             self.currentUser = .success(updated)
             return nil
         } catch {
+            self.errorReporter.reportError(error: error)
             self.currentUser = .error(error, current)
             return .unavailable
         }
@@ -680,6 +701,7 @@ class DataStore : ObservableObject {
             self.currentUser = .success(updated)
             return nil
         } catch {
+            self.errorReporter.reportError(error: error)
             self.currentUser = .error(error, current)
             return .unknown
         }
@@ -695,6 +717,7 @@ class DataStore : ObservableObject {
             self.currentUser = .success(updated)
             return true
         } catch {
+            self.errorReporter.reportError(error: error)
             self.currentUser = .error(error, current)
             return false
         }
@@ -707,6 +730,7 @@ class DataStore : ObservableObject {
             let user = try await self.apiService.getUser(id)
             self.user = .success(user)
         } catch {
+            self.errorReporter.reportError(error: error)
             self.currentUser = .error(error)
         }
     }

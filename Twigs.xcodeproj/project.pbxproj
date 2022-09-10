@@ -39,6 +39,10 @@
 		801D08CE275F189E00931465 /* RecurringTransactionsRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 801D08CD275F189E00931465 /* RecurringTransactionsRepository.swift */; };
 		801D08D2275FB7DE00931465 /* RecurringTransactionDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 801D08D1275FB7DE00931465 /* RecurringTransactionDetailsView.swift */; };
 		802161D0277647920075761A /* AsyncObservableObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 802161CF277647920075761A /* AsyncObservableObject.swift */; };
+		8043704028CBEC6800F229F9 /* FirebaseAnalyticsWithoutAdIdSupport in Frameworks */ = {isa = PBXBuildFile; productRef = 8043703F28CBEC6800F229F9 /* FirebaseAnalyticsWithoutAdIdSupport */; };
+		8043704228CBEC6800F229F9 /* FirebaseCrashlytics in Frameworks */ = {isa = PBXBuildFile; productRef = 8043704128CBEC6800F229F9 /* FirebaseCrashlytics */; };
+		8043704528CBEDF400F229F9 /* ErrorReporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8043704428CBEDF400F229F9 /* ErrorReporter.swift */; };
+		8043704728CBF16600F229F9 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8043704628CBF16600F229F9 /* GoogleService-Info.plist */; };
 		8043EB84271F26ED00498E73 /* CategoryDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8043EB83271F26ED00498E73 /* CategoryDetailsView.swift */; };
 		8044BA3927828E9D009A78D4 /* CategoryDataStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8044BA3827828E9D009A78D4 /* CategoryDataStore.swift */; };
 		8044BA3B2784B659009A78D4 /* TransactionDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8044BA3A2784B659009A78D4 /* TransactionDetails.swift */; };
@@ -136,6 +140,8 @@
 		801D08D1275FB7DE00931465 /* RecurringTransactionDetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecurringTransactionDetailsView.swift; sourceTree = "<group>"; };
 		802161CF277647920075761A /* AsyncObservableObject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsyncObservableObject.swift; sourceTree = "<group>"; };
 		8021EFAB280A0FA100043F18 /* TwigsCore */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = TwigsCore; path = ../TwigsCore; sourceTree = "<group>"; };
+		8043704428CBEDF400F229F9 /* ErrorReporter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorReporter.swift; sourceTree = "<group>"; };
+		8043704628CBF16600F229F9 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../Downloads/GoogleService-Info.plist"; sourceTree = "<group>"; };
 		8043EB83271F26ED00498E73 /* CategoryDetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryDetailsView.swift; sourceTree = "<group>"; };
 		8044BA3827828E9D009A78D4 /* CategoryDataStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryDataStore.swift; sourceTree = "<group>"; };
 		8044BA3A2784B659009A78D4 /* TransactionDetails.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionDetails.swift; sourceTree = "<group>"; };
@@ -168,7 +174,9 @@
 			files = (
 				80D06DD1288C817800B50467 /* TwigsCore in Frameworks */,
 				8076A8522809FE99006B9DC9 /* Collections in Frameworks */,
+				8043704228CBEC6800F229F9 /* FirebaseCrashlytics in Frameworks */,
 				8076A84F2809FE8E006B9DC9 /* ArgumentParser in Frameworks */,
+				8043704028CBEC6800F229F9 /* FirebaseAnalyticsWithoutAdIdSupport in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -251,13 +259,13 @@
 		28AC94E1233C373900BFB70A = {
 			isa = PBXGroup;
 			children = (
+				8005FD59277E623900E48B23 /* Frameworks */,
 				80DBED432774AE4F00CB0A88 /* Packages */,
-				80A419EB2787C0A00090C515 /* twigs-cli */,
 				28AC94EB233C373900BFB70A /* Products */,
 				28AC94EC233C373900BFB70A /* Twigs */,
+				80A419EB2787C0A00090C515 /* twigs-cli */,
 				28AC9503233C373A00BFB70A /* TwigsTests */,
 				28AC950E233C373A00BFB70A /* TwigsUITests */,
-				8005FD59277E623900E48B23 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -275,6 +283,7 @@
 		28AC94EC233C373900BFB70A /* Twigs */ = {
 			isa = PBXGroup;
 			children = (
+				8043704628CBF16600F229F9 /* GoogleService-Info.plist */,
 				282126A4235BCB7500072D52 /* Twigs.entitlements */,
 				28AC94FB233C373A00BFB70A /* Info.plist */,
 				28CE8B9423525F990072BC4C /* Extensions.swift */,
@@ -298,6 +307,7 @@
 				802161CF277647920075761A /* AsyncObservableObject.swift */,
 				800DFC2B277FF47A00EDCE9B /* AsyncData.swift */,
 				80D2CE192833448500EDD6C2 /* DataStore.swift */,
+				8043704428CBEDF400F229F9 /* ErrorReporter.swift */,
 			);
 			path = Twigs;
 			sourceTree = "<group>";
@@ -404,6 +414,7 @@
 				28AC94E6233C373900BFB70A /* Sources */,
 				28AC94E7233C373900BFB70A /* Frameworks */,
 				28AC94E8233C373900BFB70A /* Resources */,
+				8043704328CBED4000F229F9 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -414,6 +425,8 @@
 				8076A84E2809FE8E006B9DC9 /* ArgumentParser */,
 				8076A8512809FE99006B9DC9 /* Collections */,
 				80D06DD0288C817800B50467 /* TwigsCore */,
+				8043703F28CBEC6800F229F9 /* FirebaseAnalyticsWithoutAdIdSupport */,
+				8043704128CBEC6800F229F9 /* FirebaseCrashlytics */,
 			);
 			productName = Budget;
 			productReference = 28AC94EA233C373900BFB70A /* Twigs.app */;
@@ -517,6 +530,7 @@
 				8076A84A2809FE56006B9DC9 /* XCRemoteSwiftPackageReference "swift-argument-parser" */,
 				8076A84D2809FE8D006B9DC9 /* XCRemoteSwiftPackageReference "swift-argument-parser" */,
 				8076A8502809FE99006B9DC9 /* XCRemoteSwiftPackageReference "swift-collections" */,
+				8043703E28CBEC6800F229F9 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
 			);
 			productRefGroup = 28AC94EB233C373900BFB70A /* Products */;
 			projectDirPath = "";
@@ -537,6 +551,7 @@
 			files = (
 				28AC94FA233C373A00BFB70A /* LaunchScreen.storyboard in Resources */,
 				28AC951F233C381C00BFB70A /* Localizable.strings in Resources */,
+				8043704728CBF16600F229F9 /* GoogleService-Info.plist in Resources */,
 				28AC94F7233C373A00BFB70A /* Preview Assets.xcassets in Resources */,
 				28AC94F4233C373A00BFB70A /* Assets.xcassets in Resources */,
 			);
@@ -557,6 +572,28 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		8043704328CBED4000F229F9 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}/Contents/Resources/DWARF/${TARGET_NAME}",
+				"$(SRCROOT)/newInputFile",
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n\"${BUILD_DIR%/Build/*}/SourcePackages/checkouts/firebase-ios-sdk/Crashlytics/run\"\n";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		28AC94E6233C373900BFB70A /* Sources */ = {
@@ -604,6 +641,7 @@
 				284102302342D97300EAFA29 /* BudgetListsView.swift in Sources */,
 				282126BD235CDE1400072D52 /* ProgressView.swift in Sources */,
 				806C7850272B700B00FA1375 /* TwigsApp.swift in Sources */,
+				8043704528CBEDF400F229F9 /* ErrorReporter.swift in Sources */,
 				808CA1A928355B30002EDD59 /* BudgetFormView.swift in Sources */,
 				80AF7A982835ED3B009565C6 /* RecurringTransactionFormView.swift in Sources */,
 				28CE8B9523525F990072BC4C /* Extensions.swift in Sources */,
@@ -800,7 +838,8 @@
 				CODE_SIGN_ENTITLEMENTS = Twigs/Twigs.entitlements;
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 18;
+				CURRENT_PROJECT_VERSION = 19;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DERIVE_MACCATALYST_PRODUCT_BUNDLE_IDENTIFIER = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"Twigs/Preview Content\"";
 				DEVELOPMENT_TEAM = 9Z6DE6KNJ9;
@@ -829,7 +868,7 @@
 				CODE_SIGN_ENTITLEMENTS = Twigs/Twigs.entitlements;
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 18;
+				CURRENT_PROJECT_VERSION = 19;
 				DERIVE_MACCATALYST_PRODUCT_BUNDLE_IDENTIFIER = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"Twigs/Preview Content\"";
 				DEVELOPMENT_TEAM = 9Z6DE6KNJ9;
@@ -1014,6 +1053,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		8043703E28CBEC6800F229F9 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 9.0.0;
+			};
+		};
 		8076A84A2809FE56006B9DC9 /* XCRemoteSwiftPackageReference "swift-argument-parser" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/apple/swift-argument-parser.git";
@@ -1057,6 +1104,16 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		8043703F28CBEC6800F229F9 /* FirebaseAnalyticsWithoutAdIdSupport */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 8043703E28CBEC6800F229F9 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAnalyticsWithoutAdIdSupport;
+		};
+		8043704128CBEC6800F229F9 /* FirebaseCrashlytics */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 8043703E28CBEC6800F229F9 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseCrashlytics;
+		};
 		8076A84E2809FE8E006B9DC9 /* ArgumentParser */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 80A419F12787C13E0090C515 /* XCRemoteSwiftPackageReference "swift-argument-parser" */;
