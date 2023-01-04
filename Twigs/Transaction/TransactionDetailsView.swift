@@ -13,7 +13,6 @@ import ArgumentParser
 struct TransactionDetailsView: View {
     @EnvironmentObject var apiService: TwigsApiService
     @EnvironmentObject var dataStore: DataStore
-    @ObservedObject var transactionDetails: TransactionDetails
     var editing: Bool {
         if case .editing(_) = dataStore.transaction {
             return true
@@ -24,9 +23,6 @@ struct TransactionDetailsView: View {
         return false
     }
     
-    init(_ transactionDetails: TransactionDetails) {
-        self.transactionDetails = transactionDetails
-    }
     private var currentUserId: String? {
         get {
             if case let .success(currentUser) = self.dataStore.currentUser {
@@ -55,14 +51,13 @@ struct TransactionDetailsView: View {
                     if let description = transaction.description {
                         LabeledField(label: "notes", value: description, loading: .constant(false), showDivider: true)
                     }
-                    CategoryLineItem()
-                    BudgetLineItem()
-                    UserLineItem()
-                }.padding()
-                    .environmentObject(transactionDetails)
-                    .task {
-                        await transactionDetails.loadDetails(transaction)
+                    if let categoryId = transaction.categoryId {
+                        CategoryLineItem(id: categoryId)
                     }
+                    BudgetLineItem(id: transaction.budgetId)
+                    UserLineItem(id: transaction.createdBy)
+                }
+                .padding()
             }
             .navigationBarItems(trailing: Button(
                 action: { self.dataStore.editTransaction(transaction) }
@@ -92,32 +87,31 @@ struct LabeledField: View {
     
     @ViewBuilder
     var body: some View {
-        if let val = value, !val.isEmpty {
-            VStack {
-                HStack {
-                    Text(self.label)
-                        .foregroundColor(.secondary)
-                    Spacer()
-                    if loading {
-                        EmbeddedLoadingView()
-                    } else {
-                        Text(verbatim: val)
-                            .multilineTextAlignment(.trailing)
-                    }
+        VStack {
+            HStack {
+                Text(self.label)
+                    .foregroundColor(.secondary)
+                Spacer()
+                if loading {
+                    EmbeddedLoadingView()
+                } else {
+                    Text(verbatim: self.value ?? "")
+                        .multilineTextAlignment(.trailing)
                 }
-                if showDivider {
-                    Divider()
-                }
+            }
+            if showDivider {
+                Divider()
             }
         }
     }
 }
 
 struct CategoryLineItem: View {
-    @EnvironmentObject var transactionDetails: TransactionDetails
+    let id: String
+    @EnvironmentObject var dataStore: DataStore
     var value: String {
         // TODO: Show errors
-        if case let .success(category) = transactionDetails.category {
+        if let category = dataStore.getCategory(id) {
             return category.title
         } else {
             return ""
@@ -126,19 +120,16 @@ struct CategoryLineItem: View {
     
     @ViewBuilder
     var body: some View {
-        if case .empty = transactionDetails.category {
-            EmptyView()
-        } else {
-            LabeledField(label: "category", value: value, loading: .constant(self.value == ""), showDivider: true)
-        }
+        LabeledField(label: "category", value: value, loading: .constant(self.value == ""), showDivider: true)
     }
 }
 
 struct BudgetLineItem: View {
-    @EnvironmentObject var transactionDetails: TransactionDetails
+    let id: String
+    @EnvironmentObject var dataStore: DataStore
     var value: String {
         // TODO: Show errors
-        if case let .success(budget) = transactionDetails.budget {
+        if let budget = dataStore.getBudget(id) {
             return budget.name
         } else {
             return ""
@@ -147,19 +138,16 @@ struct BudgetLineItem: View {
     
     @ViewBuilder
     var body: some View {
-        if case .empty = transactionDetails.budget {
-            EmptyView()
-        } else {
-            LabeledField(label: "budget", value: value, loading: .constant(self.value == ""), showDivider: true)
-        }
+        LabeledField(label: "budget", value: value, loading: .constant(self.value == ""), showDivider: true)
     }
 }
 
 struct UserLineItem: View {
-    @EnvironmentObject var transactionDetails: TransactionDetails
+    let id: String
+    @EnvironmentObject var dataStore: DataStore
     var value: String {
         // TODO: Show errors
-        if case let .success(user) = transactionDetails.user {
+        if case let .success(user) = dataStore.user, user.id == id {
             return user.username
         } else {
             return ""
@@ -168,18 +156,17 @@ struct UserLineItem: View {
     
     @ViewBuilder
     var body: some View {
-        if case .empty = transactionDetails.user {
-            EmptyView()
-        } else {
-            LabeledField(label: "created_by", value: value, loading: .constant(self.value == ""), showDivider: false)
-        }
+        LabeledField(label: "created_by", value: value, loading: .constant(self.value == ""), showDivider: false)
+            .task {
+                await dataStore.getUser(id)
+            }
     }
 }
 
 #if DEBUG
 struct TransactionDetailsView_Previews: PreviewProvider {
     static var previews: some View {
-        TransactionDetailsView(TransactionDetails(TwigsInMemoryCacheService()))
+        TransactionDetailsView()
     }
 }
 #endif

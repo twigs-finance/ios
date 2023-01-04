@@ -45,7 +45,6 @@
 		8043704728CBF16600F229F9 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8043704628CBF16600F229F9 /* GoogleService-Info.plist */; };
 		8043EB84271F26ED00498E73 /* CategoryDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8043EB83271F26ED00498E73 /* CategoryDetailsView.swift */; };
 		8044BA3927828E9D009A78D4 /* CategoryDataStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8044BA3827828E9D009A78D4 /* CategoryDataStore.swift */; };
-		8044BA3B2784B659009A78D4 /* TransactionDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8044BA3A2784B659009A78D4 /* TransactionDetails.swift */; };
 		8044BA3D2784CC0D009A78D4 /* TransactionForm.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8044BA3C2784CC0D009A78D4 /* TransactionForm.swift */; };
 		8044BA3F27853054009A78D4 /* CategoryForm.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8044BA3E27853054009A78D4 /* CategoryForm.swift */; };
 		806C7850272B700B00FA1375 /* TwigsApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 806C784F272B700B00FA1375 /* TwigsApp.swift */; };
@@ -144,7 +143,6 @@
 		8043704628CBF16600F229F9 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../Downloads/GoogleService-Info.plist"; sourceTree = "<group>"; };
 		8043EB83271F26ED00498E73 /* CategoryDetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryDetailsView.swift; sourceTree = "<group>"; };
 		8044BA3827828E9D009A78D4 /* CategoryDataStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryDataStore.swift; sourceTree = "<group>"; };
-		8044BA3A2784B659009A78D4 /* TransactionDetails.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionDetails.swift; sourceTree = "<group>"; };
 		8044BA3C2784CC0D009A78D4 /* TransactionForm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionForm.swift; sourceTree = "<group>"; };
 		8044BA3E27853054009A78D4 /* CategoryForm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryForm.swift; sourceTree = "<group>"; };
 		806C784F272B700B00FA1375 /* TwigsApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TwigsApp.swift; sourceTree = "<group>"; };
@@ -346,7 +344,6 @@
 				28FE6B03234449DC00D5543E /* TransactionListView.swift */,
 				28FE6B0523444A9800D5543E /* TransactionDetailsView.swift */,
 				2821265F23555FD300072D52 /* TransactionFormSheet.swift */,
-				8044BA3A2784B659009A78D4 /* TransactionDetails.swift */,
 				8044BA3C2784CC0D009A78D4 /* TransactionForm.swift */,
 			);
 			path = Transaction;
@@ -621,7 +618,6 @@
 				2857EAED233DA30B0026BC83 /* LoadingView.swift in Sources */,
 				282126A3235ABC1800072D52 /* TwigsInMemoryCacheService.swift in Sources */,
 				800DFC2C277FF47A00EDCE9B /* AsyncData.swift in Sources */,
-				8044BA3B2784B659009A78D4 /* TransactionDetails.swift in Sources */,
 				28B9E50E2346BCB2007C3909 /* RegistrationView.swift in Sources */,
 				284102322342E12F00EAFA29 /* CategoryListView.swift in Sources */,
 				8043EB84271F26ED00498E73 /* CategoryDetailsView.swift in Sources */,

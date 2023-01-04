@@ -138,7 +138,7 @@ struct TransactionListItemView: View {
             tag: self.transaction,
             selection: self.$dataStore.selectedTransaction,
             destination: {
-                TransactionDetailsView(TransactionDetails(dataStore.apiService))
+                TransactionDetailsView()
                     .navigationBarTitle("details", displayMode: .inline)
             },
             label: {

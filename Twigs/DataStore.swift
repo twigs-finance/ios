@@ -103,6 +103,14 @@ class DataStore : ObservableObject {
             showBudgetSelection = true
         }
     }
+    
+    func getBudget(_ id: String) -> TwigsCore.Budget? {
+        if case let .success(budgets) = self.budgets {
+            return budgets.first(where: { $0.id == id })
+        }
+        
+        return nil
+    }
 
     func newBudget() {
         self.budget = .editing(Budget(id: "", name: "", description: "", currencyCode: ""))
@@ -251,6 +259,14 @@ class DataStore : ObservableObject {
             self.errorReporter.reportError(error: error)
             self.categories = .error(error)
         }
+    }
+    
+    func getCategory(_ id: String) -> TwigsCore.Category? {
+        if case let .success(categories) = self.categories {
+            return categories.first(where: { $0.id == id })
+        }
+        
+        return nil
     }
 
     func save(_ category: TwigsCore.Category) async {
@@ -731,7 +747,7 @@ class DataStore : ObservableObject {
             self.user = .success(user)
         } catch {
             self.errorReporter.reportError(error: error)
-            self.currentUser = .error(error)
+            self.user = .error(error)
         }
     }
 }
