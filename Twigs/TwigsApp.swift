@@ -6,6 +6,7 @@
 //  Copyright © 2021 William Brawner. All rights reserved.
 //
 
+import FirebaseCore
 import SwiftUI
 import TwigsCore
 
@@ -17,5 +18,9 @@ struct TwigsApp: App {
         WindowGroup {
             MainView(apiService as TwigsApiService)
         }
+    }
+    
+    init() {
+        FirebaseApp.configure()
     }
 }

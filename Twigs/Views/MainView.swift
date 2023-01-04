@@ -6,20 +6,10 @@
 //  Copyright © 2021 William Brawner. All rights reserved.
 //
 
-import FirebaseCore
 import SwiftUI
 import TwigsCore
 
-class AppDelegate: NSObject, UIApplicationDelegate {
-  func application(_ application: UIApplication,
-                   didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
-    FirebaseApp.configure()
-    return true
-  }
-}
-
 struct MainView: View {
-    @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
     @StateObject var dataStore: DataStore
     let apiService: TwigsApiService
     
