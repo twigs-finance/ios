@@ -32,9 +32,11 @@ struct BudgetDetailsView: View {
                 }
             }
             .listStyle(.insetGrouped)
+            #if !targetEnvironment(macCatalyst)
             .refreshable {
                 await dataStore.loadOverview(showLoader: false)
             }
+            #endif
             .navigationBarItems(trailing: Button(action: {
                 dataStore.editBudget()
             }, label: { Text("edit") }))

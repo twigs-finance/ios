@@ -95,9 +95,11 @@ struct TransactionListView<Content>: View where Content: View {
                 TransactionList(transactions)
             }
             .searchable(text: $search)
+            #if !targetEnvironment(macCatalyst)
             .refreshable {
                 await dataStore.getTransactions(showLoader: false)
             }
+            #endif
             .sheet(
                 isPresented: .constant(addingTransaction),
                 content: {

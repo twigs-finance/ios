@@ -32,9 +32,11 @@ struct RecurringTransactionsListView: View {
                     }
                 }
             }
+            #if !targetEnvironment(macCatalyst)
             .refreshable {
                 await dataStore.getRecurringTransactions(showLoader: false)
             }
+            #endif
         }
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {

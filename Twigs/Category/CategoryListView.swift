@@ -48,9 +48,12 @@ struct CategoryListView: View {
                     }
                 }
             }
-        }.refreshable {
+        }
+        #if !targetEnvironment(macCatalyst)
+        .refreshable {
             await dataStore.getCategories()
         }
+        #endif
         .navigationBarItems(trailing: Button(action: {
             Task {
                 await dataStore.edit(TwigsCore.Category(budgetId: budgetId))
