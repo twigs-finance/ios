@@ -87,13 +87,13 @@ struct IncomeOverview: View {
                 Text("expected")
                 Text(verbatim: overview.expectedIncome.toCurrencyString())
             }
-            ProgressView(value: Float(overview.expectedIncome), maxValue: Float(max(overview.expectedIncome, overview.actualIncome)), progressTintColor: .gray, progressBarHeight: 10.0, progressBarCornerRadius: 4.0)
+            ProgressView(value: Float(overview.expectedIncome), maxValue: overview.maxValue, progressTintColor: .gray, progressBarHeight: 10.0, progressBarCornerRadius: 4.0)
             HStack {
                 Text("actual")
                 Text(verbatim: overview.actualIncome.toCurrencyString())
                     .foregroundColor(.green)
             }
-            ProgressView(value: Float(overview.actualIncome), maxValue: Float(max(overview.expectedIncome, overview.actualIncome)), progressTintColor: .green, progressBarHeight: 10.0, progressBarCornerRadius: 4.0)
+            ProgressView(value: Float(overview.actualIncome), maxValue: overview.maxValue, progressTintColor: .green, progressBarHeight: 10.0, progressBarCornerRadius: 4.0)
         }
     }
 }
@@ -107,13 +107,13 @@ struct ExpensesOverview: View {
                 Text("expected")
                 Text(verbatim: overview.expectedExpenses.toCurrencyString())
             }
-            ProgressView(value: Float(overview.expectedExpenses), maxValue: Float(max(overview.expectedExpenses, overview.actualExpenses)), progressTintColor: .gray, progressBarHeight: 10.0, progressBarCornerRadius: 4.0)
+            ProgressView(value: Float(overview.expectedExpenses), maxValue: overview.maxValue, progressTintColor: .gray, progressBarHeight: 10.0, progressBarCornerRadius: 4.0)
             HStack {
                 Text("actual")
                 Text(verbatim: overview.actualExpenses.toCurrencyString())
                     .foregroundColor(.red)
             }
-            ProgressView(value: Float(overview.actualExpenses), maxValue: Float(max(overview.expectedExpenses, overview.actualExpenses)), progressTintColor: .red, progressBarHeight: 10.0, progressBarCornerRadius: 4.0)
+            ProgressView(value: Float(overview.actualExpenses), maxValue: overview.maxValue, progressTintColor: .red, progressBarHeight: 10.0, progressBarCornerRadius: 4.0)
         }
     }
 }
