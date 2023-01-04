@@ -46,11 +46,12 @@ struct SidebarBudgetView: View {
                         destination: { RecurringTransactionsListView().navigationBarTitle("recurring_transactions") },
                         label: { Label("recurring_transactions", systemImage: "arrow.triangle.2.circlepath") })
                         .keyboardShortcut("4")
+                    Divider()
                     BudgetListsView()
                 }
                 .navigationTitle(budget.name)
-                EmptyView()
                 if self.tabSelection ?? 0 > 0 {
+                    EmptyView()
                     EmptyView()
                 }
             }
