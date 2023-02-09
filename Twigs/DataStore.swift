@@ -178,7 +178,12 @@ class DataStore : ObservableObject {
         do {
             let budgetBalance = try await self.apiService.sumTransactions(budgetId: budget.id, categoryId: nil, from: nil, to: nil)
             let categories = try await self.apiService.getCategories(budgetId: budget.id, expense: nil, archived: false, count: nil, page: nil)
-            var budgetOverview = BudgetOverview(budget: budget, balance: budgetBalance.balance)
+            await self.getTransactions(showLoader: false)
+            var transactionCount = 0
+            if case let .success(transactions) = self.transactions {
+                transactionCount = transactions.count
+            }
+            var budgetOverview = BudgetOverview(budget: budget, balance: budgetBalance.balance, categories: categories, transactionCount: transactionCount)
             try await withThrowingTaskGroup(of: (TwigsCore.Category, BalanceResponse).self) { group in
                 for category in categories {
                     group.addTask {
@@ -188,15 +193,15 @@ class DataStore : ObservableObject {
 
                 for try await (category, response) in group {
                     if category.expense {
-                        budgetOverview.expectedExpenses += category.amount
+                        budgetOverview.expectedExpenses += Float(category.amount) / 100.0
                     } else {
-                        budgetOverview.expectedIncome += category.amount
+                        budgetOverview.expectedIncome += Float(category.amount) / 100.0
                     }
 
                     if category.expense {
-                        budgetOverview.actualExpenses += abs(response.balance)
+                        budgetOverview.actualExpenses += Float(abs(response.balance)) / 100.0
                     } else {
-                        budgetOverview.actualIncome += response.balance
+                        budgetOverview.actualIncome += Float(response.balance) / 100.0
                     }
                 }
             }

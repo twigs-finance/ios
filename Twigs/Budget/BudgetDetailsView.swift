@@ -6,6 +6,7 @@
 //  Copyright © 2019 William Brawner. All rights reserved.
 //
 
+import Charts
 import SwiftUI
 import TwigsCore
 
@@ -21,14 +22,50 @@ struct BudgetDetailsView: View {
             errorTextLocalizedStringKey: "budgets_load_failure"
         ) { overview in
             List {
-                Section(overview.budget.name) {
-                    DescriptionOverview(overview: overview)
+                if let description = overview.budget.description {
+                    Section(overview.budget.name) {
+                        Text(description)
+                    }
                 }
-                Section("income") {
-                    IncomeOverview(overview: overview)
+
+                Section("stats") {
+                    HStack {
+                        VStack(alignment: .center) {
+                            Text("cash_flow")
+                                .font(.caption)
+                            Text(verbatim: overview.balance.toCurrencyString())
+                                .foregroundColor(overview.balance < 0 ? .red : .green)
+                                .font(.title2)
+                        }
+                        Spacer()
+                        VStack(alignment: .center) {
+                            Text("transactions")
+                                .font(.caption)
+                            Text(verbatim: String(overview.transactionCount))
+                                .font(.title2)
+
+                        }
+                    }
                 }
-                Section("expenses") {
-                    ExpensesOverview(overview: overview)
+                Section("expected_vs_actual") {
+                    Chart {
+                        BarMark(
+                            x: .value("Amount", overview.expectedIncome),
+                            y: .value("Label", Bundle.main.localizedString(forKey: "expected_income", value: nil, table: nil))
+                        ).foregroundStyle(Color.gray)
+                        BarMark(
+                            x: .value("Amount", overview.actualIncome),
+                            y: .value("Label", Bundle.main.localizedString(forKey: "actual_income", value: nil, table: nil))
+                        ).foregroundStyle(Color.green)
+                        BarMark(
+                            x: .value("Amount", overview.expectedExpenses),
+                            y: .value("Label", Bundle.main.localizedString(forKey: "expected_expenses", value: nil, table: nil))
+                        ).foregroundStyle(Color.gray)
+                        BarMark(
+                            x: .value("Amount", overview.actualExpenses),
+                            y: .value("Label", Bundle.main.localizedString(forKey: "actual_expenses", value: nil, table: nil))
+                        ).foregroundStyle(Color.red)
+                    }
                 }
             }
             .listStyle(.insetGrouped)
@@ -57,63 +94,6 @@ struct BudgetDetailsView: View {
                     }
                 }
             )
-        }
-    }
-}
-
-struct DescriptionOverview: View {
-    let overview: BudgetOverview
-    
-    var body: some View {
-        VStack(alignment: .leading) {
-            if let description = overview.budget.description {
-                Text(description)
-            }
-            HStack {
-                Text("current_balance")
-                Text(verbatim: overview.balance.toCurrencyString())
-                    .foregroundColor(overview.balance < 0 ? .red : .green)
-            }
-        }
-    }
-}
-
-struct IncomeOverview: View {
-    let overview: BudgetOverview
-    
-    var body: some View {
-        VStack(alignment: .leading) {
-            HStack {
-                Text("expected")
-                Text(verbatim: overview.expectedIncome.toCurrencyString())
-            }
-            ProgressView(value: Float(overview.expectedIncome), maxValue: overview.maxValue, progressTintColor: .gray, progressBarHeight: 10.0, progressBarCornerRadius: 4.0)
-            HStack {
-                Text("actual")
-                Text(verbatim: overview.actualIncome.toCurrencyString())
-                    .foregroundColor(.green)
-            }
-            ProgressView(value: Float(overview.actualIncome), maxValue: overview.maxValue, progressTintColor: .green, progressBarHeight: 10.0, progressBarCornerRadius: 4.0)
-        }
-    }
-}
-
-struct ExpensesOverview: View {
-    let overview: BudgetOverview
-    
-    var body: some View {
-        VStack(alignment: .leading) {
-            HStack {
-                Text("expected")
-                Text(verbatim: overview.expectedExpenses.toCurrencyString())
-            }
-            ProgressView(value: Float(overview.expectedExpenses), maxValue: overview.maxValue, progressTintColor: .gray, progressBarHeight: 10.0, progressBarCornerRadius: 4.0)
-            HStack {
-                Text("actual")
-                Text(verbatim: overview.actualExpenses.toCurrencyString())
-                    .foregroundColor(.red)
-            }
-            ProgressView(value: Float(overview.actualExpenses), maxValue: overview.maxValue, progressTintColor: .red, progressBarHeight: 10.0, progressBarCornerRadius: 4.0)
         }
     }
 }

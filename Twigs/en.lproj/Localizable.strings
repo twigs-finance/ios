@@ -66,10 +66,13 @@
 "budgets" = "Budgets";
 "new_budget" = "New Budget";
 "current_balance" = "Current Balance:";
-"expected" = "Expected:";
-"actual" = "Actual:";
-"income" = "Income:";
-"expenses" = "Expenses:";
+"stats" = "Stats";
+"cash_flow" = "Cash Flow";
+"expected_vs_actual" = "Expected vs Actual";
+"expected_income" = "Expected Income";
+"expected_expenses" = "Expected Expenses";
+"actual_income" = "Actual Income";
+"actual_expenses" = "Actual Expenses";
 
 // MARK: Profile
 "profile" = "Profile";

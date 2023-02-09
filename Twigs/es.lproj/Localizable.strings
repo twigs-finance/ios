@@ -65,11 +65,13 @@
 "budget" = "Presupuesto";
 "budgets" = "Presupuestos";
 "new_budget" = "Nuevo Presupuesto";
-"current_balance" = "Saldo Actual:";
-"income" = "Ingresos:";
-"expenses" = "Gastos:";
-"expected" = "Planeados:";
-"actual" = "Actuales:";
+"stats" = "Estadísticas";
+"cash_flow" = "Flujo de dinero";
+"expected_vs_actual" = "Planeado vs Actual";
+"expected_income" = "Ingresos Planeados";
+"expected_expenses" = "Gastos Planeados";
+"actual_income" = "Ingresos Actuales";
+"actual_expenses" = "Gastos Actuales";
 
 
 // MARK: Profile
