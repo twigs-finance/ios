@@ -18,43 +18,66 @@ struct SidebarBudgetView: View {
     @ViewBuilder
     var mainView: some View {
         if case let .success(budget) = self.dataStore.budget {
-            NavigationView {
-                List {
-                    NavigationLink(
-                        tag: 0,
-                        selection: $tabSelection,
-                        destination: { BudgetDetailsView(budget: budget).navigationBarTitle("overview")
-                        },
-                        label: { Label("overview", systemImage: "chart.line.uptrend.xyaxis") }
-                    )
+            NavigationSplitView(sidebar: {
+                VStack {
+                    List(selection: $tabSelection) {
+                        NavigationLink(
+                            value: 0,
+                            label: { Label("overview", systemImage: "chart.line.uptrend.xyaxis") }
+                        )
                         .keyboardShortcut("1")
-                    NavigationLink(
-                        tag: 1,
-                        selection: $tabSelection,
-                        destination: { TransactionListView<EmptyView>().navigationBarTitle("transactions") },
-                        label: { Label("transactions", systemImage: "dollarsign.circle") })
+                        NavigationLink(
+                            value: 1,
+                            label: { Label("transactions", systemImage: "dollarsign.circle") }
+                        )
                         .keyboardShortcut("2")
-                    NavigationLink(
-                        tag: 2,
-                        selection: $tabSelection,
-                        destination: { CategoryListView(budget).navigationBarTitle("categories") },
-                        label: { Label("categories", systemImage: "chart.pie") })
+                        NavigationLink(
+                            value: 2,
+                            label: { Label("categories", systemImage: "chart.pie") }
+                        )
                         .keyboardShortcut("3")
-                    NavigationLink(
-                        tag: 3,
-                        selection: $tabSelection,
-                        destination: { RecurringTransactionsListView().navigationBarTitle("recurring_transactions") },
-                        label: { Label("recurring_transactions", systemImage: "arrow.triangle.2.circlepath") })
+                        NavigationLink(
+                            value: 3,
+                            label: { Label("recurring_transactions", systemImage: "arrow.triangle.2.circlepath") }
+                        )
                         .keyboardShortcut("4")
-                    Divider()
+                    }
                     BudgetListsView()
                 }
                 .navigationTitle(budget.name)
-                if self.tabSelection ?? 0 > 0 {
-                    EmptyView()
-                    EmptyView()
+            }, content: {
+                if tabSelection == 0, let budget = dataStore.selectedBudget {
+                    BudgetDetailsView(budget: budget)
+                        .navigationTitle("budgets")
+                } else if tabSelection == 1 {
+                    TransactionListView<EmptyView>()
+                        .navigationTitle("transactions")
+                } else if tabSelection == 2, let budget = dataStore.selectedBudget {
+                    CategoryListView(budget)
+                        .navigationTitle("categories")
+                } else if tabSelection == 3 {
+                    RecurringTransactionsListView()
+                        .navigationTitle("recurring_transactions")
+                } else {
+                    ActivityIndicator(isAnimating: .constant(true), style: .large)
                 }
-            }
+            }, detail: {
+                if let _ = dataStore.selectedTransaction {
+                    TransactionDetailsView()
+                        .navigationTitle("details")
+                        .onDisappear {
+                            dataStore.selectedTransaction = nil
+                        }
+                } else if let _ = dataStore.selectedCategory {
+                    if let budget = dataStore.selectedBudget {
+                        CategoryDetailsView(budget, categoryDataStore: CategoryDataStore(dataStore.apiService))
+                            .navigationTitle(dataStore.selectedCategory?.title ?? "")
+                    }
+                } else if let _ = dataStore.selectedRecurringTransaction {
+                    RecurringTransactionDetailsView()
+                        .navigationTitle("details")                    
+                }
+            })
         } else {
             ActivityIndicator(isAnimating: .constant(true), style: .large)
         }

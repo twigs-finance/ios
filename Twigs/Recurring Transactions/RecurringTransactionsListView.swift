@@ -19,7 +19,7 @@ struct RecurringTransactionsListView: View {
             action: { await self.dataStore.getRecurringTransactions() },
             errorTextLocalizedStringKey: "Failed to load recurring transactions"
         ) { (transactions: OrderedDictionary<String, [RecurringTransaction]>) in
-            List {
+            List(selection: $dataStore.selectedRecurringTransaction) {
                 ForEach(transactions.keys, id: \.self) { (key: String) in
                     Group {
                         if !transactions[key]!.isEmpty {
@@ -82,35 +82,31 @@ struct RecurringTransactionsListItemView: View {
 
     var body: some View {
         NavigationLink(
-            tag: transaction,
-            selection: $dataStore.selectedRecurringTransaction,
-            destination: {
-                RecurringTransactionDetailsView()
-                .navigationBarTitle("details", displayMode: .inline)
-            }
-        ) {
-            HStack {
-                VStack(alignment: .leading) {
-                    Text(verbatim: transaction.title)
-                        .lineLimit(1)
-                        .font(.headline)
-                    if let description = transaction.description?.trimmingCharacters(in: CharacterSet([" "])), !description.isEmpty {
-                        Text(verbatim: description)
+            value: transaction,
+            label: {
+                HStack {
+                    VStack(alignment: .leading) {
+                        Text(verbatim: transaction.title)
                             .lineLimit(1)
-                            .font(.subheadline)
-                            .foregroundColor(.secondary)
+                            .font(.headline)
+                        if let description = transaction.description?.trimmingCharacters(in: CharacterSet([" "])), !description.isEmpty {
+                            Text(verbatim: description)
+                                .lineLimit(1)
+                                .font(.subheadline)
+                                .foregroundColor(.secondary)
+                                .multilineTextAlignment(.trailing)
+                        }
+                    }
+                    Spacer()
+                    VStack(alignment: .trailing) {
+                        Text(verbatim: transaction.amount.toCurrencyString())
+                            .foregroundColor(transaction.expense ? .red : .green)
                             .multilineTextAlignment(.trailing)
                     }
-                }
-                Spacer()
-                VStack(alignment: .trailing) {
-                    Text(verbatim: transaction.amount.toCurrencyString())
-                        .foregroundColor(transaction.expense ? .red : .green)
-                        .multilineTextAlignment(.trailing)
-                }
-                .padding(.leading)
-            }.padding(5.0)
-        }
+                    .padding(.leading)
+                }.padding(5.0)
+            }
+        )
     }
 }
 

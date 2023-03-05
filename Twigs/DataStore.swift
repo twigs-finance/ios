@@ -46,6 +46,23 @@ class DataStore : ObservableObject {
         }
     }
 
+    var selectedBudget: Budget? {
+        get {
+            if case let .success(budget) = self.budget {
+                return budget
+            }
+            
+            return nil
+        }
+        set {
+            if let budget = newValue {
+                self.budget = .success(budget)
+            } else {
+                self.budget = .empty
+            }
+        }
+    }
+
     var budgetId: String? {
         get {
             if case let .success(budget) = self.budget {

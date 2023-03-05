@@ -11,7 +11,7 @@ import TwigsCore
 
 struct CategoryDetailsView: View {
     @EnvironmentObject var dataStore: DataStore
-    @EnvironmentObject var categoryDataStore: CategoryDataStore
+    @ObservedObject var categoryDataStore: CategoryDataStore
     @EnvironmentObject var apiService: TwigsApiService
     let budget: Budget
     @State var sum: Int? = 0
@@ -47,13 +47,17 @@ struct CategoryDetailsView: View {
             }.task {
                 await categoryDataStore.sum(categoryId: category.id)
             }
-            .navigationBarItems(trailing: Button(action: {
-                Task {
-                    await dataStore.edit(category)
-                }
-            }) {
-                Text("edit")
-            })
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing, content: {
+                    Button(action: {
+                        Task {
+                            await dataStore.edit(category)
+                        }
+                    }) {
+                        Text("edit")
+                    }
+                })
+            }
             .sheet(isPresented: self.$dataStore.editingCategory, onDismiss: {
                 self.dataStore.cancelEditCategory()
             }, content: {
@@ -66,8 +70,9 @@ struct CategoryDetailsView: View {
         }
     }
 
-    init (_ budget: Budget) {
+    init (_ budget: Budget, categoryDataStore: CategoryDataStore) {
         self.budget = budget
+        self.categoryDataStore = categoryDataStore
     }
 }
 
@@ -85,7 +90,7 @@ struct LabeledCounter: View {
 #if DEBUG
 struct CategoryDetailsView_Previews: PreviewProvider {
     static var previews: some View {
-        CategoryDetailsView(MockBudgetRepository.budget)
+        CategoryDetailsView(MockBudgetRepository.budget, categoryDataStore: CategoryDataStore(TwigsInMemoryCacheService()))
             .environmentObject(TwigsInMemoryCacheService())
     }
 }

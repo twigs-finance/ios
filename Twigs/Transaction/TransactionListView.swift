@@ -91,7 +91,7 @@ struct TransactionListView<Content>: View where Content: View {
             action: { await dataStore.getTransactions() },
             errorTextLocalizedStringKey: "Failed to load transactions"
         ) { transactions in
-            List {
+            List(selection: $dataStore.selectedTransaction) {
                 TransactionList(transactions)
             }
             .searchable(text: $search)
@@ -134,37 +134,29 @@ struct TransactionListItemView: View {
     var transaction: TwigsCore.Transaction
 
     var body: some View {
-        NavigationLink(
-            tag: self.transaction,
-            selection: self.$dataStore.selectedTransaction,
-            destination: {
-                TransactionDetailsView()
-                    .navigationBarTitle("details", displayMode: .inline)
-            },
-            label: {
-                HStack {
-                    VStack(alignment: .leading) {
-                        Text(verbatim: transaction.title)
+        NavigationLink(value: self.transaction, label: {
+            HStack {
+                VStack(alignment: .leading) {
+                    Text(verbatim: transaction.title)
+                        .lineLimit(1)
+                        .font(.headline)
+                    if let description = transaction.description?.trimmingCharacters(in: CharacterSet([" "])), !description.isEmpty {
+                        Text(verbatim: description)
                             .lineLimit(1)
-                            .font(.headline)
-                        if let description = transaction.description?.trimmingCharacters(in: CharacterSet([" "])), !description.isEmpty {
-                            Text(verbatim: description)
-                                .lineLimit(1)
-                                .font(.subheadline)
-                                .foregroundColor(.secondary)
-                                .multilineTextAlignment(.trailing)
-                        }
-                    }
-                    Spacer()
-                    VStack(alignment: .trailing) {
-                        Text(verbatim: transaction.amount.toCurrencyString())
-                            .foregroundColor(transaction.expense ? .red : .green)
+                            .font(.subheadline)
+                            .foregroundColor(.secondary)
                             .multilineTextAlignment(.trailing)
                     }
-                    .padding(.leading)
-                }.padding(5.0)
-            }
-        )
+                }
+                Spacer()
+                VStack(alignment: .trailing) {
+                    Text(verbatim: transaction.amount.toCurrencyString())
+                        .foregroundColor(transaction.expense ? .red : .green)
+                        .multilineTextAlignment(.trailing)
+                }
+                .padding(.leading)
+            }.padding(5.0)
+        })
     }
 
     init (_ transaction: TwigsCore.Transaction) {

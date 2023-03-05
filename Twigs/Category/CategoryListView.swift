@@ -25,7 +25,7 @@ struct CategoryListView: View {
     
     @ViewBuilder
     var body: some View {
-        List {
+        List(selection: $dataStore.selectedCategory) {
             InlineLoadingView(
                 data: $dataStore.categories,
                 action: { await self.dataStore.getCategories(budgetId: budget.id, expense: nil, archived: nil, count: nil, page: nil) },
@@ -101,32 +101,25 @@ struct CategoryListItemView: View {
     }
     
     var body: some View {
-        NavigationLink(
-            tag: category,
-            selection: $dataStore.selectedCategory,
-            destination: {
-                CategoryDetailsView(self.budget)
-                    .environmentObject(categoryDataStore)
-                    .navigationBarTitle(dataStore.selectedCategory?.title ?? "")
-            },
-            label: {
-                VStack(alignment: .leading) {
-                    HStack {
-                        Text(verbatim: category.title)
-                        Spacer()
-                        remaining
-                    }
-                    if category.description?.isEmpty == false {
-                        Text(verbatim: category.description!)
-                            .font(.subheadline)
-                            .foregroundColor(.secondary)
-                            .lineLimit(1)
-                    }
-                    progressView
-                }.task {
-                    await categoryDataStore.sum(categoryId: category.id)
+        NavigationLink(value: category, label: {
+            VStack(alignment: .leading) {
+                HStack {
+                    Text(verbatim: category.title)
+                    Spacer()
+                    remaining
                 }
-            })
+                if category.description?.isEmpty == false {
+                    Text(verbatim: category.description!)
+                        .font(.subheadline)
+                        .foregroundColor(.secondary)
+                        .lineLimit(1)
+                }
+                progressView
+            }.task {
+                await categoryDataStore.sum(categoryId: category.id)
+            }
+        })
+        .environmentObject(categoryDataStore)
     }
     
     var progressView: ProgressView {

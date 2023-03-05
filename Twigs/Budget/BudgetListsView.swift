@@ -20,7 +20,7 @@ struct BudgetListsView: View {
             action: { await self.dataStore.getBudgets(count: nil, page: nil) },
             errorTextLocalizedStringKey: "budgets_load_failure"
         ) { (budgets: [Budget]) in
-            ForEach(budgets) { budget in
+            List(budgets, selection: $dataStore.selectedBudget) { budget in
                 BudgetListItemView(budget)
             }
         }

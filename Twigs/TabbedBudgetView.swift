@@ -21,60 +21,100 @@ struct TabbedBudgetView: View {
             TabView(selection: $tabSelection) {
                 NavigationView {
                     BudgetDetailsView(budget: budget)
-                        .navigationBarTitle("overview")
-                        .navigationBarItems(leading: HStack {
-                            Button("budgets", action: {
-                                self.dataStore.showBudgetSelection = true
-                            }).padding()
-                        })
+                        .toolbar {
+                            ToolbarItem(placement: .navigationBarLeading) {
+                                HStack {
+                                    Button("budgets", action: {
+                                        self.dataStore.showBudgetSelection = true
+                                    }).padding()
+                                }
+                            }
+                        }
+                        .navigationTitle(budget.name)
                 }
-                .tabItem {
-                    Image(systemName: "chart.line.uptrend.xyaxis.circle.fill")
-                    Text("overview")
-                }
-                .tag(0)
-                .keyboardShortcut("1")
-                NavigationView {
-                    TransactionListView<EmptyView>()
-                        .navigationBarTitle("transactions")
-                }
-                .tabItem {
-                    Image(systemName: "dollarsign.circle.fill")
-                    Text("transactions")
-                }
-                .tag(1)
-                .keyboardShortcut("2")
-                NavigationView {
-                    CategoryListView(budget)
-                        .navigationBarTitle("categories")
-                }
-                .tabItem {
-                    Image(systemName: "chart.pie.fill")
-                    Text("categories")
-                }
-                .tag(2)
-                .keyboardShortcut("3")
-                NavigationView {
-                    RecurringTransactionsListView()
-                        .navigationBarTitle("recurring_transactions")
-                }
-                .tabItem {
-                    Image(systemName: "arrow.triangle.2.circlepath.circle.fill")
-                    Text("recurring")
-                }
-                .tag(3)
-                .keyboardShortcut("4")
-                NavigationView {
-                    ProfileView()
-                        .navigationBarTitle("profile")
-                }
-                .tabItem {
-                    Image(systemName: "person.circle.fill")
-                    Text("profile")
-                }
-                .tag(4)
-                .keyboardShortcut("5")
+                    .tabItem {
+                        Image(systemName: "chart.line.uptrend.xyaxis.circle.fill")
+                        Text("overview")
+                    }
+                    .tag(0)
+                    .keyboardShortcut("1")
+                NavigationSplitView(
+                    sidebar: {
+                        TransactionListView<EmptyView>()
+                            .navigationTitle(budget.name)
+                    },
+                    detail: {
+                        if let _ = dataStore.selectedTransaction {
+                            TransactionDetailsView()
+                                .navigationTitle("details")
+                                .onDisappear {
+                                    dataStore.selectedTransaction = nil
+                                }
+                        } else {
+                            ActivityIndicator(isAnimating: .constant(true), style: .large)
+                        }
+                    })
+                    .tabItem {
+                        Image(systemName: "dollarsign.circle.fill")
+                        Text("transactions")
+                    }
+                    .tag(1)
+                    .keyboardShortcut("2")
+                NavigationSplitView(
+                    sidebar: {
+                        CategoryListView(budget)
+                            .navigationTitle(budget.name)
+                    },
+                    content: {
+                        if let _ = dataStore.selectedCategory {
+                            if let budget = dataStore.selectedBudget {
+                                CategoryDetailsView(budget, categoryDataStore: CategoryDataStore(dataStore.apiService))
+                                    .navigationTitle(dataStore.selectedCategory?.title ?? "")
+                            }
+                        }
+                    },
+                    detail: {
+                        if let _ = dataStore.selectedTransaction {
+                            TransactionDetailsView()
+                                .navigationTitle("details")
+                        } else {
+                            ActivityIndicator(isAnimating: .constant(true), style: .large)
+                        }
+                    })
+                    .tabItem {
+                        Image(systemName: "chart.pie.fill")
+                        Text("categories")
+                    }
+                    .tag(2)
+                    .keyboardShortcut("3")
+                NavigationSplitView(
+                    sidebar: {
+                        RecurringTransactionsListView()
+                            .navigationTitle(budget.name)
+                    },
+                    detail: {
+                        if let _ = dataStore.selectedRecurringTransaction {
+                            RecurringTransactionDetailsView()
+                                .navigationTitle("details")
+                        } else {
+                            ActivityIndicator(isAnimating: .constant(true), style: .large)
+                        }
+                    })
+                    .tabItem {
+                        Image(systemName: "arrow.triangle.2.circlepath.circle.fill")
+                        Text("recurring")
+                    }
+                    .tag(3)
+                    .keyboardShortcut("4")
+                ProfileView()
+                    .tabItem {
+                        Image(systemName: "person.circle.fill")
+                        Text("profile")
+                    }
+                    .tag(4)
+                    .keyboardShortcut("5")
             }
+            .navigationTitle(budget.name)
         default:
             ActivityIndicator(isAnimating: .constant(true), style: .large)
         }
@@ -91,9 +131,7 @@ struct TabbedBudgetView: View {
                  content: {
             NavigationView {
                 VStack {
-                    List {
-                        BudgetListsView().environmentObject(dataStore)
-                    }
+                    BudgetListsView().environmentObject(dataStore)
                     .navigationTitle("budgets")
                     .navigationBarItems(trailing: Button(action: {dataStore.newBudget()}, label: {
                         Image(systemName: "plus")
