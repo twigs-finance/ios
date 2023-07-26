@@ -15,7 +15,7 @@ struct MainView: View {
     
     init(_ apiService: TwigsApiService) {
         self.apiService = apiService
-        self._dataStore = StateObject(wrappedValue: DataStore(apiService, errorReporter: FirebaseErrorReporter()))
+        self._dataStore = StateObject(wrappedValue: DataStore(apiService, errorReporter: LoggingErrorReporter()))
     }
     
     @ViewBuilder

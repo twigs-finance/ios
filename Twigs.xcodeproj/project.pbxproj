@@ -39,8 +39,6 @@
 		801D08CE275F189E00931465 /* RecurringTransactionsRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 801D08CD275F189E00931465 /* RecurringTransactionsRepository.swift */; };
 		801D08D2275FB7DE00931465 /* RecurringTransactionDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 801D08D1275FB7DE00931465 /* RecurringTransactionDetailsView.swift */; };
 		802161D0277647920075761A /* AsyncObservableObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 802161CF277647920075761A /* AsyncObservableObject.swift */; };
-		8043704028CBEC6800F229F9 /* FirebaseAnalyticsWithoutAdIdSupport in Frameworks */ = {isa = PBXBuildFile; productRef = 8043703F28CBEC6800F229F9 /* FirebaseAnalyticsWithoutAdIdSupport */; };
-		8043704228CBEC6800F229F9 /* FirebaseCrashlytics in Frameworks */ = {isa = PBXBuildFile; productRef = 8043704128CBEC6800F229F9 /* FirebaseCrashlytics */; };
 		8043704528CBEDF400F229F9 /* ErrorReporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8043704428CBEDF400F229F9 /* ErrorReporter.swift */; };
 		8043704728CBF16600F229F9 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8043704628CBF16600F229F9 /* GoogleService-Info.plist */; };
 		8043EB84271F26ED00498E73 /* CategoryDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8043EB83271F26ED00498E73 /* CategoryDetailsView.swift */; };
@@ -172,9 +170,7 @@
 			files = (
 				80D06DD1288C817800B50467 /* TwigsCore in Frameworks */,
 				8076A8522809FE99006B9DC9 /* Collections in Frameworks */,
-				8043704228CBEC6800F229F9 /* FirebaseCrashlytics in Frameworks */,
 				8076A84F2809FE8E006B9DC9 /* ArgumentParser in Frameworks */,
-				8043704028CBEC6800F229F9 /* FirebaseAnalyticsWithoutAdIdSupport in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -411,7 +407,6 @@
 				28AC94E6233C373900BFB70A /* Sources */,
 				28AC94E7233C373900BFB70A /* Frameworks */,
 				28AC94E8233C373900BFB70A /* Resources */,
-				8043704328CBED4000F229F9 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -422,8 +417,6 @@
 				8076A84E2809FE8E006B9DC9 /* ArgumentParser */,
 				8076A8512809FE99006B9DC9 /* Collections */,
 				80D06DD0288C817800B50467 /* TwigsCore */,
-				8043703F28CBEC6800F229F9 /* FirebaseAnalyticsWithoutAdIdSupport */,
-				8043704128CBEC6800F229F9 /* FirebaseCrashlytics */,
 			);
 			productName = Budget;
 			productReference = 28AC94EA233C373900BFB70A /* Twigs.app */;
@@ -569,28 +562,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
-
-/* Begin PBXShellScriptBuildPhase section */
-		8043704328CBED4000F229F9 /* ShellScript */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}/Contents/Resources/DWARF/${TARGET_NAME}",
-				"$(SRCROOT)/newInputFile",
-			);
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n\"${BUILD_DIR%/Build/*}/SourcePackages/checkouts/firebase-ios-sdk/Crashlytics/run\"\n";
-		};
-/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		28AC94E6233C373900BFB70A /* Sources */ = {
@@ -1114,16 +1085,6 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		8043703F28CBEC6800F229F9 /* FirebaseAnalyticsWithoutAdIdSupport */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 8043703E28CBEC6800F229F9 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
-			productName = FirebaseAnalyticsWithoutAdIdSupport;
-		};
-		8043704128CBEC6800F229F9 /* FirebaseCrashlytics */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 8043703E28CBEC6800F229F9 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
-			productName = FirebaseCrashlytics;
-		};
 		8076A84E2809FE8E006B9DC9 /* ArgumentParser */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 80A419F12787C13E0090C515 /* XCRemoteSwiftPackageReference "swift-argument-parser" */;

@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import FirebaseCrashlytics
 
 protocol ErrorReporter {
     func reportError(error: Error)
@@ -16,11 +15,5 @@ protocol ErrorReporter {
 class LoggingErrorReporter: ErrorReporter {
     func reportError(error: Error) {
         print(error)
-    }
-}
-
-class FirebaseErrorReporter: ErrorReporter {
-    func reportError(error: Error) {
-        Crashlytics.crashlytics().record(error: error)
     }
 }
